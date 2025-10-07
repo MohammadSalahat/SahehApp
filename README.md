@@ -187,14 +187,14 @@ resources/js/
 
 ## 🧑‍💻 10. Common Commands
 
-| Purpose                      | Command                            |
-| ---------------------------- | ---------------------------------- |
-| Start the app                | `php artisan serve`                |
-| Run migrations               | `php artisan migrate`              |
-| Install dependencies         | `composer install` / `npm install` |
-| Build assets                 | `npm run build`                    |
-| Watch for changes            | `npm run dev`                      |
-| Create a Filament admin user | `php artisan make:filament-user`   |
+| Purpose                      | Command                                    |
+| ---------------------------- | ------------------------------------------ |
+| Start the app                | `composer run dev` OR `php artisan serve`  |
+| Run migrations               | `php artisan migrate`                      |
+| Install dependencies         | `composer install` / `npm install`         |
+| Build assets                 | `npm run build`                            |
+| Watch for changes            | `npm run dev`                              |
+| Create a Filament admin user | `php artisan make:filament-user`           |
 
 ---
 
