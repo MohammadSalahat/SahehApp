@@ -27,7 +27,7 @@ return new class extends Migration
             $table->index('verification_result');
 
             // Fulltext index for article title search
-            $table->fullText('article_title', 'feedback_article_title_fulltext');
+            
         });
     }
 

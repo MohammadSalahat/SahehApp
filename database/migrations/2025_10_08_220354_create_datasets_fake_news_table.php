@@ -31,7 +31,7 @@ return new class extends Migration
             $table->index('content_hash');
 
             // Fulltext indexes for text matching (Arabic support)
-            $table->fullText(['title', 'content'], 'fake_news_fulltext_index');
+            // $table->fullText(['title', 'content'], 'fake_news_fulltext_index');
         });
     }
 
