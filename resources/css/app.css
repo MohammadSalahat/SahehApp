@@ -1,6 +1,5 @@
 @import 'tailwindcss';
 @import '../../vendor/livewire/flux/dist/flux.css';
-
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../vendor/livewire/flux-pro/stubs/**/*.blade.php';
@@ -22,6 +21,14 @@
     --color-zinc-800: #262626;
     --color-zinc-900: #171717;
     --color-zinc-950: #0a0a0a;
+    --color-primary: #4a6b5a;
+    --color-secondary: #7a9684;
+    --color-cream: #f5f1e8;
+    --color-light-cream: #e8e4d8;
+    --primary-color: #4a6b5a;
+    --secondary-color: #d4b896;
+    --cream-color: #f8f6f0;
+    --light-cream: #faf9f5;
 
     --color-accent: var(--color-neutral-800);
     --color-accent-content: var(--color-neutral-800);
@@ -37,7 +44,6 @@
 }
 
 @layer base {
-
     *,
     ::after,
     ::before,
@@ -52,7 +58,7 @@
 }
 
 [data-flux-label] {
-    @apply  !mb-0 !leading-tight;
+    @apply !mb-0 !leading-tight;
 }
 
 input:focus[data-flux-control],
@@ -61,6 +67,16 @@ select:focus[data-flux-control] {
     @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
 }
 
-/* \[:where(&)\]:size-4 {
-    @apply size-4;
-} */
+.bg-primary { background-color: var(--primary-color); }
+.text-primary { color: var(--primary-color); }
+.border-primary { border-color: var(--primary-color); }
+.hover\:bg-primary:hover { background-color: var(--primary-color); }
+.hover\:text-primary:hover { color: var(--primary-color); }
+.hover\:border-primary:hover { border-color: var(--primary-color); }
+.bg-secondary { background-color: var(--secondary-color); }
+.text-secondary { color: var(--secondary-color); }
+.bg-cream { background-color: var(--cream-color); }
+.bg-light-cream { background-color: var(--light-cream); }
+
+
+
