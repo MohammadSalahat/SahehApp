@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -20,6 +20,7 @@ return new class extends Migration
             $table->decimal('confidence_score', 5, 4)->default(0.0000)->comment('Score from 0.0000 to 1.0000');
             $table->string('origin_dataset_name')->nullable()->comment('e.g., LIAR, CredBank');
             $table->boolean('added_by_ai')->default(false)->comment('True if added by AI, false if from original dataset');
+            $table->string('content_hash', 64)->unique()->comment('SHA-256 hash for duplicate detection');
             $table->timestamps();
             $table->softDeletes();
 
@@ -28,12 +29,15 @@ return new class extends Migration
             $table->index('confidence_score');
             $table->index('origin_dataset_name');
             $table->index('added_by_ai');
+            $table->index('content_hash');
+
+            // $table->fullText(['title', 'content'], 'fake_news_fulltext_index');
         });
 
         // Add fulltext indexes (MySQL/MariaDB specific)
-        DB::statement('ALTER TABLE datasets_fake_news ADD FULLTEXT INDEX datasets_fake_news_title_fulltext (title)');
-        DB::statement('ALTER TABLE datasets_fake_news ADD FULLTEXT INDEX datasets_fake_news_content_fulltext (content)');
-        DB::statement('ALTER TABLE datasets_fake_news ADD FULLTEXT INDEX datasets_fake_news_title_content_fulltext (title, content)');
+        // DB::statement('ALTER TABLE datasets_fake_news ADD FULLTEXT INDEX datasets_fake_news_title_fulltext (title)');
+        // DB::statement('ALTER TABLE datasets_fake_news ADD FULLTEXT INDEX datasets_fake_news_content_fulltext (content)');
+        // DB::statement('ALTER TABLE datasets_fake_news ADD FULLTEXT INDEX datasets_fake_news_title_content_fulltext (title, content)');
     }
 
     /**

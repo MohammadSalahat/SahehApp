@@ -1,15 +1,4 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>شعار صحيح - التحقق من الأخبار القانونية</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-
-<body class="bg-white font-sans pt-20 scroll-smooth">
-
+<div>
     <x-home.navigation />
 
     <!-- Hero Section -->
@@ -17,7 +6,7 @@
         <div class="absolute inset-0 bg-gradient-to-br from-[#f8f6f0] to-[#faf9f5]"></div>
         <div class="container mx-auto px-4 text-center relative z-10">
             <h1 class="text-5xl md:text-7xl font-bold text-[#4a6b5a] mb-6 leading-tight">
-                {{ __('hero-section.title') }}
+                أهلاً بك في <span class="text-[#d4b896]">صحيح</span>
             </h1>
             <p class="text-xl md:text-2xl text-gray-700 mb-4 max-w-4xl mx-auto leading-relaxed">
                 لا تدع الشائعة تسبقك! اكتشف الحقيقة مع صحيح - منصة التحقق
@@ -541,6 +530,4 @@
         </svg>
     </button>
 
-</body>
-
-</html>
+</div>

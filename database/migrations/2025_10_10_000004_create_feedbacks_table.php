@@ -17,12 +17,14 @@ return new class extends Migration
             $table->string('article_title');
             $table->tinyInteger('rating')->unsigned()->comment('Rating from 1 to 5');
             $table->text('message')->nullable();
+            $table->string('verification_result', 50)->nullable()->comment('e.g., fake, genuine, uncertain');
             $table->timestamps();
 
             // Indexes
             $table->index('user_id');
             $table->index('rating');
             $table->index('created_at');
+            $table->index('verification_result');
         });
     }
 
