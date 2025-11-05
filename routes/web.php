@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Web\ContactRequestController;
 use App\Livewire\Pages\HomePage;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
@@ -12,12 +13,16 @@ Route::get('/', function () {
     return view('home');
 })->name('home');
 
+// Verification route
+Route::post('/verify', [App\Http\Controllers\Web\VerificationController::class, 'verify'])->name('verify');
+
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
 Route::middleware('guest')->group(function () {
     Route::get('new-home', HomePage::class)->name('new.home');
+    Route::get('new-contact-request', [ContactRequestController::class, 'create'])->name('new.contact.request');
 });
 
 Route::middleware(['auth'])->group(function () {

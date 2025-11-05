@@ -26,11 +26,26 @@ class DatasetFakeNews extends Model
     protected $fillable = [
         'title',
         'content',
+        'content_hash',
         'detected_at',
         'confidence_score',
         'origin_dataset_name',
         'added_by_ai',
     ];
+
+    /**
+     * Boot the model and set up event listeners.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (empty($model->content_hash)) {
+                $model->content_hash = hash('sha256', $model->content);
+            }
+        });
+    }
 
     /**
      * The attributes that should be cast.

@@ -5,7 +5,7 @@ namespace App\Livewire\Pages;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
-#[Layout('components.layouts.auth')]
+#[Layout('components.layouts.guest')]
 class HomePage extends Component
 {
     public function render()

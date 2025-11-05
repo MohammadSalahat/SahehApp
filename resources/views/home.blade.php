@@ -12,6 +12,9 @@
 
     <x-home.navigation />
 
+    <!-- Include Interactive Verification Loader -->
+    <x-verification-loader />
+
     <!-- Hero Section -->
     <section class="bg-[#f8f6f0] py-24 relative overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-br from-[#f8f6f0] to-[#faf9f5]"></div>
@@ -149,32 +152,66 @@
             <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl p-10 relative overflow-hidden">
                 <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#4a6b5a] to-[#d4b896]"></div>
 
-                <div class="mb-6 flex items-center gap-3 text-[#4a6b5a]">
-                    <svg class="w-8 h-8 pulse-soft" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                    <span class="font-bold text-xl">نص الخبر المراد التحقق منه</span>
-                </div>
+                <form id="verification-form" action="{{ route('verify') }}" method="POST"
+                    onsubmit="handleFormSubmit(event)">
+                    @csrf
+                    <div class="mb-6 flex items-center gap-3 text-[#4a6b5a]">
+                        <svg class="w-8 h-8 pulse-soft" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        <span class="font-bold text-xl">نص الخبر المراد التحقق منه</span>
+                    </div>
 
-                <textarea
-                    class="w-full h-48 p-6 border-2 border-gray-200 rounded-xl focus:border-[#4a6b5a] focus:outline-none resize-none text-lg leading-relaxed transition-all duration-300 focus:shadow-lg focus:ring-2 focus:ring-[#4a6b5a]/20"
-                    placeholder="اكتب أو الصق نص الخبر هنا... مثال: أعلنت وزارة العدل السعودية عن إطلاق نظام جديد للمحاكمات الإلكترونية..."></textarea>
+                    @error('content')
+                        <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">
+                            {{ $message }}
+                        </div>
+                    @enderror
 
-                <button
-                    class="bg-gradient-to-r from-[#4a6b5a] to-[#5a7a6a] text-white w-full mt-8 py-5 rounded-xl text-xl font-bold shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                    </svg>
-                    تحقق من الخبر
-                </button>
+                    <textarea id="news-content" name="content" required minlength="20"
+                        class="w-full h-48 p-6 border-2 border-gray-200 rounded-xl focus:border-[#4a6b5a] focus:outline-none resize-none text-lg leading-relaxed transition-all duration-300 focus:shadow-lg focus:ring-2 focus:ring-[#4a6b5a]/20"
+                        placeholder="اكتب أو الصق نص الخبر هنا... مثال: أعلنت وزارة العدل السعودية عن إطلاق نظام جديد للمحاكمات الإلكترونية...">{{ old('content') }}</textarea>
+
+                    <button type="submit" id="submit-btn"
+                        class="bg-gradient-to-r from-[#4a6b5a] to-[#5a7a6a] text-white w-full mt-8 py-5 rounded-xl text-xl font-bold shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                        </svg>
+                        تحقق من الخبر
+                    </button>
+                </form>
+
+                <script>
+                    function handleFormSubmit(event) {
+                        event.preventDefault();
+
+                        const content = document.getElementById('news-content').value.trim();
+
+                        // Validate content length
+                        if (content.length < 20) {
+                            alert('الرجاء إدخال نص لا يقل عن 20 حرفاً');
+                            return false;
+                        }
+
+                        // Show the loader
+                        if (window.VerificationLoader) {
+                            window.VerificationLoader.show();
+                        }
+
+                        // Submit the form after showing loader
+                        setTimeout(() => {
+                            event.target.submit();
+                        }, 300);
+                    }
+                </script>
             </div>
         </div>
     </section>
 
     <!-- How it Works Section -->
-    <section class="py-20 bg-white">
+    <section class="py-20 bg-white hidden">
         <div class="container mx-auto px-4">
             <h2 class="text-4xl md:text-5xl font-bold text-center mb-6">
                 كيف <span class="text-[#4a6b5a]">يعمل</span> <span class="text-[#d4b896]">صحيح؟</span>
@@ -245,7 +282,7 @@
     </section>
 
     <!-- Trust Sources Section -->
-    <section class="py-20 bg-[#f8f6f0]">
+    <section class="py-20 bg-[#f8f6f0] hidden">
         <div class="container mx-auto px-4">
             <h2 class="text-4xl md:text-5xl font-bold text-center mb-6">
                 لماذا تثق بـ <span class="text-[#4a6b5a]">صحيح؟</span>
@@ -364,37 +401,7 @@
             </p>
 
             <div class="max-w-3xl mx-auto bg-white rounded-3xl shadow-xl p-10">
-                <form>
-                    <div class="mb-8">
-                        <label class="block text-right text-gray-700 font-bold mb-3 text-lg">الاسم الكامل</label>
-                        <input type="text"
-                            class="w-full px-6 py-4 border-2 border-gray-200 rounded-xl focus:border-[#4a6b5a] focus:outline-none text-lg transition-all duration-300 focus:ring-2 focus:ring-[#4a6b5a]/20"
-                            placeholder="أدخل اسمك الكامل">
-                    </div>
-
-                    <div class="mb-8">
-                        <label class="block text-right text-gray-700 font-bold mb-3 text-lg">البريد الإلكتروني</label>
-                        <input type="email"
-                            class="w-full px-6 py-4 border-2 border-gray-200 rounded-xl focus:border-[#4a6b5a] focus:outline-none text-lg transition-all duration-300 focus:ring-2 focus:ring-[#4a6b5a]/20"
-                            placeholder="your.email@example.com">
-                    </div>
-
-                    <div class="mb-8">
-                        <label class="block text-right text-gray-700 font-bold mb-3 text-lg">الرسالة</label>
-                        <textarea
-                            class="w-full h-40 px-6 py-4 border-2 border-gray-200 rounded-xl focus:border-[#4a6b5a] focus:outline-none resize-none text-lg transition-all duration-300 focus:ring-2 focus:ring-[#4a6b5a]/20"
-                            placeholder="اكتب رسالتك أو استفساراتك هنا"></textarea>
-                    </div>
-
-                    <button type="submit"
-                        class="bg-gradient-to-r from-[#4a6b5a] to-[#5a7a6a] text-white w-full py-5 rounded-xl text-xl font-bold shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                        </svg>
-                        إرسال الرسالة
-                    </button>
-                </form>
+                <livewire:forms.contact-us-form />
             </div>
         </div>
     </section>

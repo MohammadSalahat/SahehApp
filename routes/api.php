@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Api\DatasetFakeNewsController;
 use App\Http\Controllers\Api\FeedbackController;
+use App\Http\Controllers\Api\SourceController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\VerificationController;
 use Illuminate\Support\Facades\Route;
 
@@ -30,6 +32,15 @@ Route::middleware('api.key')->group(function () {
         Route::get('/fake-news', [DatasetFakeNewsController::class, 'index'])
             ->name('api.datasets.fake-news.index');
 
+        Route::get('/fake-news/{id}', [DatasetFakeNewsController::class, 'show'])
+            ->name('api.datasets.fake-news.show');
+
+        Route::put('/fake-news/{id}', [DatasetFakeNewsController::class, 'update'])
+            ->name('api.datasets.fake-news.update');
+
+        Route::delete('/fake-news/{id}', [DatasetFakeNewsController::class, 'destroy'])
+            ->name('api.datasets.fake-news.destroy');
+
         Route::post('/fake-news/search', [DatasetFakeNewsController::class, 'search'])
             ->name('api.datasets.fake-news.search');
     });
@@ -44,6 +55,48 @@ Route::middleware('api.key')->group(function () {
 
         Route::get('/statistics', [FeedbackController::class, 'statistics'])
             ->name('api.feedbacks.statistics');
+    });
+
+    // Sources routes
+    Route::prefix('sources')->group(function () {
+        Route::get('/', [SourceController::class, 'index'])
+            ->name('api.sources.index');
+
+        Route::get('/trusted', [SourceController::class, 'trusted'])
+            ->name('api.sources.trusted');
+
+        Route::get('/{id}', [SourceController::class, 'show'])
+            ->name('api.sources.show');
+
+        Route::post('/', [SourceController::class, 'store'])
+            ->name('api.sources.store');
+
+        Route::put('/{id}', [SourceController::class, 'update'])
+            ->name('api.sources.update');
+
+        Route::delete('/{id}', [SourceController::class, 'destroy'])
+            ->name('api.sources.destroy');
+    });
+
+    // User routes
+    Route::prefix('users')->group(function () {
+        Route::get('/', [UserController::class, 'index'])
+            ->name('api.users.index');
+
+        Route::get('/statistics', [UserController::class, 'statistics'])
+            ->name('api.users.statistics');
+
+        Route::get('/{id}', [UserController::class, 'show'])
+            ->name('api.users.show');
+
+        Route::post('/', [UserController::class, 'store'])
+            ->name('api.users.store');
+
+        Route::put('/{id}', [UserController::class, 'update'])
+            ->name('api.users.update');
+
+        Route::delete('/{id}', [UserController::class, 'destroy'])
+            ->name('api.users.destroy');
     });
 });
 

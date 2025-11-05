@@ -192,4 +192,94 @@ class DatasetFakeNewsController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Get a single fake news entry by ID.
+     */
+    public function show(int $id): JsonResponse
+    {
+        try {
+            $fakeNews = DatasetFakeNews::findOrFail($id);
+
+            return response()->json([
+                'success' => true,
+                'data' => $fakeNews,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Fake news entry not found',
+                'error' => $e->getMessage(),
+            ], 404);
+        }
+    }
+
+    /**
+     * Update an existing fake news entry.
+     */
+    public function update(Request $request, int $id): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'sometimes|string|max:255',
+            'content' => 'sometimes|string',
+            'confidence_score' => 'nullable|numeric|min:0|max:1',
+            'origin_dataset_name' => 'nullable|string|max:255',
+            'added_by_ai' => 'nullable|boolean',
+            'detected_at' => 'nullable|date',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        try {
+            $fakeNews = DatasetFakeNews::findOrFail($id);
+            $fakeNews->update($request->only([
+                'title',
+                'content',
+                'confidence_score',
+                'origin_dataset_name',
+                'added_by_ai',
+                'detected_at',
+            ]));
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Fake news entry updated successfully',
+                'data' => $fakeNews->fresh(),
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update fake news entry',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Delete a fake news entry.
+     */
+    public function destroy(int $id): JsonResponse
+    {
+        try {
+            $fakeNews = DatasetFakeNews::findOrFail($id);
+            $fakeNews->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Fake news entry deleted successfully',
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete fake news entry',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
 }

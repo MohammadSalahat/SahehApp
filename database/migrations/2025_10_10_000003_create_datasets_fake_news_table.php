@@ -31,13 +31,13 @@ return new class extends Migration
             $table->index('added_by_ai');
             $table->index('content_hash');
 
-            // $table->fullText(['title', 'content'], 'fake_news_fulltext_index');
+            // FULLTEXT indexes will be added via raw SQL below (after table creation)
         });
 
         // Add fulltext indexes (MySQL/MariaDB specific)
-        // DB::statement('ALTER TABLE datasets_fake_news ADD FULLTEXT INDEX datasets_fake_news_title_fulltext (title)');
-        // DB::statement('ALTER TABLE datasets_fake_news ADD FULLTEXT INDEX datasets_fake_news_content_fulltext (content)');
-        // DB::statement('ALTER TABLE datasets_fake_news ADD FULLTEXT INDEX datasets_fake_news_title_content_fulltext (title, content)');
+        DB::statement('ALTER TABLE datasets_fake_news ADD FULLTEXT INDEX datasets_fake_news_title_fulltext (title)');
+        DB::statement('ALTER TABLE datasets_fake_news ADD FULLTEXT INDEX datasets_fake_news_content_fulltext (content)');
+        DB::statement('ALTER TABLE datasets_fake_news ADD FULLTEXT INDEX datasets_fake_news_title_content_fulltext (title, content)');
     }
 
     /**

@@ -24,14 +24,14 @@
             </div>
 
             <div class="hidden md:flex items-center gap-3">
-                <button
+                <a href="{{ route('login') }}" wire:navigate
                     class="bg-transparent border-2 border-white text-white px-6 py-2.5 rounded-lg font-medium hover:bg-white hover:text-[#4a6b5a] transition-all duration-300 relative overflow-hidden">
                     <span>تسجيل الدخول</span>
-                </button>
-                <button
+                </a>
+                <a :key="register-link" href="{{ route('register') }}" wire:navigate
                     class="bg-gradient-to-r from-[#4a6b5a] to-[#5a7a6a] text-white px-6 py-2.5 rounded-lg font-medium hover:shadow-lg transition-all duration-300">
                     إنشاء حساب
-                </button>
+                </a>
             </div>
 
             <button id="mobileMenuBtn" class="lg:hidden text-white">

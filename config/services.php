@@ -40,13 +40,13 @@ return [
     | Saheh AI Service Configuration
     |--------------------------------------------------------------------------
     */
-    // 'python_ai' => [
-    //     'url' => env('PYTHON_AI_SERVICE_URL', 'http://localhost:8000'),
-    //     'api_key' => env('PYTHON_AI_SERVICE_API_KEY'),
-    //     'timeout' => env('PYTHON_AI_SERVICE_TIMEOUT', 30),
-    // ],
+    'python_ai' => [
+        'url' => env('PYTHON_AI_SERVICE_URL', 'http://localhost:8000'),
+        'api_key' => env('PYTHON_AI_SERVICE_API_KEY'),
+        'timeout' => env('PYTHON_AI_SERVICE_TIMEOUT', 30),
+    ],
 
     // API Key for securing Laravel API endpoints (used by Python service)
-    // 'api_key' => env('LARAVEL_API_KEY'),
+    'api_key' => env('LARAVEL_API_KEY', 'your-secure-api-key-change-in-production'),
 
 ];
