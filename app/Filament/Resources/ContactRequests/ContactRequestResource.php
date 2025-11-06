@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ContactRequests;
 
+use App\Enums\RequestStatus;
 use App\Filament\Resources\ContactRequests\Pages\CreateContactRequest;
 use App\Filament\Resources\ContactRequests\Pages\EditContactRequest;
 use App\Filament\Resources\ContactRequests\Pages\ListContactRequests;
@@ -54,5 +55,10 @@ class ContactRequestResource extends Resource
             'view' => ViewContactRequest::route('/{record}'),
             'edit' => EditContactRequest::route('/{record}/edit'),
         ];
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) static::getModel()::query()->whereNot('status', RequestStatus::Archived->value)->count();
     }
 }

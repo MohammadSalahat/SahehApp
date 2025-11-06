@@ -8,7 +8,7 @@ use Filament\Support\Contracts\HasLabel;
 
 enum UserTypes: string implements HasColor, HasIcon, HasLabel
 {
-    case Normal = 'Normal';
+    case Guest = 'Guest';
     case Admin = 'Admin';
 
     public static function casesAsArray(): array
@@ -32,13 +32,13 @@ enum UserTypes: string implements HasColor, HasIcon, HasLabel
 
     public function getLabel(): string
     {
-        return __('enums.account_types_'.(string) $this->value);
+        return __('enums.UserTypes.'.(string) $this->value);
     }
 
     public function getColor(): string|array|null
     {
         return match ($this) {
-            self::Normal => 'success',
+            self::Guest => 'success',
             self::Admin => 'info',
         };
     }
@@ -46,7 +46,7 @@ enum UserTypes: string implements HasColor, HasIcon, HasLabel
     public function getIcon(): ?string
     {
         return match ($this) {
-            self::Normal => 'heroicon-m-user',
+            self::Guest => 'heroicon-m-user',
             self::Admin => 'heroicon-m-shield-check',
         };
     }

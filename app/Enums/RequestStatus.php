@@ -34,15 +34,15 @@ enum RequestStatus: string implements HasColor, HasIcon, HasLabel
 
     public function getLabel(): string
     {
-        return __('enums.request_status.'.(string) $this->value);
+        return __('enums.RequestStatus.'.(string) $this->value);
     }
 
     public function getColor(): string|array|null
     {
         return match ($this) {
-            self::New => 'info',
+            self::New => 'primary',
             self::Read => 'success',
-            self::Responded => 'warning',
+            self::Responded => 'info',
             self::Archived => 'danger',
         };
     }
@@ -50,10 +50,10 @@ enum RequestStatus: string implements HasColor, HasIcon, HasLabel
     public function getIcon(): ?string
     {
         return match ($this) {
-            self::New => 'heroicon-m-envelope',
-            self::Read => 'heroicon-m-envelope-open',
-            self::Responded => 'heroicon-m-paper-airplane',
-            self::Archived => 'heroicon-m-archive-box-arrow-down',
+            self::New => 'heroicon-o-envelope',
+            self::Read => 'heroicon-o-envelope-open',
+            self::Responded => 'heroicon-o-paper-airplane',
+            self::Archived => 'heroicon-o-archive-box-arrow-down',
         };
     }
 }
