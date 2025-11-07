@@ -11,7 +11,9 @@ use Livewire\Component;
 class ReviewPage extends Component
 {
     public $rating = 5;
+
     public $message = '';
+
     public $submitted = false;
 
     protected $rules = [
@@ -29,8 +31,9 @@ class ReviewPage extends Component
     public function mount()
     {
         // Check if user is authenticated
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             session()->flash('error', 'يجب تسجيل الدخول أولاً');
+
             return redirect()->route('login');
         }
     }
@@ -47,7 +50,7 @@ class ReviewPage extends Component
             ]);
 
             $this->submitted = true;
-            
+
             session()->flash('message', 'شكراً لك! تم إرسال تقييمك بنجاح');
 
         } catch (\Exception $e) {

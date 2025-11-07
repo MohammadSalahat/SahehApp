@@ -27,7 +27,7 @@ return new class extends Migration
             // Restore the columns
             $table->string('article_title')->after('user_id');
             $table->string('verification_result', 50)->nullable()->comment('e.g., fake, genuine, uncertain')->after('message');
-            
+
             // Restore the index
             $table->index('verification_result');
         });

@@ -47,8 +47,7 @@
             <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border-t-8 border-red-500 mb-8">
                 <!-- Alert Header -->
                 <div class="bg-gradient-to-r from-red-500 to-red-600 text-white p-8 text-center">
-                    <svg class="w-24 h-24 mx-auto mb-4 animate-pulse" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24">
+                    <svg class="w-24 h-24 mx-auto mb-4 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                     </svg>
@@ -66,70 +65,72 @@
 
                 <!-- Similarity Score -->
                 @if(isset($best_match))
-                <div class="p-8 bg-white border-b border-gray-100">
-                    <div class="max-w-3xl mx-auto">
-                        <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">درجة التشابه الدلالي</h3>
+                    <div class="p-8 bg-white border-b border-gray-100">
+                        <div class="max-w-3xl mx-auto">
+                            <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">درجة التشابه الدلالي</h3>
 
-                        <div class="relative mb-6">
-                            <div class="flex items-center justify-between mb-2">
-                                <span class="text-sm text-gray-600">منخفض</span>
-                                <span class="text-3xl font-bold text-red-600">
-                                    {{ number_format($best_match['similarity_score'] * 100, 1) }}%
-                                </span>
-                                <span class="text-sm text-gray-600">عالي</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-6 overflow-hidden">
-                                <div class="bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 h-6 rounded-full transition-all duration-1000 ease-out"
-                                    style="width: {{ $best_match['similarity_score'] * 100 }}%">
+                            <div class="relative mb-6">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm text-gray-600">منخفض</span>
+                                    <span class="text-3xl font-bold text-red-600">
+                                        {{ number_format($best_match['similarity_score'] * 100, 1) }}%
+                                    </span>
+                                    <span class="text-sm text-gray-600">عالي</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-6 overflow-hidden">
+                                    <div class="bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 h-6 rounded-full transition-all duration-1000 ease-out"
+                                        style="width: {{ $best_match['similarity_score'] * 100 }}%">
+                                    </div>
+                                </div>
+                                <div class="text-center mt-3">
+                                    <span class="inline-block bg-red-100 text-red-800 px-4 py-2 rounded-full text-sm font-bold">
+                                        مستوى التشابه: {{ $best_match['similarity_level_arabic'] }}
+                                    </span>
                                 </div>
                             </div>
-                            <div class="text-center mt-3">
-                                <span class="inline-block bg-red-100 text-red-800 px-4 py-2 rounded-full text-sm font-bold">
-                                    مستوى التشابه: {{ $best_match['similarity_level_arabic'] }}
-                                </span>
-                            </div>
-                        </div>
 
-                        <!-- Best Match Details -->
-                        <div class="bg-gray-50 rounded-2xl p-6 border-r-4 border-red-500">
-                            <h4 class="text-lg font-bold text-gray-800 mb-3">الخبر المزيف المشابه:</h4>
-                            <p class="text-xl font-bold text-gray-900 mb-3">{{ $best_match['title'] }}</p>
-                            <p class="text-gray-700 leading-relaxed mb-4">
-                                {{ Str::limit($best_match['content'], 300) }}
-                            </p>
-                            <div class="flex flex-wrap gap-3 items-center">
-                                <span class="bg-gray-200 px-3 py-1 rounded-full text-sm">
-                                    المصدر: {{ $best_match['origin_dataset'] }}
-                                </span>
-                                <span class="bg-gray-200 px-3 py-1 rounded-full text-sm">
-                                    ثقة الكشف: {{ number_format($best_match['confidence_score'] * 100, 1) }}%
-                                </span>
+                            <!-- Best Match Details -->
+                            <div class="bg-gray-50 rounded-2xl p-6 border-r-4 border-red-500">
+                                <h4 class="text-lg font-bold text-gray-800 mb-3">الخبر المزيف المشابه:</h4>
+                                <p class="text-xl font-bold text-gray-900 mb-3">{{ $best_match['title'] }}</p>
+                                <p class="text-gray-700 leading-relaxed mb-4">
+                                    {{ Str::limit($best_match['content'], 300) }}
+                                </p>
+                                <div class="flex flex-wrap gap-3 items-center">
+                                    <span class="bg-gray-200 px-3 py-1 rounded-full text-sm">
+                                        المصدر: {{ $best_match['origin_dataset'] }}
+                                    </span>
+                                    <span class="bg-gray-200 px-3 py-1 rounded-full text-sm">
+                                        ثقة الكشف: {{ number_format($best_match['confidence_score'] * 100, 1) }}%
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
                 @endif
 
                 <!-- Additional Matches -->
                 @if(count($similar_news) > 1)
-                <div class="p-8 bg-gray-50">
-                    <div class="max-w-3xl mx-auto">
-                        <h3 class="text-xl font-bold text-gray-800 mb-6">أخبار مزيفة مشابهة أخرى ({{ count($similar_news) - 1 }})</h3>
-                        <div class="space-y-4">
-                            @foreach(array_slice($similar_news, 1) as $news)
-                            <div class="bg-white rounded-xl p-5 border-r-4 border-orange-400">
-                                <div class="flex justify-between items-start mb-2">
-                                    <p class="font-bold text-gray-900 flex-1">{{ $news['title'] }}</p>
-                                    <span class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm font-bold mr-3 whitespace-nowrap">
-                                        {{ number_format($news['similarity_score'] * 100, 1) }}%
-                                    </span>
-                                </div>
-                                <p class="text-gray-600 text-sm">{{ Str::limit($news['content'], 150) }}</p>
+                    <div class="p-8 bg-gray-50">
+                        <div class="max-w-3xl mx-auto">
+                            <h3 class="text-xl font-bold text-gray-800 mb-6">أخبار مزيفة مشابهة أخرى
+                                ({{ count($similar_news) - 1 }})</h3>
+                            <div class="space-y-4">
+                                @foreach(array_slice($similar_news, 1) as $news)
+                                    <div class="bg-white rounded-xl p-5 border-r-4 border-orange-400">
+                                        <div class="flex justify-between items-start mb-2">
+                                            <p class="font-bold text-gray-900 flex-1">{{ $news['title'] }}</p>
+                                            <span
+                                                class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm font-bold mr-3 whitespace-nowrap">
+                                                {{ number_format($news['similarity_score'] * 100, 1) }}%
+                                            </span>
+                                        </div>
+                                        <p class="text-gray-600 text-sm">{{ Str::limit($news['content'], 150) }}</p>
+                                    </div>
+                                @endforeach
                             </div>
-                            @endforeach
                         </div>
                     </div>
-                </div>
                 @endif
             </div>
 
@@ -146,24 +147,26 @@
                 </div>
 
                 @if(!empty($similar_news))
-                <div class="p-8">
-                    <div class="max-w-3xl mx-auto">
-                        <h3 class="text-xl font-bold text-gray-800 mb-6">أخبار مشابهة تم العثور عليها ({{ count($similar_news) }})</h3>
-                        <div class="space-y-4">
-                            @foreach($similar_news as $news)
-                            <div class="bg-gray-50 rounded-xl p-5 border-r-4 border-orange-300">
-                                <div class="flex justify-between items-start mb-2">
-                                    <p class="font-bold text-gray-900 flex-1">{{ $news['title'] }}</p>
-                                    <span class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm font-bold mr-3">
-                                        {{ number_format($news['similarity_score'] * 100, 1) }}%
-                                    </span>
-                                </div>
-                                <p class="text-gray-600 text-sm">{{ Str::limit($news['content'], 150) }}</p>
+                    <div class="p-8">
+                        <div class="max-w-3xl mx-auto">
+                            <h3 class="text-xl font-bold text-gray-800 mb-6">أخبار مشابهة تم العثور عليها
+                                ({{ count($similar_news) }})</h3>
+                            <div class="space-y-4">
+                                @foreach($similar_news as $news)
+                                    <div class="bg-gray-50 rounded-xl p-5 border-r-4 border-orange-300">
+                                        <div class="flex justify-between items-start mb-2">
+                                            <p class="font-bold text-gray-900 flex-1">{{ $news['title'] }}</p>
+                                            <span
+                                                class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm font-bold mr-3">
+                                                {{ number_format($news['similarity_score'] * 100, 1) }}%
+                                            </span>
+                                        </div>
+                                        <p class="text-gray-600 text-sm">{{ Str::limit($news['content'], 150) }}</p>
+                                    </div>
+                                @endforeach
                             </div>
-                            @endforeach
                         </div>
                     </div>
-                </div>
                 @endif
             </div>
 
@@ -188,7 +191,8 @@
                         <div class="bg-blue-50 border-r-4 border-blue-500 p-6 rounded-xl text-right">
                             <p class="text-blue-900 font-bold mb-2">💡 ملاحظة هامة:</p>
                             <p class="text-blue-800">
-                                عدم وجود تشابه لا يعني بالضرورة أن الخبر صحيح. يُنصح دائماً بالتحقق من المصادر الرسمية الموثوقة مثل:
+                                عدم وجود تشابه لا يعني بالضرورة أن الخبر صحيح. يُنصح دائماً بالتحقق من المصادر الرسمية
+                                الموثوقة مثل:
                             </p>
                             <ul class="mt-3 space-y-1 text-blue-800">
                                 <li>• وكالة الأنباء السعودية (واس)</li>
@@ -210,41 +214,41 @@
                 <p class="text-gray-800 leading-relaxed text-lg whitespace-pre-wrap">{{ $search_content }}</p>
 
                 @if(isset($preprocessed_text) && $preprocessed_text)
-                <div class="mt-6 bg-gray-50 rounded-xl p-5 border-r-4 border-purple-400">
-                    <p class="text-sm font-bold text-gray-700 mb-2">النص بعد المعالجة اللغوية (NLP):</p>
-                    <p class="text-gray-600 font-mono text-sm">{{ $preprocessed_text }}</p>
-                </div>
+                    <div class="mt-6 bg-gray-50 rounded-xl p-5 border-r-4 border-purple-400">
+                        <p class="text-sm font-bold text-gray-700 mb-2">النص بعد المعالجة اللغوية (NLP):</p>
+                        <p class="text-gray-600 font-mono text-sm">{{ $preprocessed_text }}</p>
+                    </div>
                 @endif
 
                 @if(isset($query_quality))
-                <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
-                    @if(isset($query_quality['length']))
-                    <div class="bg-gray-50 rounded-lg p-4 text-center">
-                        <p class="text-2xl font-bold text-[#4a6b5a]">{{ $query_quality['length'] }}</p>
-                        <p class="text-sm text-gray-600">عدد الأحرف</p>
+                    <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+                        @if(isset($query_quality['length']))
+                            <div class="bg-gray-50 rounded-lg p-4 text-center">
+                                <p class="text-2xl font-bold text-[#4a6b5a]">{{ $query_quality['length'] }}</p>
+                                <p class="text-sm text-gray-600">عدد الأحرف</p>
+                            </div>
+                        @endif
+                        @if(isset($query_quality['word_count']))
+                            <div class="bg-gray-50 rounded-lg p-4 text-center">
+                                <p class="text-2xl font-bold text-[#4a6b5a]">{{ $query_quality['word_count'] }}</p>
+                                <p class="text-sm text-gray-600">عدد الكلمات</p>
+                            </div>
+                        @endif
+                        @if(isset($query_quality['legal_keyword_count']))
+                            <div class="bg-gray-50 rounded-lg p-4 text-center">
+                                <p class="text-2xl font-bold text-[#4a6b5a]">{{ $query_quality['legal_keyword_count'] }}</p>
+                                <p class="text-sm text-gray-600">مصطلحات قانونية</p>
+                            </div>
+                        @endif
+                        @if(isset($query_quality['is_legal_related']))
+                            <div class="bg-gray-50 rounded-lg p-4 text-center">
+                                <p class="text-2xl font-bold text-[#4a6b5a]">
+                                    {{ $query_quality['is_legal_related'] ? '✓' : '✗' }}
+                                </p>
+                                <p class="text-sm text-gray-600">نص قانوني</p>
+                            </div>
+                        @endif
                     </div>
-                    @endif
-                    @if(isset($query_quality['word_count']))
-                    <div class="bg-gray-50 rounded-lg p-4 text-center">
-                        <p class="text-2xl font-bold text-[#4a6b5a]">{{ $query_quality['word_count'] }}</p>
-                        <p class="text-sm text-gray-600">عدد الكلمات</p>
-                    </div>
-                    @endif
-                    @if(isset($query_quality['legal_keyword_count']))
-                    <div class="bg-gray-50 rounded-lg p-4 text-center">
-                        <p class="text-2xl font-bold text-[#4a6b5a]">{{ $query_quality['legal_keyword_count'] }}</p>
-                        <p class="text-sm text-gray-600">مصطلحات قانونية</p>
-                    </div>
-                    @endif
-                    @if(isset($query_quality['is_legal_related']))
-                    <div class="bg-gray-50 rounded-lg p-4 text-center">
-                        <p class="text-2xl font-bold text-[#4a6b5a]">
-                            {{ $query_quality['is_legal_related'] ? '✓' : '✗' }}
-                        </p>
-                        <p class="text-sm text-gray-600">نص قانوني</p>
-                    </div>
-                    @endif
-                </div>
                 @endif
             </div>
         </div>

@@ -68,8 +68,6 @@ class Feedback extends Model
         return $query->where('rating', $rating);
     }
 
-
-
     /**
      * Scope a query to get recent feedbacks.
      */
@@ -93,8 +91,6 @@ class Feedback extends Model
     {
         return $this->rating <= 2;
     }
-
-
 
     /**
      * Get feedback statistics.

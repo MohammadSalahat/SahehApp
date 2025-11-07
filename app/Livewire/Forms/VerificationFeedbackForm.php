@@ -9,7 +9,9 @@ use Livewire\Component;
 class VerificationFeedbackForm extends Component
 {
     public $rating = 5;
+
     public $message = '';
+
     public $submitted = false;
 
     protected $rules = [
@@ -27,7 +29,7 @@ class VerificationFeedbackForm extends Component
     public function mount()
     {
         // Store intended URL for post-login redirect (only for guests)
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             session(['url.intended' => route('review')]);
         }
     }
@@ -35,10 +37,11 @@ class VerificationFeedbackForm extends Component
     public function submit()
     {
         // Check if user is authenticated
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             // Store the current URL for redirect after login
             session(['url.intended' => request()->url()]);
             session()->flash('error', 'يجب تسجيل الدخول أولاً لإرسال التقييم');
+
             return redirect()->route('login');
         }
 
@@ -75,12 +78,14 @@ class VerificationFeedbackForm extends Component
     public function redirectToLogin()
     {
         session(['url.intended' => route('review')]);
+
         return redirect()->route('login');
     }
 
     public function redirectToRegister()
     {
         session(['url.intended' => route('review')]);
+
         return redirect()->route('register');
     }
 
