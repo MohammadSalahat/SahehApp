@@ -26,6 +26,16 @@ class Login extends Component
     public bool $remember = false;
 
     /**
+     * Component mounting - handle redirect parameter
+     */
+    public function mount()
+    {
+        if (request()->has('redirect')) {
+            session(['url.intended' => request()->get('redirect')]);
+        }
+    }
+
+    /**
      * Handle an incoming authentication request.
      */
     public function login(): void

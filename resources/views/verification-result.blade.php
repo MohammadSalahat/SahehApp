@@ -249,8 +249,14 @@
             </div>
         </div>
 
+        <!-- Feedback Section -->
+        <div class="mt-16">
+            <h2 class="text-3xl font-bold text-center text-[#4a6b5a] mb-8">قيّم دقة النتيجة</h2>
+            <livewire:forms.verification-feedback-form />
+        </div>
+
         <!-- Action Buttons -->
-        <div class="text-center space-y-4">
+        <div class="text-center space-y-4 mt-12">
             <a href="{{ route('home') }}"
                 class="inline-block bg-gradient-to-r from-[#4a6b5a] to-[#3a5a4a] text-white px-10 py-4 rounded-full font-bold text-lg hover:shadow-xl transform hover:scale-105 transition-all">
                 تحقق من خبر آخر

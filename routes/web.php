@@ -16,6 +16,9 @@ Route::get('/', function () {
 // Verification route
 Route::post('/verify', [App\Http\Controllers\Web\VerificationController::class, 'verify'])->name('verify');
 
+// Review route (requires auth)
+Route::get('/review', App\Livewire\Pages\ReviewPage::class)->middleware('auth')->name('review');
+
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');

@@ -23,6 +23,16 @@ class Register extends Component
     public string $password_confirmation = '';
 
     /**
+     * Component mounting - handle redirect parameter
+     */
+    public function mount()
+    {
+        if (request()->has('redirect')) {
+            session(['url.intended' => request()->get('redirect')]);
+        }
+    }
+
+    /**
      * Handle an incoming registration request.
      */
     public function register(): void
@@ -41,6 +51,6 @@ class Register extends Component
 
         Session::regenerate();
 
-        $this->redirect(route('dashboard', absolute: false), navigate: true);
+        $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
     }
 }

@@ -18,10 +18,8 @@ class Feedback extends Model
      */
     protected $fillable = [
         'user_id',
-        'article_title',
         'rating',
         'message',
-        'verification_result',
     ];
 
     /**
@@ -70,24 +68,7 @@ class Feedback extends Model
         return $query->where('rating', $rating);
     }
 
-    /**
-     * Scope a query to filter by verification result.
-     */
-    public function scopeByVerificationResult($query, $result)
-    {
-        return $query->where('verification_result', $result);
-    }
 
-    /**
-     * Scope a query to search by article title using fulltext.
-     */
-    public function scopeSearchArticle($query, $searchTerm)
-    {
-        return $query->whereRaw(
-            'MATCH(article_title) AGAINST(? IN BOOLEAN MODE)',
-            [$searchTerm]
-        );
-    }
 
     /**
      * Scope a query to get recent feedbacks.
@@ -113,15 +94,7 @@ class Feedback extends Model
         return $this->rating <= 2;
     }
 
-    /**
-     * Get the average rating for a specific article.
-     *
-     * @param  string  $articleTitle
-     */
-    public static function averageRatingForArticle($articleTitle): float
-    {
-        return self::where('article_title', $articleTitle)->avg('rating') ?? 0;
-    }
+
 
     /**
      * Get feedback statistics.
