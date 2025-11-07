@@ -191,8 +191,30 @@
 
                         // Validate content length
                         if (content.length < 20) {
-                            alert('الرجاء إدخال نص لا يقل عن 20 حرفاً');
+                            // Show error in a nicer way
+                            const textarea = document.getElementById('news-content');
+                            textarea.style.borderColor = '#ef4444';
+                            textarea.focus();
+
+                            // Create or update error message
+                            let errorMsg = document.getElementById('content-error');
+                            if (!errorMsg) {
+                                errorMsg = document.createElement('div');
+                                errorMsg.id = 'content-error';
+                                errorMsg.className = 'mt-2 text-red-600 text-sm font-medium';
+                                textarea.parentNode.insertBefore(errorMsg, textarea.nextSibling);
+                            }
+                            errorMsg.textContent = 'الرجاء إدخال نص لا يقل عن 20 حرفاً';
+
                             return false;
+                        }
+
+                        // Remove error styling if present
+                        const textarea = document.getElementById('news-content');
+                        textarea.style.borderColor = '';
+                        const errorMsg = document.getElementById('content-error');
+                        if (errorMsg) {
+                            errorMsg.remove();
                         }
 
                         // Show the loader
