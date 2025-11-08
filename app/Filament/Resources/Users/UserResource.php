@@ -24,7 +24,28 @@ class UserResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::User;
 
-    protected static ?string $recordTitleAttribute = 'User';
+    protected static ?string $recordTitleAttribute = 'name';
+
+    protected static ?string $navigationLabel = null;
+
+    protected static ?string $modelLabel = null;
+
+    protected static ?string $pluralModelLabel = null;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('filament.resources.users');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('filament.resource.user');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('filament.resources.users');
+    }
 
     public static function form(Schema $schema): Schema
     {

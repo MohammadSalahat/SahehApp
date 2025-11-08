@@ -5,8 +5,8 @@
                 <!-- Logo -->
                 <div class="mb-8 flex  flex-col items-center">
                     <img src="{{ asset('images/logo.png') }}" alt="شعار صحيح" class=" h-14 mb-6 ">
-                    <h2 class="text-3xl font-bold text-gray-900 mb-2">مرحباً بك في صحيح</h2>
-                    <p class="text-gray-600">أنشئ حسابك للبدء</p>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2">{{ __('auth.register_title') }}</h2>
+                    <p class="text-gray-600">{{ __('auth.register_subtitle') }}</p>
                 </div>
 
                 <!-- Register Form -->
@@ -14,40 +14,41 @@
                     <!-- Name -->
                     <div>
                         <flux:input wire:model="name" type="text" required autofocus autocomplete="name"
-                            placeholder="الاسم الكامل" />
+                            placeholder="{{ __('auth.full_name_placeholder') }}" />
                     </div>
 
                     <!-- Email -->
                     <div>
                         <flux:input wire:model="email" type="email" required autocomplete="email"
-                            placeholder="البريد الإلكتروني" />
+                            placeholder="{{ __('auth.email_placeholder') }}" />
                     </div>
 
                     <!-- Password -->
                     <div>
                         <flux:input wire:model="password" type="password" required autocomplete="new-password"
-                            placeholder="كلمة المرور" viewable />
+                            placeholder="{{ __('auth.password_placeholder') }}" viewable />
                     </div>
 
                     <!-- Confirm Password -->
                     <div>
                         <flux:input wire:model="password_confirmation" type="password" required
-                            autocomplete="new-password" placeholder="تأكيد كلمة المرور" viewable />
+                            autocomplete="new-password" placeholder="{{ __('auth.password_confirmation_placeholder') }}"
+                            viewable />
                     </div>
 
                     <!-- Register Button -->
                     <flux:button type="submit" variant="primary"
                         class="w-full bg-[#4a6b5a] hover:bg-[#3d5a4a] text-white py-3 rounded-lg font-semibold transition-colors">
-                        {{ __('إنشاء حساب') }}
+                        {{ __('auth.register_button') }}
                     </flux:button>
                 </form>
 
                 <!-- Login Link -->
                 <div class="text-center mt-6">
-                    <span class="text-gray-600 text-sm">{{ __('لديك حساب بالفعل؟') }}</span>
+                    <span class="text-gray-600 text-sm">{{ __('auth.already_have_account') }}</span>
                     <flux:link :href="route('login')" wire:navigate
                         class="text-[#4a6b5a] hover:text-[#d4b896] font-semibold text-sm mr-1">
-                        {{ __('تسجيل الدخول') }}
+                        {{ __('auth.login') }}
                     </flux:link>
                 </div>
             </div>
@@ -56,8 +57,8 @@
             <div class="hidden md:block w-full md:w-1/2 bg-gradient-to-br from-[#d4b896] to-[#4a6b5a] relative">
                 <div class="absolute inset-0 flex items-center justify-center p-12">
                     <div class="text-center text-white">
-                        <h3 class="text-4xl font-bold mb-4">أنت في المكان الصحيح</h3>
-                        <p class="text-xl opacity-90">تحقق من الأخبار القانونية بثقة</p>
+                        <h3 class="text-4xl font-bold mb-4">{{ __('auth.register_welcome_title') }}</h3>
+                        <p class="text-xl opacity-90">{{ __('auth.register_welcome_subtitle') }}</p>
 
                         <!-- Decorative Elements -->
                         <div class="mt-12 flex justify-center gap-4">
@@ -77,7 +78,7 @@
         <!-- Footer -->
         <div class="px-8 py-4 bg-gray-50 border-t border-gray-100">
             <p class="text-center text-gray-500 text-xs">
-                © 2025 منصة صحيح - مشروع جامعي لخدمة المجتمع السعودي
+                {{ __('auth.footer_text') }}
             </p>
         </div>
     </div>

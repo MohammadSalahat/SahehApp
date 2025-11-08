@@ -24,7 +24,28 @@ class DatasetsFakeNewResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $recordTitleAttribute = 'Data set';
+    protected static ?string $recordTitleAttribute = 'title';
+
+    protected static ?string $navigationLabel = null;
+
+    protected static ?string $modelLabel = null;
+
+    protected static ?string $pluralModelLabel = null;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('filament.resources.datasets_fake_news');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('filament.resource.fake_news_item');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('filament.resources.datasets_fake_news');
+    }
 
     public static function form(Schema $schema): Schema
     {

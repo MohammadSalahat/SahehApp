@@ -22,7 +22,28 @@ class FeedbackResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $recordTitleAttribute = 'Feedback';
+    protected static ?string $recordTitleAttribute = 'rating';
+
+    protected static ?string $navigationLabel = null;
+
+    protected static ?string $modelLabel = null;
+
+    protected static ?string $pluralModelLabel = null;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('filament.resources.feedback');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('filament.resource.feedback');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('filament.resources.feedback');
+    }
 
     public static function form(Schema $schema): Schema
     {

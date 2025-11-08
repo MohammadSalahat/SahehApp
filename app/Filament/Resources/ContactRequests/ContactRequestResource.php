@@ -25,6 +25,27 @@ class ContactRequestResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'email';
 
+    protected static ?string $navigationLabel = null;
+
+    protected static ?string $modelLabel = null;
+
+    protected static ?string $pluralModelLabel = null;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('filament.resources.contact_requests');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('filament.resource.contact_request');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('filament.resources.contact_requests');
+    }
+
     public static function form(Schema $schema): Schema
     {
         return ContactRequestForm::configure($schema);

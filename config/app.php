@@ -86,6 +86,21 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Available Locales
+    |--------------------------------------------------------------------------
+    |
+    | List all of the languages that your application supports. This will be
+    | used to determine which locales are available for the user to switch to.
+    |
+    */
+
+    'available_locales' => [
+        'ar' => ['name' => 'العربية', 'dir' => 'rtl'],
+        'en' => ['name' => 'English', 'dir' => 'ltr'],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Encryption Key
     |--------------------------------------------------------------------------
     |

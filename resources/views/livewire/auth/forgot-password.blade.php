@@ -11,8 +11,8 @@
                 <img src="{{ asset('images/logo.png') }}" alt="شعار صحيح"
                     class="w-20 h-20 object-contain float-animation">
             </div>
-            <h2 class="text-4xl font-bold text-[#4a6b5a] mb-2">نسيت كلمة المرور؟</h2>
-            <p class="text-lg text-gray-600">لا تقلق، سنرسل لك رابط إعادة تعيين كلمة المرور عبر البريد الإلكتروني</p>
+            <h2 class="text-4xl font-bold text-[#4a6b5a] mb-2">{{ __('auth.forgot_password_title') }}</h2>
+            <p class="text-lg text-gray-600">{{ __('auth.forgot_password_subtitle') }}</p>
         </div>
 
         <!-- Forgot Password Form Card -->
@@ -34,10 +34,10 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                             </svg>
-                            <span class="font-bold text-xl">أدخل بريدك الإلكتروني</span>
+                            <span class="font-bold text-xl">{{ __('auth.enter_email_label') }}</span>
                         </div>
 
-                        <flux:input wire:model="email" :label="__('البريد الإلكتروني')" type="email" required autofocus
+                        <flux:input wire:model="email" :label="__('auth.email')" type="email" required autofocus
                             placeholder="your.email@example.com"
                             class="w-full px-6 py-4 border-2 border-gray-200 rounded-xl focus:border-[#4a6b5a] focus:outline-none text-lg transition-all duration-300 focus:ring-2 focus:ring-[#4a6b5a]/20 group-hover:border-[#4a6b5a]/50" />
 
@@ -46,7 +46,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            سنرسل لك رابط إعادة التعيين خلال دقائق
+                            {{ __('auth.reset_link_info') }}
                         </p>
                     </div>
 
@@ -57,15 +57,15 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                         </svg>
-                        {{ __('إرسال رابط إعادة التعيين') }}
+                        {{ __('auth.send_reset_link') }}
                     </flux:button>
                 </form>
 
                 <div class="text-center pt-6 border-t border-gray-200">
-                    <span class="text-gray-600">{{ __('أو، العودة إلى') }}</span>
+                    <span class="text-gray-600">{{ __('auth.or_back_to') }}</span>
                     <flux:link :href="route('login')" wire:navigate
                         class="text-[#4a6b5a] hover:text-[#d4b896] font-semibold transition-colors duration-300 mr-2">
-                        {{ __('تسجيل الدخول') }}
+                        {{ __('auth.login') }}
                     </flux:link>
                 </div>
             </div>
@@ -74,7 +74,7 @@
         <!-- Footer Text -->
         <div class="text-center">
             <p class="text-gray-500 text-sm">
-                © 2025 منصة صحيح - مشروع جامعي لخدمة المجتمع السعودي
+                {{ __('auth.footer_text') }}
             </p>
         </div>
     </div>
