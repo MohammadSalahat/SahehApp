@@ -25,7 +25,34 @@
         <h1 class="text-4xl md:text-5xl font-bold text-center text-[#4a6b5a] mb-4">
             نتيجة التحقق بالذكاء الاصطناعي
         </h1>
-        <p class="text-center text-gray-600 mb-12">تحليل ذكي للنص باستخدام التشابه الدلالي والمعالجة اللغوية</p>
+        <p class="text-center text-gray-600 mb-8">تحليل ذكي للنص باستخدام التشابه الدلالي والمعالجة اللغوية</p>
+
+        <!-- Text Quality Analysis -->
+        @if(isset($query_quality))
+            <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+                <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">تحليل جودة النص المدخل</h3>
+                <div class="grid md:grid-cols-4 gap-4">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-blue-600">{{ $query_quality['word_count'] ?? 0 }}</div>
+                        <div class="text-sm text-gray-600">عدد الكلمات</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-green-600">
+                            {{ number_format(($query_quality['arabic_ratio'] ?? 0) * 100, 1) }}%</div>
+                        <div class="text-sm text-gray-600">نسبة النص العربي</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-purple-600">{{ $query_quality['legal_terms_count'] ?? 0 }}</div>
+                        <div class="text-sm text-gray-600">المصطلحات القانونية</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-orange-600">
+                            {{ number_format(($query_quality['quality_score'] ?? 0) * 100, 1) }}%</div>
+                        <div class="text-sm text-gray-600">درجة الجودة</div>
+                    </div>
+                </div>
+            </div>
+        @endif
 
         @if (isset($error) && $error)
             <!-- ERROR: Show Error Message -->
@@ -88,6 +115,61 @@
                                     </span>
                                 </div>
                             </div>
+
+                            <!-- Detailed Analysis Metrics -->
+                            @if(isset($best_match['detailed_metrics']))
+                                <div class="grid md:grid-cols-3 gap-4 mb-6">
+                                    <div class="bg-blue-50 p-4 rounded-lg text-center">
+                                        <h4 class="font-bold text-blue-800 mb-2">التشابه الدلالي</h4>
+                                        <p class="text-2xl font-bold text-blue-600">
+                                            {{ number_format(($best_match['detailed_metrics']['semantic_similarity'] ?? 0) * 100, 1) }}%
+                                        </p>
+                                    </div>
+                                    <div class="bg-green-50 p-4 rounded-lg text-center">
+                                        <h4 class="font-bold text-green-800 mb-2">تداخل المصطلحات</h4>
+                                        <p class="text-2xl font-bold text-green-600">
+                                            {{ number_format(($best_match['detailed_metrics']['lexical_overlap'] ?? 0) * 100, 1) }}%
+                                        </p>
+                                    </div>
+                                    <div class="bg-purple-50 p-4 rounded-lg text-center">
+                                        <h4 class="font-bold text-purple-800 mb-2">المصطلحات القانونية</h4>
+                                        <p class="text-2xl font-bold text-purple-600">
+                                            {{ number_format(($best_match['detailed_metrics']['legal_terms_overlap'] ?? 0) * 100, 1) }}%
+                                        </p>
+                                    </div>
+                                </div>
+                            @endif
+
+                            <!-- Common Legal Entities -->
+                            @if(isset($best_match['common_legal_entities']) && count($best_match['common_legal_entities']) > 0)
+                                <div class="bg-yellow-50 p-4 rounded-lg mb-6">
+                                    <h4 class="font-bold text-yellow-800 mb-3">المصطلحات القانونية المشتركة:</h4>
+                                    <div class="flex flex-wrap gap-2">
+                                        @foreach($best_match['common_legal_entities'] as $entityType => $entities)
+                                            @foreach($entities as $entity)
+                                                <span
+                                                    class="bg-yellow-200 text-yellow-800 px-3 py-1 rounded-full text-sm">{{ $entity }}</span>
+                                            @endforeach
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+
+                            <!-- Analysis Method -->
+                            @if(isset($best_match['analysis_method']))
+                                <div class="bg-indigo-50 p-4 rounded-lg mb-6">
+                                    <h4 class="font-bold text-indigo-800 mb-2">طريقة التحليل:</h4>
+                                    <p class="text-indigo-700">
+                                        @if($best_match['analysis_method'] === 'semantic_similarity')
+                                            التشابه الدلالي باستخدام نماذج Sentence Transformers
+                                        @elseif($best_match['analysis_method'] === 'tfidf_cosine')
+                                            تحليل TF-IDF والتشابه التجميعي
+                                        @else
+                                            {{ $best_match['analysis_method'] }}
+                                        @endif
+                                    </p>
+                                </div>
+                            @endif
 
                             <!-- Best Match Details -->
                             <div class="bg-gray-50 rounded-2xl p-6 border-r-4 border-red-500">

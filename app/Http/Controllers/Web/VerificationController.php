@@ -64,12 +64,42 @@ class VerificationController extends Controller
 
             // DEADLOCK FIX: Fetch fake news candidates HERE in Laravel
             // This prevents Python from calling back to Laravel API
-            $candidates = \App\Models\DatasetFakeNews::query()
+            //
+            // IMPROVED MATCHING STRATEGY:
+            // 1. Use FULLTEXT search to find exact/close matches first
+            // 2. Add random samples to reach 100 candidates for diversity
+            // This ensures exact matches are ALWAYS included while maintaining good coverage
+
+            $candidates = [];
+
+            // Step 1: FULLTEXT search for exact/close matches (prioritize these!)
+            $searchTerms = mb_substr($content, 0, 500); // Use first 500 chars for search
+            $fullTextMatches = \App\Models\DatasetFakeNews::query()
                 ->select('id', 'title', 'content', 'confidence_score', 'origin_dataset_name')
-                ->orderBy('confidence_score', 'desc')
-                ->limit(100)  // Get top 100 high-confidence entries
+                ->where('confidence_score', '>=', 0.5)
+                ->whereRaw('MATCH(title, content) AGAINST(? IN NATURAL LANGUAGE MODE)', [$searchTerms])
+                ->limit(50)  // Get top 50 FULLTEXT matches
                 ->get()
                 ->toArray();
+
+            $candidates = $fullTextMatches;
+            Log::info('FULLTEXT search found ' . count($fullTextMatches) . ' close matches');
+
+            // Step 2: Add random high-quality entries to reach 100 (for semantic diversity)
+            $remainingSlots = 100 - count($candidates);
+            if ($remainingSlots > 0) {
+                $existingIds = array_column($candidates, 'id');
+                $randomSamples = \App\Models\DatasetFakeNews::query()
+                    ->select('id', 'title', 'content', 'confidence_score', 'origin_dataset_name')
+                    ->where('confidence_score', '>=', 0.5)
+                    ->whereNotIn('id', $existingIds)  // Exclude already selected
+                    ->inRandomOrder()
+                    ->limit($remainingSlots)
+                    ->get()
+                    ->toArray();
+
+                $candidates = array_merge($candidates, $randomSamples);
+            }
 
             Log::info('Fetched fake news candidates', [
                 'count' => count($candidates),
@@ -80,8 +110,8 @@ class VerificationController extends Controller
             $aiResult = $this->pythonAI->verifyArabicNewsWithCandidates(
                 text: $content,
                 candidates: $candidates,
-                threshold: 0.6,  // 60% similarity threshold
-                topK: 5          // Return top 5 similar news
+                threshold: 0.70,  // 70% similarity threshold for better accuracy
+                topK: 5           // Return top 5 similar news
             );
 
             Log::info('AI verification completed', [
