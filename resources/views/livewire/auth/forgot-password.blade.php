@@ -18,8 +18,7 @@
         <!-- Forgot Password Form Card -->
         <div
             class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl p-10 border border-white/20 hover:shadow-[#4a6b5a]/10 transition-all duration-500">
-            <div
-                class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#4a6b5a] via-[#d4b896] to-[#4a6b5a] rounded-t-3xl">
+            <div class="absolute top-0 left-0 w-full h-2 bg-primary rounded-t-3xl">
             </div>
 
             <div class="flex flex-col gap-6">
@@ -39,7 +38,7 @@
 
                         <flux:input wire:model="email" :label="__('auth.email')" type="email" required autofocus
                             placeholder="your.email@example.com"
-                            class="w-full px-6 py-4 border-2 border-gray-200 rounded-xl focus:border-[#4a6b5a] focus:outline-none text-lg transition-all duration-300 focus:ring-2 focus:ring-[#4a6b5a]/20 group-hover:border-[#4a6b5a]/50" />
+                            class="w-full border-2 border-gray-200 rounded-xl focus:border-[#4a6b5a] focus:outline-none text-lg transition-all duration-300 focus:ring-2 focus:ring-[#4a6b5a]/20 group-hover:border-[#4a6b5a]/50" />
 
                         <p class="text-sm text-gray-500 mt-2 flex items-center gap-2">
                             <svg class="w-4 h-4 text-[#d4b896]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -52,11 +51,7 @@
 
                     <!-- Send Reset Link Button -->
                     <flux:button variant="primary" type="submit"
-                        class="w-full bg-gradient-to-r bg-primary text-white py-4 rounded-xl text-lg font-bold shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                        </svg>
+                        class="w-full bg-primary text-white py-4 rounded-xl text-lg font-bold shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                         {{ __('auth.send_reset_link') }}
                     </flux:button>
                 </form>

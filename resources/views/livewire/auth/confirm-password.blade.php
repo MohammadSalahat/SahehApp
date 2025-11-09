@@ -1,6 +1,6 @@
 <x-layouts.auth>
     <div
-        class="min-h-screen bg-gradient-to-br from-[#f8f6f0] via-[#faf9f5] to-[#f8f6f0] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        class="min-h-screen bg-primary flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         <!-- Background Decorations -->
         <div
             class="absolute top-20 left-1/2 transform -translate-x-1/2 w-72 h-72 bg-primborder-primary/10 rounded-full blur-3xl">

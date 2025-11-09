@@ -30,7 +30,8 @@
         <!-- Text Quality Analysis -->
         @if(isset($query_quality))
             <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
-                <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">{{ __('verification.quality_analysis_title') }}</h3>
+                <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">{{ __('verification.quality_analysis_title') }}
+                </h3>
                 <div class="grid md:grid-cols-4 gap-4">
                     <div class="text-center">
                         <div class="text-2xl font-bold text-blue-600">{{ $query_quality['word_count'] ?? 0 }}</div>
@@ -38,7 +39,8 @@
                     </div>
                     <div class="text-center">
                         <div class="text-2xl font-bold text-green-600">
-                            {{ number_format(($query_quality['arabic_ratio'] ?? 0) * 100, 1) }}%</div>
+                            {{ number_format(($query_quality['arabic_ratio'] ?? 0) * 100, 1) }}%
+                        </div>
                         <div class="text-sm text-gray-600">{{ __('verification.arabic_ratio') }}</div>
                     </div>
                     <div class="text-center">
@@ -47,7 +49,8 @@
                     </div>
                     <div class="text-center">
                         <div class="text-2xl font-bold text-orange-600">
-                            {{ number_format(($query_quality['quality_score'] ?? 0) * 100, 1) }}%</div>
+                            {{ number_format(($query_quality['quality_score'] ?? 0) * 100, 1) }}%
+                        </div>
                         <div class="text-sm text-gray-600">{{ __('verification.quality_score') }}</div>
                     </div>
                 </div>
@@ -85,7 +88,8 @@
                 <!-- AI Recommendation -->
                 <div class="p-8 bg-red-50 border-b border-red-100">
                     <div class="max-w-3xl mx-auto text-center">
-                        <h3 class="text-2xl font-bold text-gray-800 mb-4">{{ __('verification.ai_recommendation_title') }}</h3>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">{{ __('verification.ai_recommendation_title') }}
+                        </h3>
                         <p class="text-lg text-gray-700 leading-relaxed">{{ $recommendation }}</p>
                     </div>
                 </div>
@@ -94,7 +98,8 @@
                 @if(isset($best_match))
                     <div class="p-8 bg-white border-b border-gray-100">
                         <div class="max-w-3xl mx-auto">
-                            <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">{{ __('verification.similarity_title') }}</h3>
+                            <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">
+                                {{ __('verification.similarity_title') }}</h3>
 
                             <div class="relative mb-6">
                                 <div class="flex items-center justify-between mb-2">
@@ -183,7 +188,8 @@
                                         {{ __('verification.source_label') }}: {{ $best_match['origin_dataset'] }}
                                     </span>
                                     <span class="bg-gray-200 px-3 py-1 rounded-full text-sm">
-                                        {{ __('verification.confidence_label') }}: {{ number_format($best_match['confidence_score'] * 100, 1) }}%
+                                        {{ __('verification.confidence_label') }}:
+                                        {{ number_format($best_match['confidence_score'] * 100, 1) }}%
                                     </span>
                                 </div>
                             </div>
@@ -270,7 +276,7 @@
                         <p class="text-lg text-gray-700 leading-relaxed mb-6">
                             {{ $recommendation ?? __('verification.safe_default_message') }}
                         </p>
-                        <div class="bg-blue-50 border-r-4 border-blue-500 p-6 rounded-xl text-right">
+                        <div class="bg-blue-50 border-r-4 border-blue-500 p-6 rounded-xl ">
                             <p class="text-blue-900 font-bold mb-2">{{ __('verification.important_note_title') }}</p>
                             <p class="text-blue-800">
                                 {{ __('verification.important_note_text') }}
@@ -296,7 +302,8 @@
 
                 @if(isset($preprocessed_text) && $preprocessed_text)
                     <div class="mt-6 bg-gray-50 rounded-xl p-5 border-r-4 border-purple-400">
-                        <p class="text-sm font-bold text-gray-700 mb-2">{{ __('verification.preprocessed_text_label') }}:</p>
+                        <p class="text-sm font-bold text-gray-700 mb-2">{{ __('verification.preprocessed_text_label') }}:
+                        </p>
                         <p class="text-gray-600 font-mono text-sm">{{ $preprocessed_text }}</p>
                     </div>
                 @endif

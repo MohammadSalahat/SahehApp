@@ -49,7 +49,7 @@
                             <h3 class="text-lg font-bold text-[#4a6b5a] mb-1">معالجة النص العربي</h3>
                             <p class="text-gray-600 text-sm">تنظيف وتجهيز النص للتحليل اللغوي...</p>
                             <div class="mt-2 h-1 bg-gray-200 rounded-full overflow-hidden">
-                                <div class="h-full bg-gradient-to-r bg-primary rounded-full step-progress w-0"></div>
+                                <div class="h-full bg-primary rounded-full step-progress w-0"></div>
                             </div>
                         </div>
                     </div>
@@ -69,7 +69,7 @@
                             <h3 class="text-lg font-bold text-gray-400 mb-1">استخراج المصطلحات القانونية</h3>
                             <p class="text-gray-400 text-sm">تحديد المصطلحات القانونية والكلمات المفتاحية...</p>
                             <div class="mt-2 h-1 bg-gray-200 rounded-full overflow-hidden">
-                                <div class="h-full bg-gradient-to-r bg-primary rounded-full step-progress w-0"></div>
+                                <div class="h-full bg-primary rounded-full step-progress w-0"></div>
                             </div>
                         </div>
                     </div>
@@ -90,7 +90,7 @@
                             </h3>
                             <p class="text-gray-400 text-sm">مقارنة النص مع قاعدة بيانات الأخبار المزيفة...</p>
                             <div class="mt-2 h-1 bg-gray-200 rounded-full overflow-hidden">
-                                <div class="h-full bg-gradient-to-r bg-primary rounded-full step-progress w-0"></div>
+                                <div class="h-full bg-primary rounded-full step-progress w-0"></div>
                             </div>
                         </div>
                     </div>
@@ -110,7 +110,7 @@
                             <h3 class="text-lg font-bold text-gray-400 mb-1">حساب درجة الثقة والتوصيات</h3>
                             <p class="text-gray-400 text-sm">تحديد مستوى التشابه وإعداد التقرير النهائي...</p>
                             <div class="mt-2 h-1 bg-gray-200 rounded-full overflow-hidden">
-                                <div class="h-full bg-gradient-to-r bg-primary rounded-full step-progress w-0"></div>
+                                <div class="h-full bg-primary rounded-full step-progress w-0"></div>
                             </div>
                         </div>
                     </div>

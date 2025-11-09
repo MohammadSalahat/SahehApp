@@ -15,7 +15,7 @@
 
         <!-- Card -->
         <div class="bg-white rounded-2xl shadow-xl p-8 relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r bg-primary"></div>
+            <div class="absolute top-0 left-0 w-full h-2 bg-primary"></div>
 
             <!-- Session Status -->
             <x-auth-session-status class="mb-4 text-center" :status="session('status')" />
@@ -23,14 +23,14 @@
             <form method="POST" wire:submit="login" class="space-y-6">
                 <!-- Email Address -->
                 <div>
-                    <label for="email" class="block text-right text-gray-700 font-semibold mb-2">
+                    <label for="email" class="block  text-gray-700 font-semibold mb-2">
                         {{ __('auth.email') }}
                     </label>
                     <input wire:model="email" id="email" type="email" required autofocus autocomplete="email"
                         placeholder="{{ __('auth.email_placeholder') }}"
                         class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-[#4a6b5a] focus:outline-none transition-all duration-300 focus:ring-2 focus:ring-[#4a6b5a]/20" />
                     @error('email')
-                        <p class="mt-1 text-sm text-red-600 text-right">{{ $message }}</p>
+                        <p class="mt-1 text-sm text-red-600 ">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -51,12 +51,12 @@
                         placeholder="{{ __('auth.password_placeholder') }}"
                         class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-[#4a6b5a] focus:outline-none transition-all duration-300 focus:ring-2 focus:ring-[#4a6b5a]/20" />
                     @error('password')
-                        <p class="mt-1 text-sm text-red-600 text-right">{{ $message }}</p>
+                        <p class="mt-1 text-sm text-red-600 ">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <!-- Remember Me -->
-                <div class="flex items-center">
+                <div class="flex items-center gap-2">
                     <input wire:model="remember" id="remember" type="checkbox"
                         class="w-4 h-4 text-[#4a6b5a] border-gray-300 rounded focus:ring-[#4a6b5a] focus:ring-2" />
                     <label for="remember" class="mr-2 text-sm text-gray-700">

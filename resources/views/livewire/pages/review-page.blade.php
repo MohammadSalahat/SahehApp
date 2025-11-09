@@ -36,7 +36,7 @@
                             @for($i = 1; $i <= 5; $i++)
                                 <button type="button" wire:click="$set('rating', {{ $i }})"
                                     class="text-5xl transition-all duration-200 hover:scale-125 focus:outline-none transform
-                                                               {{ $rating >= $i ? 'text-yellow-400 drop-shadow-lg' : 'text-gray-300' }}">
+                                                                       {{ $rating >= $i ? 'text-yellow-400 drop-shadow-lg' : 'text-gray-300' }}">
                                     ⭐
                                 </button>
                             @endfor
@@ -53,7 +53,7 @@
 
                     <!-- Message Section -->
                     <div>
-                        <label for="message" class="block text-right text-gray-700 font-bold mb-4 text-lg">
+                        <label for="message" class="block  text-gray-700 font-bold mb-4 text-lg">
                             ملاحظات إضافية (اختياري)
                         </label>
                         <textarea wire:model="message" id="message" rows="5"
