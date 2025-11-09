@@ -13,4 +13,5 @@ return [
     'logout' => 'تسجيل الخروج',
     'hello' => 'مرحباً، :name',
     'logo_alt' => 'شعار صحيح',
+    'latest_news' => 'آخر الأخبار',
 ];

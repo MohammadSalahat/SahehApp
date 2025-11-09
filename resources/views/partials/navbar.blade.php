@@ -9,21 +9,21 @@
             </div>
 
             <!-- Desktop Navigation -->
-            <div class="hidden md:flex items-center space-x-8">
+            <div class="hidden md:flex items-start  gap-4">
                 <a href="#" class="text-gray-700 hover:text-primary px-3 py-2 text-sm font-medium transition-colors">
                     {{ __('navigation.home') }}
+                </a>
+                <a href="#about"
+                    class="text-gray-700 hover:text-primary px-3 py-2 text-sm font-medium transition-colors">
+                    {{ __('navigation.about_project') }}
                 </a>
                 <a href="#verify"
                     class="text-gray-700 hover:text-primary px-3 py-2 text-sm font-medium transition-colors">
                     {{ __('navigation.verify_news') }}
                 </a>
-                <a href="#sources"
+                <a href="#latest-news"
                     class="text-gray-700 hover:text-primary px-3 py-2 text-sm font-medium transition-colors">
-                    {{ __('navigation.legal_sources') }}
-                </a>
-                <a href="#about"
-                    class="text-gray-700 hover:text-primary px-3 py-2 text-sm font-medium transition-colors">
-                    {{ __('navigation.about_project') }}
+                    {{ __('navigation.latest_news') }}
                 </a>
                 <a href="#contact"
                     class="text-gray-700 hover:text-primary px-3 py-2 text-sm font-medium transition-colors">

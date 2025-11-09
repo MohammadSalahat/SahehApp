@@ -1,4 +1,4 @@
-<section class="py-20 bg-white">
+<section id="latest-news" class="py-20 bg-white">
     <div class="container mx-auto px-4">
         <h2 class="text-4xl md:text-5xl font-bold text-center text-[#4a6b5a] mb-6">
             {{ __('home.latest_news') }}

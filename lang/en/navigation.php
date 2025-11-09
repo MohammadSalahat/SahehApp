@@ -13,4 +13,5 @@ return [
     'logout' => 'Logout',
     'hello' => 'Hello, :name',
     'logo_alt' => 'Saheh Logo',
+    'latest_news' => 'Latest News',
 ];
