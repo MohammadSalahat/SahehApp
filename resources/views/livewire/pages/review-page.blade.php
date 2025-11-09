@@ -3,7 +3,7 @@
 
         <!-- Header -->
         <div class="text-center mb-12">
-            <h1 class="text-4xl md:text-5xl font-bold text-[#4a6b5a] mb-4">
+            <h1 class="text-4xl md:text-5xl font-bold text-primary mb-4">
                 تقييم نتيجة التحقق
             </h1>
             <p class="text-xl text-gray-600">
@@ -24,7 +24,7 @@
         @endif
 
         @if (!$submitted)
-            <div class="bg-white rounded-3xl shadow-2xl p-10 border-t-4 border-[#4a6b5a]">
+            <div class="bg-white rounded-3xl shadow-2xl p-10 border-t-4 border-primary">
 
                 <form wire:submit.prevent="submit" class="space-y-8">
                     <!-- Rating Section -->
@@ -36,7 +36,7 @@
                             @for($i = 1; $i <= 5; $i++)
                                 <button type="button" wire:click="$set('rating', {{ $i }})"
                                     class="text-5xl transition-all duration-200 hover:scale-125 focus:outline-none transform
-                                                                       {{ $rating >= $i ? 'text-yellow-400 drop-shadow-lg' : 'text-gray-300' }}">
+                                                                               {{ $rating >= $i ? 'text-yellow-400 drop-shadow-lg' : 'text-gray-300' }}">
                                     ⭐
                                 </button>
                             @endfor
@@ -57,7 +57,7 @@
                             ملاحظات إضافية (اختياري)
                         </label>
                         <textarea wire:model="message" id="message" rows="5"
-                            class="w-full px-6 py-4 border-2 border-gray-200 rounded-xl focus:border-[#4a6b5a] focus:outline-none resize-none text-lg transition-all duration-300 focus:ring-2 focus:ring-[#4a6b5a]/20 @error('message') border-red-500 @enderror"
+                            class="w-full px-6 py-4 border-2 border-gray-200 rounded-xl focus:border-primary focus:outline-none resize-none text-lg transition-all duration-300 focus:ring-2 focus:ring-primary/20 @error('message') border-red-500 @enderror"
                             placeholder="شاركنا ملاحظاتك حول دقة النتيجة أو اقتراحات للتحسين..."></textarea>
                         @error('message')
                             <p class="mt-2 text-red-600 text-sm">{{ $message }}</p>
@@ -67,7 +67,7 @@
                     <!-- Submit Button -->
                     <div class="text-center space-y-4">
                         <button type="submit" wire:loading.attr="disabled" wire:target="submit"
-                            class="bg-gradient-to-r from-[#4a6b5a] to-[#5a7a6a] text-white px-12 py-4 rounded-xl text-xl font-bold shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3 mx-auto">
+                            class="bg-gradient-to-r from-primary to-[#5a7a6a] text-white px-12 py-4 rounded-xl text-xl font-bold shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3 mx-auto">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />

@@ -21,7 +21,7 @@
                     <label for="full_name"
                         class="block text-gray-700 font-bold mb-3 text-lg">{{ __('contact.full_name') }}</label>
                     <input type="text"
-                        class="w-full px-6 py-4 border-2 border-gray-200 rounded-xl focus:border-[#4a6b5a] focus:outline-none text-lg transition-all duration-300 focus:ring-2 focus:ring-[#4a6b5a]/20 @error('full_name') border-red-500 @enderror"
+                        class="w-full px-6 py-4 border-2 border-gray-200 rounded-xl focus:border-primary focus:outline-none text-lg transition-all duration-300 focus:ring-2 focus:ring-primary/20 @error('full_name') border-red-500 @enderror"
                         placeholder="{{ __('contact.full_name_placeholder') }}" name="full_name" id="full_name"
                         wire:model.blur="full_name">
                     @error('full_name')
@@ -32,7 +32,7 @@
                 <div class="mb-8">
                     <label for="email" class="block text-gray-700 font-bold mb-3 text-lg">{{ __('contact.email') }}</label>
                     <input type="email"
-                        class="w-full px-6 py-4 border-2 border-gray-200 rounded-xl focus:border-[#4a6b5a] focus:outline-none text-lg transition-all duration-300 focus:ring-2 focus:ring-[#4a6b5a]/20 @error('email') border-red-500 @enderror"
+                        class="w-full px-6 py-4 border-2 border-gray-200 rounded-xl focus:border-primary focus:outline-none text-lg transition-all duration-300 focus:ring-2 focus:ring-primary/20 @error('email') border-red-500 @enderror"
                         placeholder="{{ __('contact.email_placeholder') }}" name="email" id="email" wire:model.blur="email">
                     @error('email')
                         <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
@@ -43,7 +43,7 @@
                     <label for="message"
                         class="block text-gray-700 font-bold mb-3 text-lg">{{ __('contact.message') }}</label>
                     <textarea
-                        class="w-full h-40 px-6 py-4 border-2 border-gray-200 rounded-xl focus:border-[#4a6b5a] focus:outline-none resize-none text-lg transition-all duration-300 focus:ring-2 focus:ring-[#4a6b5a]/20 @error('message') border-red-500 @enderror"
+                        class="w-full h-40 px-6 py-4 border-2 border-gray-200 rounded-xl focus:border-primary focus:outline-none resize-none text-lg transition-all duration-300 focus:ring-2 focus:ring-primary/20 @error('message') border-red-500 @enderror"
                         placeholder="{{ __('contact.message_placeholder') }}" name="message" id="message"
                         wire:model.blur="message"></textarea>
                     @error('message')

@@ -11,13 +11,13 @@
                 <img src="{{ asset('images/logo.png') }}" alt="شعار صحيح"
                     class="w-20 h-20 object-contain float-animation">
             </div>
-            <h2 class="text-4xl font-bold text-[#4a6b5a] mb-2">{{ __('auth.forgot_password_title') }}</h2>
+            <h2 class="text-4xl font-bold text-primary mb-2">{{ __('auth.forgot_password_title') }}</h2>
             <p class="text-lg text-gray-600">{{ __('auth.forgot_password_subtitle') }}</p>
         </div>
 
         <!-- Forgot Password Form Card -->
         <div
-            class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl p-10 border border-white/20 hover:shadow-[#4a6b5a]/10 transition-all duration-500">
+            class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl p-10 border border-white/20 hover:shadow-primary/10 transition-all duration-500">
             <div class="absolute top-0 left-0 w-full h-2 bg-primary rounded-t-3xl">
             </div>
 
@@ -28,7 +28,7 @@
                 <form method="POST" wire:submit="sendPasswordResetLink" class="flex flex-col gap-6">
                     <!-- Email Address -->
                     <div class="group">
-                        <div class="flex items-center gap-3 mb-4 text-[#4a6b5a]">
+                        <div class="flex items-center gap-3 mb-4 text-primary">
                             <svg class="w-8 h-8 pulse-soft" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -38,7 +38,7 @@
 
                         <flux:input wire:model="email" :label="__('auth.email')" type="email" required autofocus
                             placeholder="your.email@example.com"
-                            class="w-full border-2 border-gray-200 rounded-xl focus:border-[#4a6b5a] focus:outline-none text-lg transition-all duration-300 focus:ring-2 focus:ring-[#4a6b5a]/20 group-hover:border-[#4a6b5a]/50" />
+                            class="w-full border-2 border-gray-200 rounded-xl focus:border-primary focus:outline-none text-lg transition-all duration-300 focus:ring-2 focus:ring-primary/20 group-hover:border-primary/50" />
 
                         <p class="text-sm text-gray-500 mt-2 flex items-center gap-2">
                             <svg class="w-4 h-4 text-[#d4b896]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -59,7 +59,7 @@
                 <div class="text-center pt-6 border-t border-gray-200">
                     <span class="text-gray-600">{{ __('auth.or_back_to') }}</span>
                     <flux:link :href="route('login')" wire:navigate
-                        class="text-[#4a6b5a] hover:text-[#d4b896] font-semibold transition-colors duration-300 mr-2">
+                        class="text-primary hover:text-[#d4b896] font-semibold transition-colors duration-300 mr-2">
                         {{ __('auth.login') }}
                     </flux:link>
                 </div>

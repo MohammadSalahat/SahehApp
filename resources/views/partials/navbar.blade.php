@@ -3,8 +3,7 @@
         <div class="flex items-center justify-between h-16">
             <!-- Logo -->
             <div class="flex items-center">
-                <img src="{{ asset('images/logo.png') }}" alt="{{ __('navigation.logo_alt') }}"
-                    class="h-10 object-contain">
+                <x-app-logo-icon class="h-10 object-contain" />
                 <span class="ml-2 text-xl font-semibold text-primary">{{ __('navigation.name') }}</span>
             </div>
 

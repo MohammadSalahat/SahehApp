@@ -1,4 +1,4 @@
-<footer class="bg-gradient-to-r from-[#4a6b5a] to-[#3a5a4a] text-white py-16">
+<footer class="bg-gradient-to-r from-primary to-[#3a5a4a] text-white py-16">
     <div class="container mx-auto px-4">
         <div class="grid md:grid-cols-4 gap-8 mb-12">
             <div>

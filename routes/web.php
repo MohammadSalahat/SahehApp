@@ -4,6 +4,7 @@ use App\Http\Controllers\Web\ContactRequestController;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Middleware\LanguageMiddleware;
 use App\Livewire\Pages\HomePage;
+use App\Livewire\Pages\ReviewPage;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
@@ -23,7 +24,7 @@ Route::middleware([LanguageMiddleware::class])->group(function () {
     Route::post('/verify', [App\Http\Controllers\Web\VerificationController::class, 'verify'])->name('verify');
 
     // Review route (requires auth)
-    Route::get('/review', App\Livewire\Pages\ReviewPage::class)->middleware('auth')->name('review');
+    Route::get('/review', ReviewPage::class)->middleware('auth')->name('review');
 
     Route::view('dashboard', 'dashboard')
         ->middleware(['auth', 'verified'])

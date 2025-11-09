@@ -1,28 +1,15 @@
-<!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}" dir="{{ config('app.available_locales')[app()->getLocale()]['dir'] }}">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ __('verification.page_title') }}</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-
-<body class="bg-gray-50 font-sans">
-
-    <x-home.navigation />
-
+<x-layouts.main :title="__('verification.page_title')">
     <div class="container mx-auto px-4 py-20 max-w-6xl">
         <!-- Back Button -->
         <a href="{{ route('home') }}"
-            class="inline-flex items-center gap-2 text-[#4a6b5a] hover:text-[#3a5a4a] font-bold mb-8 transition-colors">
+            class="inline-flex items-center gap-2 text-primary hover:text-[#3a5a4a] font-bold mb-8 transition-colors">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>
             {{ __('verification.back_to_home') }}
         </a>
 
-        <h1 class="text-4xl md:text-5xl font-bold text-center text-[#4a6b5a] mb-4">
+        <h1 class="text-4xl md:text-5xl font-bold text-center text-primary mb-4">
             {{ __('verification.main_title') }}
         </h1>
         <p class="text-center text-gray-600 mb-8">{{ __('verification.subtitle') }}</p>
@@ -294,7 +281,7 @@
 
         <!-- Your Submitted Text -->
         <div class="bg-white rounded-3xl shadow-lg overflow-hidden mb-8">
-            <div class="bg-gradient-to-r from-[#4a6b5a] to-[#3a5a4a] text-white p-6">
+            <div class="bg-gradient-to-r from-primary to-[#3a5a4a] text-white p-6">
                 <h3 class="text-2xl font-bold">{{ __('verification.submitted_text_title') }}</h3>
             </div>
             <div class="p-8">
@@ -312,25 +299,25 @@
                     <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
                         @if(isset($query_quality['length']))
                             <div class="bg-gray-50 rounded-lg p-4 text-center">
-                                <p class="text-2xl font-bold text-[#4a6b5a]">{{ $query_quality['length'] }}</p>
+                                <p class="text-2xl font-bold text-primary">{{ $query_quality['length'] }}</p>
                                 <p class="text-sm text-gray-600">{{ __('verification.character_count') }}</p>
                             </div>
                         @endif
                         @if(isset($query_quality['word_count']))
                             <div class="bg-gray-50 rounded-lg p-4 text-center">
-                                <p class="text-2xl font-bold text-[#4a6b5a]">{{ $query_quality['word_count'] }}</p>
+                                <p class="text-2xl font-bold text-primary">{{ $query_quality['word_count'] }}</p>
                                 <p class="text-sm text-gray-600">{{ __('verification.word_count') }}</p>
                             </div>
                         @endif
                         @if(isset($query_quality['legal_keyword_count']))
                             <div class="bg-gray-50 rounded-lg p-4 text-center">
-                                <p class="text-2xl font-bold text-[#4a6b5a]">{{ $query_quality['legal_keyword_count'] }}</p>
+                                <p class="text-2xl font-bold text-primary">{{ $query_quality['legal_keyword_count'] }}</p>
                                 <p class="text-sm text-gray-600">{{ __('verification.legal_keyword_count') }}</p>
                             </div>
                         @endif
                         @if(isset($query_quality['is_legal_related']))
                             <div class="bg-gray-50 rounded-lg p-4 text-center">
-                                <p class="text-2xl font-bold text-[#4a6b5a]">
+                                <p class="text-2xl font-bold text-primary">
                                     {{ $query_quality['is_legal_related'] ? '✓' : '✗' }}
                                 </p>
                                 <p class="text-sm text-gray-600">{{ __('verification.is_legal_text') }}</p>
@@ -343,14 +330,14 @@
 
         <!-- Feedback Section -->
         <div class="mt-16">
-            <h2 class="text-3xl font-bold text-center text-[#4a6b5a] mb-8">{{ __('verification.feedback_title') }}</h2>
+            <h2 class="text-3xl font-bold text-center text-primary mb-8">{{ __('verification.feedback_title') }}</h2>
             <livewire:forms.verification-feedback-form />
         </div>
 
         <!-- Action Buttons -->
         <div class="text-center space-y-4 mt-12">
             <a href="{{ route('home') }}"
-                class="inline-block bg-gradient-to-r from-[#4a6b5a] to-[#3a5a4a] text-white px-10 py-4 rounded-full font-bold text-lg hover:shadow-xl transform hover:scale-105 transition-all">
+                class="inline-block bg-gradient-to-r from-primary to-[#3a5a4a] text-white px-10 py-4 rounded-full font-bold text-lg hover:shadow-xl transform hover:scale-105 transition-all">
                 {{ __('verification.verify_another') }}
             </a>
 
@@ -359,7 +346,4 @@
             </p>
         </div>
     </div>
-
-</body>
-
-</html>
+</x-layouts.main>

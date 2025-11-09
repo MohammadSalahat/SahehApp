@@ -8,7 +8,7 @@
                 <div class="inline-block relative">
                     <!-- Animated rings -->
                     <div class="absolute inset-0 -m-8">
-                        <div class="w-32 h-32 border-4 border-[#4a6b5a] opacity-20 rounded-full animate-ping"></div>
+                        <div class="w-32 h-32 border-4 border-primary opacity-20 rounded-full animate-ping"></div>
                     </div>
                     <div class="absolute inset-0 -m-4">
                         <div class="w-24 h-24 border-4 border-[#d4b896] opacity-30 rounded-full animate-pulse"></div>
@@ -16,7 +16,7 @@
 
                     <!-- Logo -->
                     <div
-                        class="relative w-20 h-20 mx-auto bg-gradient-to-br from-[#4a6b5a] to-[#5a7a6a] rounded-2xl flex items-center justify-center shadow-xl">
+                        class="relative w-20 h-20 mx-auto bg-gradient-to-br from-primary to-[#5a7a6a] rounded-2xl flex items-center justify-center shadow-xl">
                         <svg class="w-12 h-12 text-white animate-pulse" fill="none" stroke="currentColor"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -27,7 +27,7 @@
             </div>
 
             <!-- Title -->
-            <h2 class="text-3xl md:text-4xl font-bold text-center text-[#4a6b5a] mb-8">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-primary mb-8">
                 جارٍ التحليل الذكي للنص
             </h2>
 
@@ -37,7 +37,7 @@
                     <!-- Step 1 -->
                     <div class="flex items-start gap-4 verification-step opacity-0" data-step="1">
                         <div
-                            class="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#4a6b5a] to-[#5a7a6a] rounded-full flex items-center justify-center text-white font-bold step-icon">
+                            class="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-primary to-[#5a7a6a] rounded-full flex items-center justify-center text-white font-bold step-icon">
                             <span class="step-number">1</span>
                             <svg class="w-6 h-6 hidden step-check" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
@@ -46,7 +46,7 @@
                             </svg>
                         </div>
                         <div class="flex-1">
-                            <h3 class="text-lg font-bold text-[#4a6b5a] mb-1">معالجة النص العربي</h3>
+                            <h3 class="text-lg font-bold text-primary mb-1">معالجة النص العربي</h3>
                             <p class="text-gray-600 text-sm">تنظيف وتجهيز النص للتحليل اللغوي...</p>
                             <div class="mt-2 h-1 bg-gray-200 rounded-full overflow-hidden">
                                 <div class="h-full bg-primary rounded-full step-progress w-0"></div>
@@ -119,9 +119,8 @@
 
             <!-- Rotating Messages -->
             <div class="text-center">
-                <div
-                    class="bg-gradient-to-r from-[#4a6b5a]/10 to-[#d4b896]/10 rounded-xl p-6 border-r-4 border-[#4a6b5a]">
-                    <p id="loading-message" class="text-[#4a6b5a] text-lg font-medium leading-relaxed">
+                <div class="bg-gradient-to-r from-primary/10 to-[#d4b896]/10 rounded-xl p-6 border-r-4 border-primary">
+                    <p id="loading-message" class="text-primary text-lg font-medium leading-relaxed">
                         يستخدم النظام خوارزميات الذكاء الاصطناعي لفهم المعنى الدلالي للنص...
                     </p>
                 </div>
@@ -231,12 +230,12 @@
 
                         // Activate colors
                         icon.classList.remove('bg-gray-200');
-                        icon.classList.add('bg-gradient-to-br', 'from-[#4a6b5a]', 'to-[#5a7a6a]');
+                        icon.classList.add('bg-gradient-to-br', 'from-primary', 'to-[#5a7a6a]');
                         icon.classList.remove('text-gray-400');
                         icon.classList.add('text-white');
 
                         title.classList.remove('text-gray-400');
-                        title.classList.add('text-[#4a6b5a]');
+                        title.classList.add('text-primary');
 
                         description.classList.remove('text-gray-400');
                         description.classList.add('text-gray-600');

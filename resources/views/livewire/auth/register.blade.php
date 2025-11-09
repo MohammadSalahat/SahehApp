@@ -47,7 +47,7 @@
                 <div class="text-center mt-6">
                     <span class="text-gray-600 text-sm">{{ __('auth.already_have_account') }}</span>
                     <flux:link :href="route('login')" wire:navigate
-                        class="text-[#4a6b5a] hover:text-[#d4b896] font-semibold text-sm mr-1">
+                        class="text-primary hover:text-[#d4b896] font-semibold text-sm mr-1">
                         {{ __('auth.login') }}
                     </flux:link>
                 </div>

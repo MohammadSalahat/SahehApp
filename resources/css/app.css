@@ -1,33 +1,27 @@
 @import 'tailwindcss';
 @import '../../vendor/livewire/flux/dist/flux.css';
+
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../vendor/livewire/flux-pro/stubs/**/*.blade.php';
 @source '../../vendor/livewire/flux/stubs/**/*.blade.php';
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
 
 /* @custom-variant dark (&:where(.dark, .dark *)); */
 
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
-    --color-zinc-50: #fafafa;
-    --color-zinc-100: #f5f5f5;
-    --color-zinc-200: #e5e5e5;
-    --color-zinc-300: #d4d4d4;
-    --color-zinc-400: #a3a3a3;
-    --color-zinc-500: #737373;
-    --color-zinc-600: #525252;
-    --color-zinc-700: #404040;
-    --color-zinc-800: #262626;
-    --color-zinc-900: #171717;
-    --color-zinc-950: #0a0a0a;
-
-    --secondary-color: #758D95;
-    --primary-color: #4A6B5A;
-    --primary-400-color: #D8E4DE;
-    --primary-300-color: #76A08B;
-    --primary-200-color: #9AB9AA;
-    --primary-100-color: #D8E4DE;
+    --color-secondary: #758D95;
+    --color-primary: #4A6B5A;
+    --color-primary-400: #D8E4DE;
+    --color-primary-300: #76A08B;
+    --color-primary-200: #9AB9AA;
+    --color-primary-100: #D8E4DE;
 
 }
 
@@ -62,44 +56,4 @@ input:focus[data-flux-control],
 textarea:focus[data-flux-control],
 select:focus[data-flux-control] {
     @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
-}
-
-.bg-primary {
-    background-color: var(--primary-color);
-}
-
-.text-primary {
-    color: var(--primary-color);
-}
-
-.border-primary {
-    border-color: var(--primary-color);
-}
-
-.hover\:bg-primary:hover {
-    background-color: var(--primary-color);
-}
-
-.hover\:text-primary:hover {
-    color: var(--primary-color);
-}
-
-.hover\:border-primary:hover {
-    border-color: var(--primary-color);
-}
-
-.bg-secondary {
-    background-color: var(--secondary-color);
-}
-
-.text-secondary {
-    color: var(--secondary-color);
-}
-
-.bg-cream {
-    background-color: var(--cream-color);
-}
-
-.bg-light-cream {
-    background-color: var(--light-cream);
 }
