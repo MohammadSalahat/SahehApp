@@ -46,7 +46,7 @@
         </div>
         <div class="relative">
             @if($isPercentage)
-                <div class="flex items-start justify-center mb-4">
+                <div class="flex items-start justify-center mb-4 w-fit">
                     <span class="text-6xl md:text-7xl font-black text-white" x-text="currentValue"></span>
                     <span class="text-4xl font-black text-[#d4b896] mt-2">%</span>
                 </div>
