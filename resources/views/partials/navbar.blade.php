@@ -37,30 +37,7 @@
 
                 @auth
                     <!-- Authenticated User -->
-                    <div class="flex items-center space-x-4">
-                        <span class="text-sm text-gray-600">
-                            {{ __('navigation.hello', ['name' => Auth::user()->name]) }}
-                        </span>
-                        <a href="{{ route('dashboard') }}" wire:navigate
-                            class="inline-flex items-center px-3 py-2 border border-primary text-primary bg-white hover:bg-primary hover:text-white text-sm font-medium rounded-md transition-colors">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2V7zm0 0V5a2 2 0 012-2h6l2 2h6a2 2 0 012 2v2M7 13h10M7 17h4" />
-                            </svg>
-                            {{ __('navigation.dashboard') }}
-                        </a>
-                        <form method="POST" action="{{ route('logout') }}" class="inline">
-                            @csrf
-                            <button type="submit"
-                                class="inline-flex items-center px-3 py-2 border border-red-300 text-red-700 bg-white hover:bg-red-50 text-sm font-medium rounded-md transition-colors">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                                </svg>
-                                {{ __('navigation.logout') }}
-                            </button>
-                        </form>
-                    </div>
+                    <x-layouts.auth.desktop-user-menu />
                 @else
                     <!-- Guest User -->
                     <a href="{{ route('login') }}" wire:navigate
@@ -132,7 +109,7 @@
                     <div class="text-sm text-gray-600 text-center py-2">
                         {{ __('navigation.hello', ['name' => Auth::user()->name]) }}
                     </div>
-                    <a href="{{ route('dashboard') }}" wire:navigate
+                    <a href="{{ route('settings.profile') }}" wire:navigate
                         class="w-full flex items-center justify-center px-3 py-2 border border-primary text-primary bg-white hover:bg-primary hover:text-white rounded-md text-sm font-medium transition-colors">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
