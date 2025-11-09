@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Livewire\Component;
 
@@ -21,7 +22,7 @@ class LocaleSwitcher extends Component
     public function switchLocale($locale)
     {
         // Validate locale
-        if (!array_key_exists($locale, config('app.available_locales'))) {
+        if (! array_key_exists($locale, config('app.available_locales'))) {
             return;
         }
 
@@ -35,7 +36,7 @@ class LocaleSwitcher extends Component
         $this->currentLocale = $locale;
 
         // Refresh the page to apply locale changes
-        return redirect()->to(request()->url().'?locale='.$locale);
+        return Redirect::back();
     }
 
     public function render()

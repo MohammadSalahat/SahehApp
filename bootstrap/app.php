@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\LanguageMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -12,11 +13,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // Add locale middleware to web group
-        $middleware->web(append: [
-            \App\Http\Middleware\SetLocale::class,
-        ]);
-
+        $middleware->appendToGroup('web', LanguageMiddleware::class);
+    })
+    ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             'api.key' => \App\Http\Middleware\ApiKeyAuthentication::class,
         ]);
