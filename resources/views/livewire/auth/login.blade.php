@@ -15,7 +15,7 @@
 
         <!-- Card -->
         <div class="bg-white rounded-2xl shadow-xl p-8 relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#4a6b5a] to-[#d4b896]"></div>
+            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r bg-primary"></div>
 
             <!-- Session Status -->
             <x-auth-session-status class="mb-4 text-center" :status="session('status')" />

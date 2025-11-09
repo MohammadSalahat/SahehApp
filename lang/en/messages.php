@@ -4,6 +4,12 @@ return [
     // Success Messages
     'success' => 'Success!',
     'contact_sent' => 'Your message has been sent successfully. We will contact you soon.',
+
+    // Contact Form Messages
+    'contact' => [
+        'success' => 'Your message has been sent successfully. Thank you for contacting us, we will respond to you soon.',
+        'error' => 'An error occurred while sending the message. Please try again.',
+    ],
     'feedback_sent' => 'Your feedback has been submitted successfully. Thank you for helping us improve the system.',
     'verification_complete' => 'Text verification completed successfully.',
     'profile_updated' => 'Profile information updated successfully.',

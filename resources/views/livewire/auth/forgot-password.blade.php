@@ -2,7 +2,7 @@
     class="min-h-screen bg-gradient-to-br from-[#f8f6f0] via-[#faf9f5] to-[#f8f6f0] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
     <!-- Background Decorations -->
     <div class="absolute top-20 left-16 w-72 h-72 bg-[#d4b896]/10 rounded-full blur-3xl"></div>
-    <div class="absolute bottom-20 right-16 w-96 h-96 bg-[#4a6b5a]/10 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-20 right-16 w-96 h-96 bg-primary/10 rounded-full blur-3xl"></div>
 
     <div class="max-w-md w-full space-y-8 relative z-10">
         <!-- Logo Section -->
@@ -52,7 +52,7 @@
 
                     <!-- Send Reset Link Button -->
                     <flux:button variant="primary" type="submit"
-                        class="w-full bg-gradient-to-r from-[#4a6b5a] to-[#d4b896] text-white py-4 rounded-xl text-lg font-bold shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3">
+                        class="w-full bg-gradient-to-r bg-primary text-white py-4 rounded-xl text-lg font-bold shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />

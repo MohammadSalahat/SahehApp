@@ -1,6 +1,6 @@
 <!-- Navigation -->
 <nav
-    class="fixed top-0 left-0 right-0 z-[1000] bg-[#4a6b5a] backdrop-blur-sm transition-all duration-300 ease-out shadow">
+    class="sticky top-0 left-0 right-0 z-[1000] bg-primary backdrop-blur-sm transition-all duration-300 ease-out shadow">
     <div class="container mx-auto px-4">
         <div class="flex items-center justify-between h-20">
             <div class="flex items-center gap-2">
@@ -15,7 +15,8 @@
                     class="text-white/90 hover:text-white transition-all duration-300 hover:scale-105">{{ __('navigation.verify_news') }}</a>
                 <a href="#sources"
                     class="text-white/90 hover:text-white transition-all duration-300 hover:scale-105">{{ __('navigation.legal_sources') }}</a>
-                <a href="#about" class="text-white/90 hover:text-white transition-all duration-300 hover:scale-105">{{ __('navigation.about_project') }}</a>
+                <a href="#about"
+                    class="text-white/90 hover:text-white transition-all duration-300 hover:scale-105">{{ __('navigation.about_project') }}</a>
                 <a href="#contact"
                     class="text-white/90 hover:text-white transition-all duration-300 hover:scale-105">{{ __('navigation.contact') }}</a>
             </div>
@@ -74,13 +75,17 @@
 
     <!-- Mobile Menu -->
     <div id="mobileMenu"
-        class="lg:hidden fixed top-20 right-0 w-80 h-screen bg-[#4a6b5a] shadow-xl transform translate-x-full transition-transform duration-300 ease-in-out">
+        class="lg:hidden fixed top-20 right-0 w-80 h-screen bg-primary shadow-xl transform translate-x-full transition-transform duration-300 ease-in-out">
         <div class="p-6 space-y-6">
             <a href="#" class="block text-white/90 hover:text-white text-lg transition">{{ __('navigation.home') }}</a>
-            <a href="#verify" class="block text-white/90 hover:text-white text-lg transition">{{ __('navigation.verify_news') }}</a>
-            <a href="#sources" class="block text-white/90 hover:text-white text-lg transition">{{ __('navigation.legal_sources') }}</a>
-            <a href="#about" class="block text-white/90 hover:text-white text-lg transition">{{ __('navigation.about_project') }}</a>
-            <a href="#contact" class="block text-white/90 hover:text-white text-lg transition">{{ __('navigation.contact') }}</a>
+            <a href="#verify"
+                class="block text-white/90 hover:text-white text-lg transition">{{ __('navigation.verify_news') }}</a>
+            <a href="#sources"
+                class="block text-white/90 hover:text-white text-lg transition">{{ __('navigation.legal_sources') }}</a>
+            <a href="#about"
+                class="block text-white/90 hover:text-white text-lg transition">{{ __('navigation.about_project') }}</a>
+            <a href="#contact"
+                class="block text-white/90 hover:text-white text-lg transition">{{ __('navigation.contact') }}</a>
 
             <!-- Locale Switcher Mobile -->
             <div class="pt-4 border-t border-white/20">

@@ -38,7 +38,7 @@
 
                     <!-- Register Button -->
                     <flux:button type="submit" variant="primary"
-                        class="w-full bg-[#4a6b5a] hover:bg-[#3d5a4a] text-white py-3 rounded-lg font-semibold transition-colors">
+                        class="w-full bg-primary hover:bg-[#3d5a4a] text-white py-3 rounded-lg font-semibold transition-colors">
                         {{ __('auth.register_button') }}
                     </flux:button>
                 </form>
@@ -54,7 +54,7 @@
             </div>
 
             <!-- Right Side - Image Section -->
-            <div class="hidden md:block w-full md:w-1/2 bg-gradient-to-br from-[#d4b896] to-[#4a6b5a] relative">
+            <div class="hidden md:block w-full md:w-1/2 bg-gradient-to-br bg-primary relative">
                 <div class="absolute inset-0 flex items-center justify-center p-12">
                     <div class="text-center text-white">
                         <h3 class="text-4xl font-bold mb-4">{{ __('auth.register_welcome_title') }}</h3>

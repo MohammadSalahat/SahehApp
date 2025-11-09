@@ -3,13 +3,13 @@
         <div class="flex items-start justify-center gap-4 flex-col">
             <div class="w-full bg-primary/10 border-2 border-primary/40 text-primary px-4 py-3 rounded-lg relative"
                 role="alert">
-                <strong class="font-bold">تم الإرسال!</strong>
-                <span class="block sm:inline">شكرًا لتواصلك معنا. سنرد عليك في أقرب وقت ممكن.</span>
+                <strong class="font-bold">{{ __('contact.success_title') }}</strong>
+                <span class="block sm:inline">{{ __('contact.success_message') }}</span>
             </div>
 
             <button type="button" wire:click="submitAnother"
                 class="bg-primary hover:bg-primary-700 text-white font-bold py-2 px-4 rounded-lg">
-                إرسال طلب آخر
+                {{ __('contact.submit_another') }}
             </button>
         </div>
 
@@ -18,32 +18,33 @@
             @csrf
             <div class="flex flex-col gap-4">
                 <div class="mb-8">
-                    <label for="full_name" class="block text-right text-gray-700 font-bold mb-3 text-lg">الاسم
-                        الكامل</label>
+                    <label for="full_name"
+                        class="block text-gray-700 font-bold mb-3 text-lg">{{ __('contact.full_name') }}</label>
                     <input type="text"
                         class="w-full px-6 py-4 border-2 border-gray-200 rounded-xl focus:border-[#4a6b5a] focus:outline-none text-lg transition-all duration-300 focus:ring-2 focus:ring-[#4a6b5a]/20 @error('full_name') border-red-500 @enderror"
-                        placeholder="أدخل اسمك الكامل" name="full_name" id="full_name" wire:model.blur="full_name">
+                        placeholder="{{ __('contact.full_name_placeholder') }}" name="full_name" id="full_name"
+                        wire:model.blur="full_name">
                     @error('full_name')
                         <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
                     @enderror
                 </div>
 
                 <div class="mb-8">
-                    <label for="email" class="block text-right text-gray-700 font-bold mb-3 text-lg">البريد
-                        الإلكتروني</label>
+                    <label for="email" class="block text-gray-700 font-bold mb-3 text-lg">{{ __('contact.email') }}</label>
                     <input type="email"
                         class="w-full px-6 py-4 border-2 border-gray-200 rounded-xl focus:border-[#4a6b5a] focus:outline-none text-lg transition-all duration-300 focus:ring-2 focus:ring-[#4a6b5a]/20 @error('email') border-red-500 @enderror"
-                        placeholder="your.email@example.com" name="email" id="email" wire:model.blur="email">
+                        placeholder="{{ __('contact.email_placeholder') }}" name="email" id="email" wire:model.blur="email">
                     @error('email')
                         <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
                     @enderror
                 </div>
 
                 <div class="mb-8">
-                    <label for="message" class="block text-right text-gray-700 font-bold mb-3 text-lg">الرسالة</label>
+                    <label for="message"
+                        class="block text-gray-700 font-bold mb-3 text-lg">{{ __('contact.message') }}</label>
                     <textarea
                         class="w-full h-40 px-6 py-4 border-2 border-gray-200 rounded-xl focus:border-[#4a6b5a] focus:outline-none resize-none text-lg transition-all duration-300 focus:ring-2 focus:ring-[#4a6b5a]/20 @error('message') border-red-500 @enderror"
-                        placeholder="اكتب رسالتك أو استفساراتك هنا" name="message" id="message"
+                        placeholder="{{ __('contact.message_placeholder') }}" name="message" id="message"
                         wire:model.blur="message"></textarea>
                     @error('message')
                         <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
@@ -51,20 +52,18 @@
                 </div>
 
                 {{-- Submit --}}
-                <button aria-label="submit" wire:loading.attr="disabled" wire:target="submit" type="submit" class="w-fit">
-                    <div
-                        class="bg-primary text-white rounded-md text-sm font-semibold px-6 py-2.5 hover:bg-primary-dark transition-colors flex items-center space-x-2">
-                        <span>إرسال الطلب</span>
-                        <div wire:loading wire:target="submit" class="inline-block">
-                            <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
-                                </circle>
-                                <path class="opacity-75" fill="currentColor"
-                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                </path>
-                            </svg>
-                        </div>
+                <button aria-label="submit" wire:loading.attr="disabled" wire:target="submit" type="submit"
+                    class="w-fit self-end px-6 py-4 hover:bg-white bg-primary  text-white rounded-md cursor-pointer flex items-center space-x-2">
+                    <span class="text-lg font-bold">{{ __('contact.submit_button') }}</span>
+                    <div wire:loading wire:target="submit" class="inline-block">
+                        <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                            </circle>
+                            <path class="opacity-75" fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                            </path>
+                        </svg>
                     </div>
                 </button>
             </div>
@@ -88,7 +87,7 @@
                     </svg>
                 </div>
                 <div class="ms-3 flex-1">
-                    <p class="text-sm font-medium text-gray-800">Success!</p>
+                    <p class="text-sm font-medium text-gray-800">{{ __('contact.toast_success_title') }}</p>
                     <p class="mt-1 text-sm text-gray-600">{{ session('success') }}</p>
                 </div>
                 <div class="ms-4 flex-shrink-0 flex">
@@ -121,7 +120,7 @@
                     </svg>
                 </div>
                 <div class="ms-3 flex-1">
-                    <p class="text-sm font-medium text-gray-800">Error!</p>
+                    <p class="text-sm font-medium text-gray-800">{{ __('contact.toast_error_title') }}</p>
                     <p class="mt-1 text-sm text-gray-600">{{ session('error') }}</p>
                 </div>
                 <div class="ms-4 flex-shrink-0 flex">

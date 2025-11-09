@@ -17,9 +17,7 @@ Route::controller(HomeController::class)->group(function () {
 
 Route::middleware([LanguageMiddleware::class])->group(function () {
 
-    Route::get('/', function () {
-        return view('home');
-    })->name('home');
+    Route::get('/', HomePage::class)->name('home');
 
     // Verification route
     Route::post('/verify', [App\Http\Controllers\Web\VerificationController::class, 'verify'])->name('verify');

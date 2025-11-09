@@ -84,10 +84,13 @@ return [
     'registered_users' => 'Registered Users',
     'legal_sources' => 'Legal Sources',
 
+    // Validation
+    'validation_min_length' => 'Please enter text of at least 20 characters',
+
     // Footer
     'footer_desc' => 'AI-powered legal news verification platform. A university project serving the Saudi community.',
     'quick_links' => 'Quick Links',
-    'legal_sources' => 'Legal Sources',
+    'legal_sources_section' => 'Legal Sources',
     'contact_us' => 'Contact Us',
     'phone' => '+966123456789',
     'location' => 'Riyadh, Kingdom of Saudi Arabia',

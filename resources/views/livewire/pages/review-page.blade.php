@@ -36,13 +36,13 @@
                             @for($i = 1; $i <= 5; $i++)
                                 <button type="button" wire:click="$set('rating', {{ $i }})"
                                     class="text-5xl transition-all duration-200 hover:scale-125 focus:outline-none transform
-                                                       {{ $rating >= $i ? 'text-yellow-400 drop-shadow-lg' : 'text-gray-300' }}">
+                                                               {{ $rating >= $i ? 'text-yellow-400 drop-shadow-lg' : 'text-gray-300' }}">
                                     ⭐
                                 </button>
                             @endfor
                         </div>
                         <div class="text-center">
-                            <span class="inline-block bg-[#4a6b5a] text-white px-6 py-2 rounded-full text-lg font-medium">
+                            <span class="inline-block bg-primary text-white px-6 py-2 rounded-full text-lg font-medium">
                                 {{ $rating == 1 ? 'ضعيف جداً' : ($rating == 2 ? 'ضعيف' : ($rating == 3 ? 'متوسط' : ($rating == 4 ? 'جيد' : 'ممتاز'))) }}
                             </span>
                         </div>
@@ -99,7 +99,7 @@
 
                     <div class="space-y-4">
                         <a href="{{ route('home') }}"
-                            class="bg-[#4a6b5a] text-white px-8 py-3 rounded-lg font-medium hover:bg-[#3a5a4a] transition-colors inline-block">
+                            class="bg-primary text-white px-8 py-3 rounded-lg font-medium hover:bg-[#3a5a4a] transition-colors inline-block">
                             العودة للصفحة الرئيسية
                         </a>
                     </div>
