@@ -9,7 +9,7 @@
     <x-sections.latest-news-section />
 
     <!-- Verify Section -->
-    <X-sections.verify-section />
+    <x-sections.verify-section />
 
     <!-- How it Works Section -->
     <x-sections.how-it-works-section />
@@ -22,5 +22,4 @@
 
     <!-- Contact Section -->
     <x-sections.contact-section />
-
 </div>

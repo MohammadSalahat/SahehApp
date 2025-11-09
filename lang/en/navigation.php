@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'name' => 'Saheh Platform',
     'home' => 'Home',
     'verify_news' => 'Verify News',
     'legal_sources' => 'Legal Sources',

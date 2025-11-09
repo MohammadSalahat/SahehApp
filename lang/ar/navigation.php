@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'name' => 'منصة صحيح',
     'home' => 'الرئيسية',
     'verify_news' => 'تحقق من خبر',
     'legal_sources' => 'المصادر القانونية',

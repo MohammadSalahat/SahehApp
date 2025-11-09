@@ -1,134 +1,220 @@
-<!-- Navigation -->
-<nav
-    class="sticky top-0 left-0 right-0 z-[1000] bg-primary backdrop-blur-sm transition-all duration-300 ease-out shadow">
-    <div class="container mx-auto px-4">
-        <div class="flex items-center justify-between h-20">
-            <div class="flex items-center gap-2">
+<nav class="sticky top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+            <!-- Logo -->
+            <div class="flex items-center">
                 <img src="{{ asset('images/logo.png') }}" alt="{{ __('navigation.logo_alt') }}"
-                    class="w-20 h-20 object-contain float-animation">
+                    class="h-10 object-contain">
+                <span class="ml-2 text-xl font-semibold text-primary">{{ __('navigation.name') }}</span>
             </div>
 
-            <div class="hidden lg:flex items-center gap-8">
-                <a href="#"
-                    class="text-white/90 hover:text-white transition-all duration-300 hover:scale-105">{{ __('navigation.home') }}</a>
+            <!-- Desktop Navigation -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#" class="text-gray-700 hover:text-primary px-3 py-2 text-sm font-medium transition-colors">
+                    {{ __('navigation.home') }}
+                </a>
                 <a href="#verify"
-                    class="text-white/90 hover:text-white transition-all duration-300 hover:scale-105">{{ __('navigation.verify_news') }}</a>
+                    class="text-gray-700 hover:text-primary px-3 py-2 text-sm font-medium transition-colors">
+                    {{ __('navigation.verify_news') }}
+                </a>
                 <a href="#sources"
-                    class="text-white/90 hover:text-white transition-all duration-300 hover:scale-105">{{ __('navigation.legal_sources') }}</a>
+                    class="text-gray-700 hover:text-primary px-3 py-2 text-sm font-medium transition-colors">
+                    {{ __('navigation.legal_sources') }}
+                </a>
                 <a href="#about"
-                    class="text-white/90 hover:text-white transition-all duration-300 hover:scale-105">{{ __('navigation.about_project') }}</a>
+                    class="text-gray-700 hover:text-primary px-3 py-2 text-sm font-medium transition-colors">
+                    {{ __('navigation.about_project') }}
+                </a>
                 <a href="#contact"
-                    class="text-white/90 hover:text-white transition-all duration-300 hover:scale-105">{{ __('navigation.contact') }}</a>
+                    class="text-gray-700 hover:text-primary px-3 py-2 text-sm font-medium transition-colors">
+                    {{ __('navigation.contact') }}
+                </a>
             </div>
 
-            <div class="hidden md:flex items-center gap-3">
+            <!-- Desktop Actions -->
+            <div class="hidden md:flex items-center space-x-4">
                 <!-- Locale Switcher -->
                 @livewire('locale-switcher')
+
                 @auth
                     <!-- Authenticated User -->
-                    <div class="flex items-center gap-4">
-                        <div class="text-white/90 text-sm">
+                    <div class="flex items-center space-x-4">
+                        <span class="text-sm text-gray-600">
                             {{ __('navigation.hello', ['name' => Auth::user()->name]) }}
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <a href="{{ route('dashboard') }}" wire:navigate
-                                class="bg-transparent border-2 border-white text-white px-4 py-2 rounded-lg font-medium hover:bg-white hover:text-[#4a6b5a] transition-all duration-300 flex items-center gap-2">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        </span>
+                        <a href="{{ route('dashboard') }}" wire:navigate
+                            class="inline-flex items-center px-3 py-2 border border-primary text-primary bg-white hover:bg-primary hover:text-white text-sm font-medium rounded-md transition-colors">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2V7zm0 0V5a2 2 0 012-2h6l2 2h6a2 2 0 012 2v2M7 13h10M7 17h4" />
+                            </svg>
+                            {{ __('navigation.dashboard') }}
+                        </a>
+                        <form method="POST" action="{{ route('logout') }}" class="inline">
+                            @csrf
+                            <button type="submit"
+                                class="inline-flex items-center px-3 py-2 border border-red-300 text-red-700 bg-white hover:bg-red-50 text-sm font-medium rounded-md transition-colors">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2V7zm0 0V5a2 2 0 012-2h6l2 2h6a2 2 0 012 2v2M7 13h10M7 17h4" />
+                                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                                 </svg>
-                                <span>{{ __('navigation.dashboard') }}</span>
-                            </a>
-                            <form method="POST" action="{{ route('logout') }}" class="inline">
-                                @csrf
-                                <button type="submit"
-                                    class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-300 flex items-center gap-2">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                                    </svg>
-                                    <span>{{ __('navigation.logout') }}</span>
-                                </button>
-                            </form>
-                        </div>
+                                {{ __('navigation.logout') }}
+                            </button>
+                        </form>
                     </div>
                 @else
                     <!-- Guest User -->
                     <a href="{{ route('login') }}" wire:navigate
-                        class="bg-transparent border-2 border-white text-white px-6 py-2.5 rounded-lg font-medium hover:bg-white hover:text-[#4a6b5a] transition-all duration-300 relative overflow-hidden">
-                        <span>{{ __('navigation.login') }}</span>
+                        class="inline-flex items-center px-4 py-2 border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 text-sm font-medium rounded-md transition-colors">
+                        {{ __('navigation.login') }}
                     </a>
                     <a href="{{ route('register') }}" wire:navigate
-                        class="bg-gradient-to-r from-[#4a6b5a] to-[#5a7a6a] text-white px-6 py-2.5 rounded-lg font-medium hover:shadow-lg transition-all duration-300">
+                        class="inline-flex items-center px-4 py-2 border border-transparent text-white bg-primary hover:bg-primary-300 text-sm font-medium rounded-md transition-colors">
                         {{ __('navigation.register') }}
                     </a>
                 @endauth
             </div>
 
-            <button id="mobileMenuBtn" class="lg:hidden text-white">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-            </button>
+            <!-- Mobile menu button -->
+            <div class="md:hidden">
+                <button id="mobileMenuBtn" type="button"
+                    class="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-primary hover:bg-gray-100 transition-colors"
+                    aria-controls="mobile-menu" aria-expanded="false">
+                    <span class="sr-only">Open main menu</span>
+                    <!-- Menu icon -->
+                    <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                    <!-- Close icon -->
+                    <svg class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
         </div>
     </div>
 
-    <!-- Mobile Menu -->
-    <div id="mobileMenu"
-        class="lg:hidden fixed top-20 right-0 w-80 h-screen bg-primary shadow-xl transform translate-x-full transition-transform duration-300 ease-in-out">
-        <div class="p-6 space-y-6">
-            <a href="#" class="block text-white/90 hover:text-white text-lg transition">{{ __('navigation.home') }}</a>
+    <!-- Mobile menu -->
+    <div id="mobileMenu" class="md:hidden hidden bg-white border-t border-gray-200">
+        <div class="px-2 pt-2 pb-3 space-y-1">
+            <a href="#"
+                class="block px-3 py-2 text-gray-700 hover:text-primary hover:bg-gray-50 rounded-md text-base font-medium transition-colors">
+                {{ __('navigation.home') }}
+            </a>
             <a href="#verify"
-                class="block text-white/90 hover:text-white text-lg transition">{{ __('navigation.verify_news') }}</a>
+                class="block px-3 py-2 text-gray-700 hover:text-primary hover:bg-gray-50 rounded-md text-base font-medium transition-colors">
+                {{ __('navigation.verify_news') }}
+            </a>
             <a href="#sources"
-                class="block text-white/90 hover:text-white text-lg transition">{{ __('navigation.legal_sources') }}</a>
+                class="block px-3 py-2 text-gray-700 hover:text-primary hover:bg-gray-50 rounded-md text-base font-medium transition-colors">
+                {{ __('navigation.legal_sources') }}
+            </a>
             <a href="#about"
-                class="block text-white/90 hover:text-white text-lg transition">{{ __('navigation.about_project') }}</a>
+                class="block px-3 py-2 text-gray-700 hover:text-primary hover:bg-gray-50 rounded-md text-base font-medium transition-colors">
+                {{ __('navigation.about_project') }}
+            </a>
             <a href="#contact"
-                class="block text-white/90 hover:text-white text-lg transition">{{ __('navigation.contact') }}</a>
+                class="block px-3 py-2 text-gray-700 hover:text-primary hover:bg-gray-50 rounded-md text-base font-medium transition-colors">
+                {{ __('navigation.contact') }}
+            </a>
+        </div>
 
+        <!-- Mobile Actions -->
+        <div class="pt-4 pb-3 border-t border-gray-200">
             <!-- Locale Switcher Mobile -->
-            <div class="pt-4 border-t border-white/20">
+            <div class="px-3 mb-4">
                 @livewire('locale-switcher')
             </div>
 
-            <div class="pt-6 space-y-3">
-                @auth
-                    <!-- Authenticated User Mobile -->
-                    <div class="text-white/90 text-center pb-4">
+            @auth
+                <div class="px-3 space-y-3">
+                    <div class="text-sm text-gray-600 text-center py-2">
                         {{ __('navigation.hello', ['name' => Auth::user()->name]) }}
                     </div>
                     <a href="{{ route('dashboard') }}" wire:navigate
-                        class="w-full bg-transparent border-2 border-white text-white py-3 rounded-lg hover:bg-white hover:text-[#4a6b5a] transition-all duration-300 flex items-center justify-center gap-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        class="w-full flex items-center justify-center px-3 py-2 border border-primary text-primary bg-white hover:bg-primary hover:text-white rounded-md text-sm font-medium transition-colors">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2V7zm0 0V5a2 2 0 012-2h6l2 2h6a2 2 0 012 2v2M7 13h10M7 17h4" />
                         </svg>
-                        <span>{{ __('navigation.dashboard') }}</span>
+                        {{ __('navigation.dashboard') }}
                     </a>
                     <form method="POST" action="{{ route('logout') }}" class="w-full">
                         @csrf
                         <button type="submit"
-                            class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-lg transition-all duration-300 flex items-center justify-center gap-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            class="w-full flex items-center justify-center px-3 py-2 border border-red-300 text-red-700 bg-white hover:bg-red-50 rounded-md text-sm font-medium transition-colors">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                             </svg>
-                            <span>{{ __('navigation.logout') }}</span>
+                            {{ __('navigation.logout') }}
                         </button>
                     </form>
-                @else
-                    <!-- Guest User Mobile -->
+                </div>
+            @else
+                <div class="px-3 space-y-3">
                     <a href="{{ route('login') }}" wire:navigate
-                        class="w-full bg-transparent border-2 border-white text-white py-3 rounded-lg hover:bg-white hover:text-[#4a6b5a] transition-all duration-300 block text-center">
-                        <span>{{ __('navigation.login') }}</span>
+                        class="w-full flex items-center justify-center px-3 py-2 border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 rounded-md text-sm font-medium transition-colors">
+                        {{ __('navigation.login') }}
                     </a>
                     <a href="{{ route('register') }}" wire:navigate
-                        class="w-full bg-gradient-to-r from-[#4a6b5a] to-[#5a7a6a] text-white py-3 rounded-lg hover:shadow-lg transition-all duration-300 block text-center">
+                        class="w-full flex items-center justify-center px-3 py-2 border border-transparent text-white bg-primary hover:bg-primary-300 rounded-md text-sm font-medium transition-colors">
                         {{ __('navigation.register') }}
                     </a>
-                @endauth
-            </div>
+                </div>
+            @endauth
         </div>
     </div>
 </nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const menuIcon = mobileMenuBtn.querySelector('svg:first-child');
+        const closeIcon = mobileMenuBtn.querySelector('svg:last-child');
+
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', function () {
+                const isOpen = !mobileMenu.classList.contains('hidden');
+
+                if (isOpen) {
+                    // Close menu
+                    mobileMenu.classList.add('hidden');
+                    menuIcon.classList.remove('hidden');
+                    closeIcon.classList.add('hidden');
+                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                } else {
+                    // Open menu
+                    mobileMenu.classList.remove('hidden');
+                    menuIcon.classList.add('hidden');
+                    closeIcon.classList.remove('hidden');
+                    mobileMenuBtn.setAttribute('aria-expanded', 'true');
+                }
+            });
+
+            // Close menu when clicking on a link
+            const menuLinks = mobileMenu.querySelectorAll('a');
+            menuLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    menuIcon.classList.remove('hidden');
+                    closeIcon.classList.add('hidden');
+                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                });
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener('click', function (event) {
+                if (!mobileMenuBtn.contains(event.target) && !mobileMenu.contains(event.target)) {
+                    mobileMenu.classList.add('hidden');
+                    menuIcon.classList.remove('hidden');
+                    closeIcon.classList.add('hidden');
+                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
+    });
+</script>

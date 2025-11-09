@@ -5,7 +5,7 @@
                 <div class="flex items-center gap-2 mb-6">
                     <img src="{{ asset('images/logo.png') }}" class="w-20 h-20 object-contain">
                     <div class="text-2xl font-bold">
-                        <span class="text-white">منصة صحيح</span>
+                        <span class="text-white">{{ __('navigation.name') }}</span>
                     </div>
                 </div>
                 <p class="text-white/80 leading-relaxed text-lg">

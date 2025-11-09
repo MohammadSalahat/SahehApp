@@ -21,19 +21,14 @@
     --color-zinc-800: #262626;
     --color-zinc-900: #171717;
     --color-zinc-950: #0a0a0a;
-    --color-primary: #4a6b5a;
-    --color-secondary: #7a9684;
-    --color-cream: #f5f1e8;
-    --color-light-cream: #e8e4d8;
-    --primary-color: #4a6b5a;
-    --secondary-color: #d4b896;
-    --cream-color: #f8f6f0;
-    --light-cream: #faf9f5;
-    --color-white-1: #f8f6f0;
 
-    --color-accent: var(--color-neutral-800);
-    --color-accent-content: var(--color-neutral-800);
-    --color-accent-foreground: var(--color-white);
+    --secondary-color: #758D95;
+    --primary-color: #4A6B5A;
+    --primary-400-color: #D8E4DE;
+    --primary-300-color: #76A08B;
+    --primary-200-color: #9AB9AA;
+    --primary-100-color: #D8E4DE;
+
 }
 
 @layer theme {
