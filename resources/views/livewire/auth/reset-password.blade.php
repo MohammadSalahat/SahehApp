@@ -1,5 +1,5 @@
 <div
-    class="min-h-screen bg-primary flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    class="min-h-screen bg-gradient-to-br from-[#f8f6f0] via-[#faf9f5] to-[#f8f6f0] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
     <!-- Background Decorations -->
     <div class="absolute top-20 right-20 w-72 h-72 bg-primary/10 rounded-full blur-3xl"></div>
     <div class="absolute bottom-20 left-20 w-96 h-96 bg-[#d4b896]/10 rounded-full blur-3xl"></div>
