@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Web\ContactRequestController;
 use App\Http\Controllers\Web\HomeController;
+use App\Http\Controllers\Web\VerificationController;
 use App\Http\Middleware\LanguageMiddleware;
 use App\Livewire\Pages\HomePage;
 use App\Livewire\Pages\ReviewPage;
@@ -21,7 +22,7 @@ Route::middleware([LanguageMiddleware::class])->group(function () {
     Route::get('/', HomePage::class)->name('home');
 
     // Verification route
-    Route::post('/verify', [App\Http\Controllers\Web\VerificationController::class, 'verify'])->name('verify');
+    Route::post('/verify', [VerificationController::class, 'verify'])->name('verify');
 
     // Review route (requires auth)
     Route::get('/review', ReviewPage::class)->middleware('auth')->name('review');

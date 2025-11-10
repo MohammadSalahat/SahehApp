@@ -1,44 +1,60 @@
 <x-layouts.main :title="__('verification.page_title')">
-    <div class="container mx-auto px-4 py-20 max-w-6xl">
+    <div class="container px-4 py-12 mx-auto max-w-7xl" dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}">
         <!-- Back Button -->
         <a href="{{ route('home') }}"
-            class="inline-flex items-center gap-2 text-primary hover:text-[#3a5a4a] font-bold mb-8 transition-colors">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            class="inline-flex items-center gap-2 px-4 py-2 mb-8 font-semibold transition-all border rounded-lg text-primary dark:text-primary-300 hover:bg-primary-100/50 dark:hover:bg-primary/10 border-primary-200 dark:border-primary-400/30 hover:border-primary dark:hover:border-primary-300">
+            <svg class="w-5 h-5 {{ app()->getLocale() === 'ar' ? 'rotate-180' : '' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>
             {{ __('verification.back_to_home') }}
         </a>
 
-        <h1 class="text-4xl md:text-5xl font-bold text-center text-primary mb-4">
-            {{ __('verification.main_title') }}
-        </h1>
-        <p class="text-center text-gray-600 mb-8">{{ __('verification.subtitle') }}</p>
+        <!-- Page Header -->
+        <div class="mb-12 text-center">
+            <h1 class="mb-3 text-4xl font-bold md:text-5xl text-zinc-900 dark:text-zinc-50">
+                {{ __('verification.main_title') }}
+            </h1>
+            <p class="text-lg text-zinc-600 dark:text-zinc-400">{{ __('verification.subtitle') }}</p>
+        </div>
 
         <!-- Text Quality Analysis -->
         @if(isset($query_quality))
-            <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
-                <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">{{ __('verification.quality_analysis_title') }}
+            <div class="p-8 mb-8 overflow-hidden border rounded-2xl bg-white/50 dark:bg-zinc-900/50 border-zinc-200 dark:border-zinc-700 backdrop-blur-sm">
+                <h3 class="mb-6 text-2xl font-bold text-center text-zinc-900 dark:text-zinc-50">
+                    {{ __('verification.quality_analysis_title') }}
                 </h3>
-                <div class="grid md:grid-cols-4 gap-4">
-                    <div class="text-center">
-                        <div class="text-2xl font-bold text-blue-600">{{ $query_quality['word_count'] ?? 0 }}</div>
-                        <div class="text-sm text-gray-600">{{ __('verification.word_count') }}</div>
+                <div class="grid gap-6 md:grid-cols-4">
+                    <div class="p-6 text-center transition-all border rounded-xl bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 hover:shadow-lg hover:border-primary dark:hover:border-primary-300">
+                        <div class="mb-2 text-4xl font-bold text-primary dark:text-primary-300">
+                            {{ $query_quality['word_count'] ?? 0 }}
+                        </div>
+                        <div class="text-sm font-medium text-zinc-600 dark:text-zinc-400">
+                            {{ __('verification.word_count') }}
+                        </div>
                     </div>
-                    <div class="text-center">
-                        <div class="text-2xl font-bold text-green-600">
+                    <div class="p-6 text-center transition-all border rounded-xl bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 hover:shadow-lg hover:border-emerald-400 dark:hover:border-emerald-600">
+                        <div class="mb-2 text-4xl font-bold text-emerald-600 dark:text-emerald-400">
                             {{ number_format(($query_quality['arabic_ratio'] ?? 0) * 100, 1) }}%
                         </div>
-                        <div class="text-sm text-gray-600">{{ __('verification.arabic_ratio') }}</div>
+                        <div class="text-sm font-medium text-zinc-600 dark:text-zinc-400">
+                            {{ __('verification.arabic_ratio') }}
+                        </div>
                     </div>
-                    <div class="text-center">
-                        <div class="text-2xl font-bold text-purple-600">{{ $query_quality['legal_terms_count'] ?? 0 }}</div>
-                        <div class="text-sm text-gray-600">{{ __('verification.legal_terms_count') }}</div>
+                    <div class="p-6 text-center transition-all border rounded-xl bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 hover:shadow-lg hover:border-secondary dark:hover:border-secondary/70">
+                        <div class="mb-2 text-4xl font-bold text-secondary dark:text-secondary/90">
+                            {{ $query_quality['legal_terms_count'] ?? 0 }}
+                        </div>
+                        <div class="text-sm font-medium text-zinc-600 dark:text-zinc-400">
+                            {{ __('verification.legal_terms_count') }}
+                        </div>
                     </div>
-                    <div class="text-center">
-                        <div class="text-2xl font-bold text-orange-600">
+                    <div class="p-6 text-center transition-all border rounded-xl bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 hover:shadow-lg hover:border-amber-400 dark:hover:border-amber-600">
+                        <div class="mb-2 text-4xl font-bold text-amber-600 dark:text-amber-400">
                             {{ number_format(($query_quality['quality_score'] ?? 0) * 100, 1) }}%
                         </div>
-                        <div class="text-sm text-gray-600">{{ __('verification.quality_score') }}</div>
+                        <div class="text-sm font-medium text-zinc-600 dark:text-zinc-400">
+                            {{ __('verification.quality_score') }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -46,63 +62,84 @@
 
         @if (isset($error) && $error)
             <!-- ERROR: Show Error Message -->
-            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border-t-8 border-yellow-500 mb-8">
-                <div class="bg-gradient-to-r from-yellow-500 to-yellow-600 text-white p-8 text-center">
-                    <svg class="w-20 h-20 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="mb-8 overflow-hidden border-t-4 shadow-xl rounded-2xl border-amber-500 bg-white dark:bg-zinc-900">
+                <div class="p-10 text-center text-white bg-gradient-to-br from-amber-500 to-amber-600">
+                    <svg class="w-24 h-24 mx-auto mb-4 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <h2 class="text-3xl font-bold">{{ __('verification.error_title') }}</h2>
-                    <p class="text-xl mt-2 opacity-90">{{ $error_message }}</p>
+                    <h2 class="mb-2 text-4xl font-bold">{{ __('verification.error_title') }}</h2>
+                    <p class="text-xl opacity-90">{{ $error_message }}</p>
                     @if($error_details)
-                        <p class="text-sm mt-4 opacity-75 font-mono">{{ $error_details }}</p>
+                        <p class="mt-4 text-sm font-mono opacity-75">{{ $error_details }}</p>
                     @endif
                 </div>
             </div>
         @elseif ($is_potentially_fake ?? false)
             <!-- POTENTIALLY FAKE: Show Warning with AI Analysis -->
-            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border-t-8 border-red-500 mb-8">
+            <div class="mb-8 overflow-hidden border-t-4 shadow-xl rounded-2xl border-red-500 bg-white dark:bg-zinc-900">
                 <!-- Alert Header -->
-                <div class="bg-gradient-to-r from-red-500 to-red-600 text-white p-8 text-center">
-                    <svg class="w-24 h-24 mx-auto mb-4 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                    </svg>
-                    <h2 class="text-3xl font-bold">{{ __('verification.potentially_fake_title') }}</h2>
-                    <p class="text-xl mt-2 opacity-90">{{ __('verification.potentially_fake_subtitle') }}</p>
+                <div class="p-10 text-center text-white bg-gradient-to-br from-red-500 via-red-600 to-red-700">
+                    <div class="relative inline-block mb-4">
+                        <svg class="w-28 h-28 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        <div class="absolute inset-0 rounded-full opacity-20 animate-ping bg-red-300"></div>
+                    </div>
+                    <h2 class="mb-3 text-4xl font-bold">{{ __('verification.potentially_fake_title') }}</h2>
+                    <p class="text-xl opacity-95">{{ __('verification.potentially_fake_subtitle') }}</p>
                 </div>
 
                 <!-- AI Recommendation -->
-                <div class="p-8 bg-red-50 border-b border-red-100">
-                    <div class="max-w-3xl mx-auto text-center">
-                        <h3 class="text-2xl font-bold text-gray-800 mb-4">{{ __('verification.ai_recommendation_title') }}
-                        </h3>
-                        <p class="text-lg text-gray-700 leading-relaxed">{{ $recommendation }}</p>
+                <div class="p-8 border-b bg-red-50 dark:bg-red-950/20 border-red-100 dark:border-red-900/50">
+                    <div class="max-w-4xl mx-auto text-center">
+                        <div class="inline-flex items-center gap-2 px-4 py-2 mb-4 font-semibold rounded-full bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-200">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                            </svg>
+                            {{ __('verification.ai_recommendation_title') }}
+                        </div>
+                        <p class="text-lg leading-relaxed text-zinc-700 dark:text-zinc-300">{{ $recommendation }}</p>
                     </div>
                 </div>
 
                 <!-- Similarity Score -->
                 @if(isset($best_match))
-                    <div class="p-8 bg-white border-b border-gray-100">
-                        <div class="max-w-3xl mx-auto">
-                            <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">
-                                {{ __('verification.similarity_title') }}</h3>
+                    <div class="p-8 border-b bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800">
+                        <div class="max-w-4xl mx-auto">
+                            <h3 class="mb-6 text-2xl font-bold text-center text-zinc-900 dark:text-zinc-50">
+                                {{ __('verification.similarity_title') }}
+                            </h3>
 
-                            <div class="relative mb-6">
-                                <div class="flex items-center justify-between mb-2">
-                                    <span class="text-sm text-gray-600">{{ __('verification.similarity_low') }}</span>
-                                    <span class="text-3xl font-bold text-red-600">
-                                        {{ number_format($best_match['similarity_score'] * 100, 1) }}%
+                            <div class="p-6 mb-6 border rounded-2xl bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-950/20 dark:to-orange-950/20 border-red-200 dark:border-red-900/50">
+                                <div class="flex items-center justify-between mb-4">
+                                    <span class="text-sm font-medium text-zinc-600 dark:text-zinc-400">
+                                        {{ __('verification.similarity_low') }}
                                     </span>
-                                    <span class="text-sm text-gray-600">{{ __('verification.similarity_high') }}</span>
+                                    <div class="relative">
+                                        <span class="text-5xl font-bold text-red-600 dark:text-red-400">
+                                            {{ number_format($best_match['similarity_score'] * 100, 1) }}%
+                                        </span>
+                                        <div class="absolute -inset-2 rounded-full opacity-20 animate-ping bg-red-400"></div>
+                                    </div>
+                                    <span class="text-sm font-medium text-zinc-600 dark:text-zinc-400">
+                                        {{ __('verification.similarity_high') }}
+                                    </span>
                                 </div>
-                                <div class="w-full bg-gray-200 rounded-full h-6 overflow-hidden">
-                                    <div class="bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 h-6 rounded-full transition-all duration-1000 ease-out"
-                                        style="width: {{ $best_match['similarity_score'] * 100 }}%">
+                                
+                                <div class="relative overflow-hidden rounded-full h-4 bg-zinc-200 dark:bg-zinc-700">
+                                    <div class="absolute inset-0 bg-gradient-to-r from-green-500 via-yellow-500 to-red-500"></div>
+                                    <div class="absolute inset-0 rounded-full bg-zinc-200 dark:bg-zinc-700"
+                                        style="clip-path: inset(0 0 0 {{ $best_match['similarity_score'] * 100 }}%);">
                                     </div>
                                 </div>
-                                <div class="text-center mt-3">
-                                    <span class="inline-block bg-red-100 text-red-800 px-4 py-2 rounded-full text-sm font-bold">
+                                
+                                <div class="mt-4 text-center">
+                                    <span class="inline-flex items-center gap-2 px-4 py-2 text-sm font-bold text-red-800 bg-red-100 rounded-full dark:bg-red-900/50 dark:text-red-200">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                        </svg>
                                         {{ __('verification.similarity_level') }}: {{ $best_match['similarity_level_arabic'] }}
                                     </span>
                                 </div>
@@ -110,22 +147,28 @@
 
                             <!-- Detailed Analysis Metrics -->
                             @if(isset($best_match['detailed_metrics']))
-                                <div class="grid md:grid-cols-3 gap-4 mb-6">
-                                    <div class="bg-blue-50 p-4 rounded-lg text-center">
-                                        <h4 class="font-bold text-blue-800 mb-2">{{ __('verification.semantic_similarity') }}</h4>
-                                        <p class="text-2xl font-bold text-blue-600">
+                                <div class="grid gap-4 mb-6 md:grid-cols-3">
+                                    <div class="p-5 text-center transition-all border rounded-xl bg-primary-100/50 dark:bg-primary/20 border-primary-200 dark:border-primary/30 hover:shadow-lg">
+                                        <h4 class="mb-2 text-sm font-bold text-primary dark:text-primary-300">
+                                            {{ __('verification.semantic_similarity') }}
+                                        </h4>
+                                        <p class="text-3xl font-bold text-primary dark:text-primary-200">
                                             {{ number_format(($best_match['detailed_metrics']['semantic_similarity'] ?? 0) * 100, 1) }}%
                                         </p>
                                     </div>
-                                    <div class="bg-green-50 p-4 rounded-lg text-center">
-                                        <h4 class="font-bold text-green-800 mb-2">{{ __('verification.lexical_overlap') }}</h4>
-                                        <p class="text-2xl font-bold text-green-600">
+                                    <div class="p-5 text-center transition-all border rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-900/50 hover:shadow-lg">
+                                        <h4 class="mb-2 text-sm font-bold text-emerald-800 dark:text-emerald-300">
+                                            {{ __('verification.lexical_overlap') }}
+                                        </h4>
+                                        <p class="text-3xl font-bold text-emerald-600 dark:text-emerald-400">
                                             {{ number_format(($best_match['detailed_metrics']['lexical_overlap'] ?? 0) * 100, 1) }}%
                                         </p>
                                     </div>
-                                    <div class="bg-purple-50 p-4 rounded-lg text-center">
-                                        <h4 class="font-bold text-purple-800 mb-2">{{ __('verification.legal_terms_overlap') }}</h4>
-                                        <p class="text-2xl font-bold text-purple-600">
+                                    <div class="p-5 text-center transition-all border rounded-xl bg-secondary/10 dark:bg-secondary/20 border-secondary/30 dark:border-secondary/40 hover:shadow-lg">
+                                        <h4 class="mb-2 text-sm font-bold text-secondary dark:text-secondary/90">
+                                            {{ __('verification.legal_terms_overlap') }}
+                                        </h4>
+                                        <p class="text-3xl font-bold text-secondary dark:text-secondary/80">
                                             {{ number_format(($best_match['detailed_metrics']['legal_terms_overlap'] ?? 0) * 100, 1) }}%
                                         </p>
                                     </div>
@@ -134,13 +177,19 @@
 
                             <!-- Common Legal Entities -->
                             @if(isset($best_match['common_legal_entities']) && count($best_match['common_legal_entities']) > 0)
-                                <div class="bg-yellow-50 p-4 rounded-lg mb-6">
-                                    <h4 class="font-bold text-yellow-800 mb-3">{{ __('verification.common_legal_entities') }}:</h4>
+                                <div class="p-5 mb-6 border rounded-xl bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-900/50">
+                                    <h4 class="flex items-center gap-2 mb-3 font-bold text-amber-800 dark:text-amber-300">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                                        </svg>
+                                        {{ __('verification.common_legal_entities') }}
+                                    </h4>
                                     <div class="flex flex-wrap gap-2">
                                         @foreach($best_match['common_legal_entities'] as $entityType => $entities)
                                             @foreach($entities as $entity)
-                                                <span
-                                                    class="bg-yellow-200 text-yellow-800 px-3 py-1 rounded-full text-sm">{{ $entity }}</span>
+                                                <span class="px-3 py-1 text-sm font-medium text-amber-800 bg-amber-200 dark:bg-amber-900 dark:text-amber-200 rounded-full">
+                                                    {{ $entity }}
+                                                </span>
                                             @endforeach
                                         @endforeach
                                     </div>
@@ -149,9 +198,14 @@
 
                             <!-- Analysis Method -->
                             @if(isset($best_match['analysis_method']))
-                                <div class="bg-indigo-50 p-4 rounded-lg mb-6">
-                                    <h4 class="font-bold text-indigo-800 mb-2">{{ __('verification.analysis_method') }}:</h4>
-                                    <p class="text-indigo-700">
+                                <div class="p-5 mb-6 border rounded-xl bg-secondary/10 dark:bg-secondary/20 border-secondary/30 dark:border-secondary/40">
+                                    <h4 class="flex items-center gap-2 mb-2 font-bold text-secondary dark:text-secondary/90">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                                        </svg>
+                                        {{ __('verification.analysis_method') }}
+                                    </h4>
+                                    <p class="text-secondary/90 dark:text-secondary/80">
                                         @if($best_match['analysis_method'] === 'semantic_similarity')
                                             {{ __('verification.analysis_method_semantic') }}
                                         @elseif($best_match['analysis_method'] === 'tfidf_cosine')
@@ -164,17 +218,34 @@
                             @endif
 
                             <!-- Best Match Details -->
-                            <div class="bg-gray-50 rounded-2xl p-6 border-r-4 border-red-500">
-                                <h4 class="text-lg font-bold text-gray-800 mb-3">{{ __('verification.best_match_title') }}:</h4>
-                                <p class="text-xl font-bold text-gray-900 mb-3">{{ $best_match['title'] }}</p>
-                                <p class="text-gray-700 leading-relaxed mb-4">
+                            <div class="p-6 border-s-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/50 border-red-500">
+                                <div class="flex items-start gap-3 mb-4">
+                                    <div class="p-2 rounded-lg bg-red-100 dark:bg-red-900/50">
+                                        <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h4 class="mb-1 text-lg font-bold text-zinc-900 dark:text-zinc-50">
+                                            {{ __('verification.best_match_title') }}
+                                        </h4>
+                                    </div>
+                                </div>
+                                <p class="mb-3 text-xl font-bold text-zinc-900 dark:text-zinc-50">{{ $best_match['title'] }}</p>
+                                <p class="mb-4 leading-relaxed text-zinc-700 dark:text-zinc-300">
                                     {{ Str::limit($best_match['content'], 300) }}
                                 </p>
-                                <div class="flex flex-wrap gap-3 items-center">
-                                    <span class="bg-gray-200 px-3 py-1 rounded-full text-sm">
+                                <div class="flex flex-wrap items-center gap-3">
+                                    <span class="inline-flex items-center gap-2 px-3 py-1 text-sm font-medium rounded-full bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+                                        </svg>
                                         {{ __('verification.source_label') }}: {{ $best_match['origin_dataset'] }}
                                     </span>
-                                    <span class="bg-gray-200 px-3 py-1 rounded-full text-sm">
+                                    <span class="inline-flex items-center gap-2 px-3 py-1 text-sm font-medium rounded-full bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
                                         {{ __('verification.confidence_label') }}:
                                         {{ number_format($best_match['confidence_score'] * 100, 1) }}%
                                     </span>
@@ -186,21 +257,30 @@
 
                 <!-- Additional Matches -->
                 @if(count($similar_news) > 1)
-                    <div class="p-8 bg-gray-50">
-                        <div class="max-w-3xl mx-auto">
-                            <h3 class="text-xl font-bold text-gray-800 mb-6">{{ __('verification.additional_matches_title') }}
-                                ({{ count($similar_news) - 1 }})</h3>
+                    <div class="p-8 bg-zinc-50 dark:bg-zinc-800/30">
+                        <div class="max-w-4xl mx-auto">
+                            <h3 class="flex items-center gap-2 mb-6 text-xl font-bold text-zinc-900 dark:text-zinc-50">
+                                <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                </svg>
+                                {{ __('verification.additional_matches_title') }}
+                                <span class="px-3 py-1 text-sm font-semibold text-orange-800 bg-orange-200 rounded-full dark:bg-orange-900 dark:text-orange-200">
+                                    {{ count($similar_news) - 1 }}
+                                </span>
+                            </h3>
                             <div class="space-y-4">
                                 @foreach(array_slice($similar_news, 1) as $news)
-                                    <div class="bg-white rounded-xl p-5 border-r-4 border-orange-400">
-                                        <div class="flex justify-between items-start mb-2">
-                                            <p class="font-bold text-gray-900 flex-1">{{ $news['title'] }}</p>
-                                            <span
-                                                class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm font-bold mr-3 whitespace-nowrap">
+                                    <div class="p-5 transition-all border-s-4 rounded-xl bg-white dark:bg-zinc-900 border-orange-400 hover:shadow-lg">
+                                        <div class="flex items-start justify-between gap-4 mb-2">
+                                            <p class="flex-1 text-lg font-bold text-zinc-900 dark:text-zinc-50">{{ $news['title'] }}</p>
+                                            <span class="inline-flex items-center gap-1 px-3 py-1 text-sm font-bold text-orange-800 bg-orange-100 rounded-full dark:bg-orange-900/50 dark:text-orange-200 whitespace-nowrap">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                                </svg>
                                                 {{ number_format($news['similarity_score'] * 100, 1) }}%
                                             </span>
                                         </div>
-                                        <p class="text-gray-600 text-sm">{{ Str::limit($news['content'], 150) }}</p>
+                                        <p class="text-sm text-zinc-600 dark:text-zinc-400">{{ Str::limit($news['content'], 150) }}</p>
                                     </div>
                                 @endforeach
                             </div>
@@ -208,35 +288,45 @@
                     </div>
                 @endif
             </div>
+                                            
 
         @elseif($found)
             <!-- FOUND BUT LOW SIMILARITY: Show Caution -->
-            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border-t-8 border-orange-500 mb-8">
-                <div class="bg-gradient-to-r from-orange-500 to-orange-600 text-white p-8 text-center">
-                    <svg class="w-20 h-20 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="mb-8 overflow-hidden border-t-4 shadow-xl rounded-2xl border-orange-500 bg-white dark:bg-zinc-900">
+                <div class="p-10 text-center text-white bg-gradient-to-br from-orange-500 to-orange-600">
+                    <svg class="w-24 h-24 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <h2 class="text-3xl font-bold">{{ __('verification.caution_title') }}</h2>
-                    <p class="text-xl mt-2 opacity-90">{{ $recommendation }}</p>
+                    <h2 class="mb-3 text-4xl font-bold">{{ __('verification.caution_title') }}</h2>
+                    <p class="text-xl opacity-95">{{ $recommendation }}</p>
                 </div>
 
                 @if(!empty($similar_news))
-                    <div class="p-8">
-                        <div class="max-w-3xl mx-auto">
-                            <h3 class="text-xl font-bold text-gray-800 mb-6">{{ __('verification.similar_news_found') }}
-                                ({{ count($similar_news) }})</h3>
+                    <div class="p-8 bg-white dark:bg-zinc-900">
+                        <div class="max-w-4xl mx-auto">
+                            <h3 class="flex items-center gap-2 mb-6 text-xl font-bold text-zinc-900 dark:text-zinc-50">
+                                <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                                {{ __('verification.similar_news_found') }}
+                                <span class="px-3 py-1 text-sm font-semibold text-orange-800 bg-orange-200 rounded-full dark:bg-orange-900 dark:text-orange-200">
+                                    {{ count($similar_news) }}
+                                </span>
+                            </h3>
                             <div class="space-y-4">
                                 @foreach($similar_news as $news)
-                                    <div class="bg-gray-50 rounded-xl p-5 border-r-4 border-orange-300">
-                                        <div class="flex justify-between items-start mb-2">
-                                            <p class="font-bold text-gray-900 flex-1">{{ $news['title'] }}</p>
-                                            <span
-                                                class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm font-bold mr-3">
+                                    <div class="p-5 transition-all border-s-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/50 border-orange-400 hover:shadow-lg">
+                                        <div class="flex items-start justify-between gap-4 mb-2">
+                                            <p class="flex-1 text-lg font-bold text-zinc-900 dark:text-zinc-50">{{ $news['title'] }}</p>
+                                            <span class="inline-flex items-center gap-1 px-3 py-1 text-sm font-bold text-orange-800 bg-orange-100 rounded-full dark:bg-orange-900/50 dark:text-orange-200 whitespace-nowrap">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                                </svg>
                                                 {{ number_format($news['similarity_score'] * 100, 1) }}%
                                             </span>
                                         </div>
-                                        <p class="text-gray-600 text-sm">{{ Str::limit($news['content'], 150) }}</p>
+                                        <p class="text-sm text-zinc-600 dark:text-zinc-400">{{ Str::limit($news['content'], 150) }}</p>
                                     </div>
                                 @endforeach
                             </div>
@@ -247,32 +337,67 @@
 
         @else
             <!-- NOT FOUND: Show Safe Message -->
-            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border-t-8 border-green-500 mb-8">
-                <div class="bg-gradient-to-r from-green-500 to-green-600 text-white p-8 text-center">
-                    <svg class="w-24 h-24 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <h2 class="text-3xl font-bold">{{ __('verification.safe_title') }}</h2>
-                    <p class="text-xl mt-2 opacity-90">{{ __('verification.safe_subtitle') }}</p>
+            <div class="mb-8 overflow-hidden border-t-4 shadow-xl rounded-2xl border-emerald-500 bg-white dark:bg-zinc-900">
+                <div class="p-10 text-center text-white bg-gradient-to-br from-primary via-primary-300 to-emerald-500">
+                    <div class="relative inline-block mb-4">
+                        <svg class="w-28 h-28" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <div class="absolute rounded-full opacity-30 inset-2 animate-ping bg-emerald-300"></div>
+                    </div>
+                    <h2 class="mb-3 text-4xl font-bold">{{ __('verification.safe_title') }}</h2>
+                    <p class="text-xl opacity-95">{{ __('verification.safe_subtitle') }}</p>
                 </div>
 
-                <div class="p-8">
-                    <div class="max-w-3xl mx-auto text-center">
-                        <h3 class="text-2xl font-bold text-gray-800 mb-4">{{ __('verification.safe_analysis_title') }}</h3>
-                        <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                <div class="p-8 bg-white dark:bg-zinc-900">
+                    <div class="max-w-4xl mx-auto text-center">
+                        <div class="inline-flex items-center gap-2 px-4 py-2 mb-4 font-semibold text-primary bg-primary-100 rounded-full dark:bg-primary/20 dark:text-primary-300">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                            </svg>
+                            {{ __('verification.safe_analysis_title') }}
+                        </div>
+                        <p class="mb-6 text-lg leading-relaxed text-zinc-700 dark:text-zinc-300">
                             {{ $recommendation ?? __('verification.safe_default_message') }}
                         </p>
-                        <div class="bg-blue-50 border-r-4 border-blue-500 p-6 rounded-xl ">
-                            <p class="text-blue-900 font-bold mb-2">{{ __('verification.important_note_title') }}</p>
-                            <p class="text-blue-800">
-                                {{ __('verification.important_note_text') }}
-                            </p>
-                            <ul class="mt-3 space-y-1 text-blue-800">
-                                <li>{{ __('verification.source_spa') }}</li>
-                                <li>{{ __('verification.source_moj') }}</li>
-                                <li>{{ __('verification.source_gov') }}</li>
-                            </ul>
+                        <div class="p-6 border-s-4 border-primary rounded-xl bg-primary-100/50 dark:bg-primary/10">
+                            <div class="flex justify-center items-start gap-3">
+                                <div class="p-2 rounded-lg bg-primary-100 dark:bg-primary/20">
+                                    <svg class="w-6 h-6 text-primary dark:text-primary-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <div class="flex-1 text-start">
+                                    <p class="mb-2 font-bold text-primary dark:text-primary-200">{{ __('verification.important_note_title') }}</p>
+                                    <p class="mb-3 text-primary/90 dark:text-primary-300">
+                                        {{ __('verification.important_note_text') }}
+                                    </p>
+                                </div>
+                            </div>
+                            <hr class="mb-2 border-primary-200 dark:border-primary/20" />
+                            <div>
+                                <ul class="space-y-1 text-sm text-primary/90 dark:text-primary-300">
+                                        <li class="flex items-center gap-2">
+                                            <span>{{ __('verification.source_spa') }}</span>
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </li>
+                                        <li class="flex items-center gap-2">
+                                            <span>{{ __('verification.source_moj') }}</span>
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </li>
+                                        <li class="flex items-center gap-2">
+                                            <span>{{ __('verification.source_gov') }}</span>
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </li>
+                                    </ul>
+                                </div>
                         </div>
                     </div>
                 </div>
@@ -280,49 +405,24 @@
         @endif
 
         <!-- Your Submitted Text -->
-        <div class="bg-white rounded-3xl shadow-lg overflow-hidden mb-8">
-            <div class="bg-gradient-to-r from-primary to-[#3a5a4a] text-white p-6">
-                <h3 class="text-2xl font-bold">{{ __('verification.submitted_text_title') }}</h3>
+        <div class="mb-8 overflow-hidden shadow-lg rounded-2xl bg-white dark:bg-zinc-900">
+            <div class="p-6 text-white bg-gradient-to-r from-primary to-primary-300 dark:from-primary dark:to-primary-400">
+                <h3 class="flex items-center gap-2 text-2xl font-bold">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    {{ __('verification.submitted_text_title') }}
+                </h3>
             </div>
             <div class="p-8">
-                <p class="text-gray-800 leading-relaxed text-lg whitespace-pre-wrap">{{ $search_content }}</p>
+                <p class="mb-6 text-lg leading-relaxed whitespace-pre-wrap text-zinc-800 dark:text-zinc-200">{{ $search_content }}</p>
 
                 @if(isset($preprocessed_text) && $preprocessed_text)
-                    <div class="mt-6 bg-gray-50 rounded-xl p-5 border-r-4 border-purple-400">
-                        <p class="text-sm font-bold text-gray-700 mb-2">{{ __('verification.preprocessed_text_label') }}:
+                    <div class="p-5 mt-6 border-s-4 border-secondary rounded-xl bg-secondary/10 dark:bg-secondary/20">
+                        <p class="mb-2 text-sm font-bold text-secondary dark:text-secondary/90">
+                            {{ __('verification.preprocessed_text_label') }}
                         </p>
-                        <p class="text-gray-600 font-mono text-sm">{{ $preprocessed_text }}</p>
-                    </div>
-                @endif
-
-                @if(isset($query_quality))
-                    <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
-                        @if(isset($query_quality['length']))
-                            <div class="bg-gray-50 rounded-lg p-4 text-center">
-                                <p class="text-2xl font-bold text-primary">{{ $query_quality['length'] }}</p>
-                                <p class="text-sm text-gray-600">{{ __('verification.character_count') }}</p>
-                            </div>
-                        @endif
-                        @if(isset($query_quality['word_count']))
-                            <div class="bg-gray-50 rounded-lg p-4 text-center">
-                                <p class="text-2xl font-bold text-primary">{{ $query_quality['word_count'] }}</p>
-                                <p class="text-sm text-gray-600">{{ __('verification.word_count') }}</p>
-                            </div>
-                        @endif
-                        @if(isset($query_quality['legal_keyword_count']))
-                            <div class="bg-gray-50 rounded-lg p-4 text-center">
-                                <p class="text-2xl font-bold text-primary">{{ $query_quality['legal_keyword_count'] }}</p>
-                                <p class="text-sm text-gray-600">{{ __('verification.legal_keyword_count') }}</p>
-                            </div>
-                        @endif
-                        @if(isset($query_quality['is_legal_related']))
-                            <div class="bg-gray-50 rounded-lg p-4 text-center">
-                                <p class="text-2xl font-bold text-primary">
-                                    {{ $query_quality['is_legal_related'] ? '✓' : '✗' }}
-                                </p>
-                                <p class="text-sm text-gray-600">{{ __('verification.is_legal_text') }}</p>
-                            </div>
-                        @endif
+                        <p class="text-sm font-mono text-secondary/90 dark:text-secondary/80">{{ $preprocessed_text }}</p>
                     </div>
                 @endif
             </div>
@@ -330,18 +430,24 @@
 
         <!-- Feedback Section -->
         <div class="mt-16">
-            <h2 class="text-3xl font-bold text-center text-primary mb-8">{{ __('verification.feedback_title') }}</h2>
+            <div class="mb-8 text-center">
+                <h2 class="mb-2 text-3xl font-bold text-zinc-900 dark:text-zinc-50">{{ __('verification.feedback_title') }}</h2>
+                <p class="text-zinc-600 dark:text-zinc-400">{{ __('Help us improve our verification system') }}</p>
+            </div>
             <livewire:forms.verification-feedback-form />
         </div>
 
         <!-- Action Buttons -->
-        <div class="text-center space-y-4 mt-12">
+        <div class="mt-12 space-y-6 text-center">
             <a href="{{ route('home') }}"
-                class="inline-block bg-gradient-to-r from-primary to-[#3a5a4a] text-white px-10 py-4 rounded-full font-bold text-lg hover:shadow-xl transform hover:scale-105 transition-all">
+                class="inline-flex items-center gap-2 px-10 py-4 text-lg font-bold text-white transition-all transform shadow-lg bg-gradient-to-r from-primary to-primary-300 dark:from-primary dark:to-primary-400 rounded-full hover:shadow-2xl hover:scale-105">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                </svg>
                 {{ __('verification.verify_another') }}
             </a>
 
-            <p class="text-gray-500 text-sm">
+            <p class="text-sm text-zinc-500 dark:text-zinc-400">
                 {{ __('verification.analysis_footer') }}
             </p>
         </div>

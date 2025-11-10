@@ -28,16 +28,20 @@
 
                 <form wire:submit.prevent="submit" class="space-y-8">
                     <!-- Rating Section -->
-                    <div class="text-center">
+                    <div class="text-center" x-data="{ hover: 0 }">
                         <label class="block text-gray-700 font-bold mb-6 text-xl">
                             كيف تقيم دقة نتيجة التحقق؟
                         </label>
                         <div class="flex justify-center items-center gap-3 mb-4">
                             @for($i = 1; $i <= 5; $i++)
-                                <button type="button" wire:click="$set('rating', {{ $i }})"
-                                    class="text-5xl transition-all duration-200 hover:scale-125 focus:outline-none transform
-                                                                               {{ $rating >= $i ? 'text-yellow-400 drop-shadow-lg' : 'text-gray-300' }}">
-                                    ⭐
+                                <button type="button" wire:click="$set('rating', {{ $i }})" @mouseenter="hover = {{ $i }}"
+                                    @mouseleave="hover = 0"
+                                    class="text-5xl transition-all duration-200 hover:scale-110 focus:outline-none transform"
+                                    :class="{
+                                                                        'text-yellow-400': (hover > 0 ? hover >= {{ $i }} : {{ $rating }} >= {{ $i }}),
+                                                                        'text-gray-300': (hover > 0 ? hover < {{ $i }} : {{ $rating }} < {{ $i }})
+                                                                    }">
+                                    <x-heroicon-s-star class="size-8 fill-current" />
                                 </button>
                             @endfor
                         </div>
