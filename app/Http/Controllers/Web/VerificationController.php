@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Helpers\LanguageDetector;
 use App\Http\Controllers\Controller;
 use App\Services\PythonAIService;
 use Exception;
@@ -45,9 +46,9 @@ class VerificationController extends Controller
         $validator = Validator::make($request->all(), [
             'content' => 'required|string|min:20|max:10000',
         ], [
-            'content.required' => 'الرجاء إدخال نص الخبر',
-            'content.min' => 'النص قصير جداً. الحد الأدنى 20 حرف',
-            'content.max' => 'النص طويل جداً. الحد الأقصى 10000 حرف',
+            'content.required' => 'الرجاء إدخال نص الخبر | Please enter the news text',
+            'content.min' => 'النص قصير جداً. الحد الأدنى 20 حرف | Text is too short. Minimum 20 characters',
+            'content.max' => 'النص طويل جداً. الحد الأقصى 10000 حرف | Text is too long. Maximum 10,000 characters',
         ]);
 
         if ($validator->fails()) {
@@ -57,64 +58,32 @@ class VerificationController extends Controller
         $content = $request->input('content');
 
         try {
-            Log::info('Starting AI-powered verification', [
+            // Detect language
+            $detectedLanguage = LanguageDetector::detect($content);
+            $isArabic = $detectedLanguage === 'ar';
+
+            Log::info('Starting verification', [
                 'text_length' => strlen($content),
                 'word_count' => str_word_count($content),
+                'detected_language' => $detectedLanguage,
             ]);
 
-            // DEADLOCK FIX: Fetch fake news candidates HERE in Laravel
-            // This prevents Python from calling back to Laravel API
-            //
-            // IMPROVED MATCHING STRATEGY:
-            // 1. Use FULLTEXT search to find exact/close matches first
-            // 2. Add random samples to reach 100 candidates for diversity
-            // This ensures exact matches are ALWAYS included while maintaining good coverage
-
-            $candidates = [];
-
-            // Step 1: FULLTEXT search for exact/close matches (prioritize these!)
-            $searchTerms = mb_substr($content, 0, 500); // Use first 500 chars for search
-            $fullTextMatches = \App\Models\DatasetFakeNews::query()
-                ->select('id', 'title', 'content', 'confidence_score', 'origin_dataset_name')
-                ->where('confidence_score', '>=', 0.5)
-                ->whereRaw('MATCH(title, content) AGAINST(? IN NATURAL LANGUAGE MODE)', [$searchTerms])
-                ->limit(50)  // Get top 50 FULLTEXT matches
-                ->get()
-                ->toArray();
-
-            $candidates = $fullTextMatches;
-            Log::info('FULLTEXT search found ' . count($fullTextMatches) . ' close matches');
-
-            // Step 2: Add random high-quality entries to reach 100 (for semantic diversity)
-            $remainingSlots = 100 - count($candidates);
-            if ($remainingSlots > 0) {
-                $existingIds = array_column($candidates, 'id');
-                $randomSamples = \App\Models\DatasetFakeNews::query()
-                    ->select('id', 'title', 'content', 'confidence_score', 'origin_dataset_name')
-                    ->where('confidence_score', '>=', 0.5)
-                    ->whereNotIn('id', $existingIds)  // Exclude already selected
-                    ->inRandomOrder()
-                    ->limit($remainingSlots)
-                    ->get()
-                    ->toArray();
-
-                $candidates = array_merge($candidates, $randomSamples);
+            // Route to appropriate verification method based on language
+            if ($isArabic) {
+                // ARABIC: Use AI-powered semantic similarity with AraBERT
+                $aiResult = $this->verifyArabicContent($content);
+            } else {
+                // ENGLISH: Use direct FULLTEXT matching (faster, no AI needed)
+                $aiResult = $this->pythonAI->verifyEnglishNews(
+                    text: $content,
+                    threshold: 0.70,
+                    topK: 5
+                );
             }
 
-            Log::info('Fetched fake news candidates', [
-                'count' => count($candidates),
-            ]);
-
-            // Call Python AI service with BOTH text and candidates
-            // Python will process locally without calling Laravel
-            $aiResult = $this->pythonAI->verifyArabicNewsWithCandidates(
-                text: $content,
-                candidates: $candidates,
-                threshold: 0.70,  // 70% similarity threshold for better accuracy
-                topK: 5           // Return top 5 similar news
-            );
-
-            Log::info('AI verification completed', [
+            Log::info('Verification completed', [
+                'language' => $detectedLanguage,
+                'method' => $isArabic ? 'arabic_ai_semantic' : 'english_fulltext',
                 'is_potentially_fake' => $aiResult['is_potentially_fake'],
                 'similar_news_found' => $aiResult['similar_news_found'],
                 'highest_similarity' => $aiResult['highest_similarity'],
@@ -131,6 +100,8 @@ class VerificationController extends Controller
                 'recommendation' => $aiResult['recommendation'],
                 'query_quality' => $aiResult['query_quality'] ?? [],
                 'preprocessed_text' => $aiResult['query_text_preprocessed'] ?? '',
+                'detected_language' => $detectedLanguage,
+                'processing_method' => $aiResult['processing_method'] ?? ($isArabic ? 'arabic_ai_semantic' : 'unknown'),
             ];
 
             // If similar news found, add best match details
@@ -163,9 +134,74 @@ class VerificationController extends Controller
                 'search_content' => $content,
                 'found' => false,
                 'error' => true,
-                'error_message' => 'عذراً، حدث خطأ في نظام التحقق الذكي. الرجاء المحاولة مرة أخرى لاحقاً.',
+                'error_message' => 'عذراً، حدث خطأ في نظام التحقق الذكي. الرجاء المحاولة مرة أخرى لاحقاً. | Sorry, an error occurred in the verification system. Please try again later.',
                 'error_details' => config('app.debug') ? $e->getMessage() : null,
             ]);
         }
+    }
+
+    /**
+     * Verify Arabic content using AI semantic similarity with AraBERT
+     *
+     * @param  string  $content  Arabic text to verify
+     * @return array AI verification results
+     *
+     * @throws Exception
+     */
+    private function verifyArabicContent(string $content): array
+    {
+        // DEADLOCK FIX: Fetch fake news candidates HERE in Laravel
+        // This prevents Python from calling back to Laravel API
+        //
+        // IMPROVED MATCHING STRATEGY:
+        // 1. Use FULLTEXT search to find exact/close matches first
+        // 2. Add random samples to reach 100 candidates for diversity
+        // This ensures exact matches are ALWAYS included while maintaining good coverage
+
+        $candidates = [];
+
+        // Step 1: FULLTEXT search for exact/close matches (prioritize these!)
+        $searchTerms = mb_substr($content, 0, 500); // Use first 500 chars for search
+        $fullTextMatches = \App\Models\DatasetFakeNews::query()
+            ->select('id', 'title', 'content', 'confidence_score', 'origin_dataset_name')
+            ->where('language', 'ar') // Only Arabic content
+            ->where('confidence_score', '>=', 0.5)
+            ->whereRaw('MATCH(title, content) AGAINST(? IN NATURAL LANGUAGE MODE)', [$searchTerms])
+            ->limit(50)  // Get top 50 FULLTEXT matches
+            ->get()
+            ->toArray();
+
+        $candidates = $fullTextMatches;
+        Log::info('FULLTEXT search found '.count($fullTextMatches).' close matches');
+
+        // Step 2: Add random high-quality entries to reach 100 (for semantic diversity)
+        $remainingSlots = 100 - count($candidates);
+        if ($remainingSlots > 0) {
+            $existingIds = array_column($candidates, 'id');
+            $randomSamples = \App\Models\DatasetFakeNews::query()
+                ->select('id', 'title', 'content', 'confidence_score', 'origin_dataset_name')
+                ->where('language', 'ar') // Only Arabic content
+                ->where('confidence_score', '>=', 0.5)
+                ->whereNotIn('id', $existingIds)  // Exclude already selected
+                ->inRandomOrder()
+                ->limit($remainingSlots)
+                ->get()
+                ->toArray();
+
+            $candidates = array_merge($candidates, $randomSamples);
+        }
+
+        Log::info('Fetched Arabic fake news candidates', [
+            'count' => count($candidates),
+        ]);
+
+        // Call Python AI service with BOTH text and candidates
+        // Python will process locally without calling Laravel
+        return $this->pythonAI->verifyArabicNewsWithCandidates(
+            text: $content,
+            candidates: $candidates,
+            threshold: 0.70,  // 70% similarity threshold for better accuracy
+            topK: 5           // Return top 5 similar news
+        );
     }
 }

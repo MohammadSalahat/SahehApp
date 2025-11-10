@@ -155,6 +155,132 @@ class PythonAIService
     }
 
     /**
+     * Verify English news using direct FULLTEXT matching (no AI)
+     *
+     * For English texts, we don't use AraBERT model. Instead, we do
+     * direct database matching using MySQL FULLTEXT search for fast results.
+     *
+     * @param  string  $text  English news text to verify
+     * @param  float  $threshold  Similarity threshold (0.0 to 1.0) - not used for English
+     * @param  int  $topK  Number of top results to return
+     * @return array Verification results with match scores
+     */
+    public function verifyEnglishNews(string $text, float $threshold = 0.6, int $topK = 5): array
+    {
+        try {
+            Log::info('Verifying English news using FULLTEXT matching', [
+                'text_length' => strlen($text),
+                'top_k' => $topK,
+            ]);
+
+            // Use FULLTEXT search for English content
+            $searchTerms = mb_substr($text, 0, 500); // Use first 500 chars
+
+            $matches = \App\Models\DatasetFakeNews::query()
+                ->select('id', 'title', 'content', 'confidence_score', 'origin_dataset_name', 'language')
+                ->where('language', 'en')
+                ->where('confidence_score', '>=', 0.5)
+                ->whereRaw('MATCH(title, content) AGAINST(? IN NATURAL LANGUAGE MODE)', [$searchTerms])
+                ->limit($topK)
+                ->get();
+
+            $similarNews = [];
+            $highestScore = 0.0;
+
+            foreach ($matches as $index => $match) {
+                // Calculate a pseudo-similarity score based on FULLTEXT relevance
+                // In MySQL FULLTEXT, results are ordered by relevance
+                // We'll assign declining scores: first result gets highest score
+                $score = 0.95 - ($index * 0.1); // 0.95, 0.85, 0.75, 0.65, 0.55
+                $score = max($score, 0.55); // Minimum score of 0.55
+
+                if ($score > $highestScore) {
+                    $highestScore = $score;
+                }
+
+                $similarNews[] = [
+                    'id' => $match->id,
+                    'title' => $match->title,
+                    'content' => $match->content,
+                    'similarity_score' => $score,
+                    'similarity_level' => $this->getSimilarityLevel($score),
+                    'confidence_score' => $match->confidence_score,
+                    'origin_dataset_name' => $match->origin_dataset_name,
+                    'language' => $match->language,
+                    'recommendation' => $this->getRecommendation($score),
+                ];
+            }
+
+            $isPotentiallyFake = $highestScore >= 0.70;
+            $found = count($similarNews) > 0;
+
+            return [
+                'is_potentially_fake' => $isPotentiallyFake,
+                'similar_news_found' => count($similarNews),
+                'highest_similarity' => $highestScore,
+                'similar_news' => $similarNews,
+                'recommendation' => $isPotentiallyFake
+                    ? 'Warning: This content closely matches known fake news in our database. Please verify from official sources.'
+                    : ($found
+                        ? 'Caution: Some similarity found. Cross-check with reliable sources before sharing.'
+                        : 'No significant matches found in our database. Still verify from trusted sources.'),
+                'query_quality' => [
+                    'word_count' => str_word_count($text),
+                    'character_count' => mb_strlen($text),
+                    'language' => 'en',
+                    'language_name' => 'English',
+                ],
+                'query_text_preprocessed' => $text, // No preprocessing for English
+                'processing_method' => 'fulltext_matching',
+            ];
+
+        } catch (Exception $e) {
+            Log::error('English news verification failed', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            throw $e;
+        }
+    }
+
+    /**
+     * Get similarity level from score
+     */
+    private function getSimilarityLevel(float $score): string
+    {
+        if ($score >= 0.95) {
+            return 'identical';
+        } elseif ($score >= 0.85) {
+            return 'very_high';
+        } elseif ($score >= 0.75) {
+            return 'high';
+        } elseif ($score >= 0.65) {
+            return 'medium';
+        } elseif ($score >= 0.55) {
+            return 'low';
+        } else {
+            return 'very_low';
+        }
+    }
+
+    /**
+     * Get recommendation based on score
+     */
+    private function getRecommendation(float $score): string
+    {
+        if ($score >= 0.85) {
+            return 'Highly likely to be fake news. Do not share without verification.';
+        } elseif ($score >= 0.70) {
+            return 'Potentially fake news. Verify from official sources before believing or sharing.';
+        } elseif ($score >= 0.55) {
+            return 'Some similarities detected. Cross-check with multiple reliable sources.';
+        } else {
+            return 'Low similarity. Still recommended to verify from trusted sources.';
+        }
+    }
+
+    /**
      * Preprocess Arabic text (for testing)
      *
      * @param  string  $text  Raw Arabic text

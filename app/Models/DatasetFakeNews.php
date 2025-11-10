@@ -26,6 +26,7 @@ class DatasetFakeNews extends Model
     protected $fillable = [
         'title',
         'content',
+        'language',
         'content_hash',
         'detected_at',
         'confidence_score',
