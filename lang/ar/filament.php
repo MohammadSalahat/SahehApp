@@ -115,7 +115,7 @@ return [
         'article_rating_description' => 'معلومات عن المقال وتقييم المستخدم',
         'timestamps' => 'التواريخ',
         'timestamps_description' => 'تواريخ تقديم التقييم وتعديله',
-        
+
         // Fields
         'user' => 'المستخدم',
         'user_name' => 'اسم المستخدم',
@@ -129,7 +129,7 @@ return [
         'verification' => 'التحقق',
         'verification_status' => 'حالة التحقق',
         'submitted_at' => 'تاريخ الإرسال',
-        
+
         // Placeholders
         'placeholders' => [
             'user' => 'اختر المستخدم الذي قدم التقييم',
@@ -138,7 +138,7 @@ return [
             'message' => 'أدخل رسالة التقييم التفصيلية...',
             'verification' => 'اختر نتيجة التحقق',
         ],
-        
+
         // Rating Options
         'ratings' => [
             'poor' => 'ضعيف',
@@ -149,14 +149,14 @@ return [
             'star' => 'نجمة',
             'stars' => 'نجوم',
         ],
-        
+
         // Verification Values
         'real' => 'حقيقي',
         'fake' => 'مزيف',
         'uncertain' => 'غير مؤكد',
         'pending' => 'قيد الانتظار',
         'not_verified' => 'لم يتم التحقق بعد',
-        
+
         // Messages
         'no_message' => 'لا توجد رسالة',
         'no_message_provided' => 'لم يتم تقديم رسالة',
@@ -184,7 +184,7 @@ return [
         'followup_details' => 'تفاصيل المتابعة',
         'timestamps' => 'التواريخ',
         'timestamps_description' => 'تواريخ تقديم الطلب وتعديله',
-        
+
         // Fields
         'full_name' => 'الاسم الكامل',
         'email' => 'عنوان البريد الإلكتروني',
@@ -199,7 +199,7 @@ return [
         'internal_notes' => 'الملاحظات الداخلية',
         'submitted_at' => 'تاريخ الإرسال',
         'created_at' => 'تاريخ الإرسال',
-        
+
         // Status Values
         'new' => 'جديد',
         'read' => 'مقروء',
@@ -209,21 +209,21 @@ return [
         'in_progress' => 'قيد المعالجة',
         'resolved' => 'تم الحل',
         'closed' => 'مغلق',
-        
+
         // Placeholders
         'placeholders' => [
             'name' => 'أدخل الاسم الكامل',
             'email' => 'أدخل عنوان البريد الإلكتروني',
             'message' => 'أدخل رسالتك هنا...',
         ],
-        
+
         // Helper Texts
         'helper_texts' => [
             'created_at' => 'وقت إنشاء هذا الطلب',
             'last_contacted_at' => 'آخر مرة تواصلت مع هذا العميل',
             'notes' => 'أضف أي ملاحظات أو تعليقات حول هذا الطلب',
         ],
-        
+
         // Messages
         'no_message' => 'لا توجد رسالة',
         'no_message_provided' => 'لم يتم تقديم رسالة',
@@ -311,7 +311,7 @@ return [
         'reliability_description' => 'مقاييس الموثوقية وحالة المصدر',
         'timestamps' => 'التواريخ',
         'timestamps_description' => 'تواريخ إضافة المصدر وتعديله وحذفه',
-        
+
         // Fields
         'name' => 'اسم المصدر',
         'source_name' => 'اسم المصدر',
@@ -327,20 +327,20 @@ return [
         'updated_at' => 'آخر تحديث',
         'deleted_at' => 'تاريخ الحذف',
         'monitoring_status' => 'حالة المراقبة',
-        
+
         // Placeholders
         'placeholders' => [
             'name' => 'أدخل اسم مصدر الأخبار (مثال: CNN, BBC)',
             'url' => 'https://example.com',
             'description' => 'وصف موجز لمصدر الأخبار...',
         ],
-        
+
         // Helper Texts
         'helper_texts' => [
             'reliability_score' => 'درجة الموثوقية من 0 (غير موثوق) إلى 1 (موثوق جدًا)',
             'is_active' => 'ما إذا كان يتم مراقبة هذا المصدر بنشاط',
         ],
-        
+
         // Values
         'active_sources' => 'المصادر النشطة',
         'inactive_sources' => 'المصادر غير النشطة',
@@ -368,7 +368,7 @@ return [
         'source_info_description' => 'أصل قاعدة البيانات وتحديد المحتوى',
         'timestamps' => 'التواريخ',
         'timestamps_description' => 'تواريخ الإنشاء والتعديل والحذف',
-        
+
         // Fields
         'article_title' => 'عنوان المقال',
         'article_content' => 'محتوى المقال',
@@ -385,7 +385,7 @@ return [
         'added_at' => 'تاريخ الإضافة',
         'updated_at' => 'آخر تحديث',
         'deleted_at' => 'تاريخ الحذف',
-        
+
         // Placeholders
         'placeholders' => [
             'title' => 'أدخل عنوان المقال',
@@ -393,14 +393,14 @@ return [
             'origin_dataset' => 'اسم مصدر البيانات (مثال: LIAR, FakeNewsNet)',
             'content_hash' => 'معرّف SHA-256 للمحتوى',
         ],
-        
+
         // Helper Texts
         'helper_texts' => [
             'content_hash' => 'معرّف فريد لاكتشاف المحتوى المكرر',
             'confidence_score' => 'مستوى ثقة الذكاء الاصطناعي (0-1)',
             'added_by_ai' => 'ما إذا تم اكتشاف هذا الإدخال تلقائيًا بواسطة الذكاء الاصطناعي',
         ],
-        
+
         // Values
         'unknown_dataset' => 'قاعدة بيانات غير معروفة',
         'automatically_detected' => 'كشف تلقائي بالذكاء الاصطناعي',
@@ -413,7 +413,7 @@ return [
         'high_confidence' => 'ثقة عالية (>80%)',
         'detected_from' => 'كشف من',
         'detected_until' => 'كشف حتى',
-        
+
         // Messages
         'title_copied' => 'تم نسخ العنوان!',
         'hash_copied' => 'تم نسخ المعرّف!',

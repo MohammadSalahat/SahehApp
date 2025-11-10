@@ -26,28 +26,29 @@ class DatasetsFakeNewsTable
                     ->limit(50)
                     ->tooltip(function (TextColumn $column): ?string {
                         $state = $column->getState();
+
                         return strlen($state) > 50 ? $state : null;
                     })
                     ->icon('heroicon-m-document-text')
                     ->copyable()
                     ->copyMessage(__('filament.datasets_fake_news.title_copied')),
-                    
+
                 TextColumn::make('detected_at')
                     ->label(__('filament.datasets_fake_news.detected_at'))
                     ->dateTime()
                     ->since()
                     ->sortable()
                     ->icon('heroicon-m-calendar'),
-                    
+
                 TextColumn::make('confidence_score')
                     ->label(__('filament.datasets_fake_news.confidence_score'))
                     ->numeric()
                     ->sortable()
                     ->badge()
                     ->color(fn ($state) => $state > 0.8 ? 'success' : ($state > 0.5 ? 'warning' : 'danger'))
-                    ->formatStateUsing(fn ($state) => round($state * 100) . '%')
+                    ->formatStateUsing(fn ($state) => round($state * 100).'%')
                     ->icon('heroicon-m-shield-check'),
-                    
+
                 TextColumn::make('origin_dataset_name')
                     ->label(__('filament.datasets_fake_news.origin_dataset'))
                     ->searchable()
@@ -55,7 +56,7 @@ class DatasetsFakeNewsTable
                     ->badge()
                     ->color('info')
                     ->icon('heroicon-m-archive-box'),
-                    
+
                 IconColumn::make('added_by_ai')
                     ->label(__('filament.datasets_fake_news.ai_detected'))
                     ->boolean()
@@ -63,7 +64,7 @@ class DatasetsFakeNewsTable
                     ->falseIcon('heroicon-o-user')
                     ->trueColor('info')
                     ->falseColor('gray'),
-                    
+
                 TextColumn::make('content_hash')
                     ->label(__('filament.datasets_fake_news.content_hash'))
                     ->searchable()
@@ -75,7 +76,7 @@ class DatasetsFakeNewsTable
                     ->copyMessage(__('filament.datasets_fake_news.hash_copied'))
                     ->toggleable()
                     ->icon('heroicon-m-hashtag'),
-                    
+
                 TextColumn::make('created_at')
                     ->label(__('filament.datasets_fake_news.added_at'))
                     ->dateTime()
@@ -83,7 +84,7 @@ class DatasetsFakeNewsTable
                     ->sortable()
                     ->icon('heroicon-m-calendar-days')
                     ->toggleable(isToggledHiddenByDefault: true),
-                    
+
                 TextColumn::make('updated_at')
                     ->label(__('filament.datasets_fake_news.updated_at'))
                     ->dateTime()
@@ -91,7 +92,7 @@ class DatasetsFakeNewsTable
                     ->sortable()
                     ->icon('heroicon-m-pencil')
                     ->toggleable(isToggledHiddenByDefault: true),
-                    
+
                 TextColumn::make('deleted_at')
                     ->label(__('filament.datasets_fake_news.deleted_at'))
                     ->dateTime()

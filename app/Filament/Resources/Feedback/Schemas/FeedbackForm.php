@@ -39,11 +39,11 @@ class FeedbackForm
                             ->label(__('filament.feedback.rating'))
                             ->required()
                             ->options([
-                                1 => '⭐ 1 - ' . __('filament.feedback.ratings.poor'),
-                                2 => '⭐⭐ 2 - ' . __('filament.feedback.ratings.fair'),
-                                3 => '⭐⭐⭐ 3 - ' . __('filament.feedback.ratings.good'),
-                                4 => '⭐⭐⭐⭐ 4 - ' . __('filament.feedback.ratings.very_good'),
-                                5 => '⭐⭐⭐⭐⭐ 5 - ' . __('filament.feedback.ratings.excellent'),
+                                1 => '⭐ 1 - '.__('filament.feedback.ratings.poor'),
+                                2 => '⭐⭐ 2 - '.__('filament.feedback.ratings.fair'),
+                                3 => '⭐⭐⭐ 3 - '.__('filament.feedback.ratings.good'),
+                                4 => '⭐⭐⭐⭐ 4 - '.__('filament.feedback.ratings.very_good'),
+                                5 => '⭐⭐⭐⭐⭐ 5 - '.__('filament.feedback.ratings.excellent'),
                             ])
                             ->placeholder(__('filament.feedback.placeholders.rating'))
                             ->columnSpan(1),
@@ -51,10 +51,10 @@ class FeedbackForm
                         Select::make('verification_result')
                             ->label(__('filament.feedback.verification_result'))
                             ->options([
-                                'real' => '✅ ' . __('filament.feedback.real'),
-                                'fake' => '❌ ' . __('filament.feedback.fake'),
-                                'uncertain' => '❓ ' . __('filament.feedback.uncertain'),
-                                'pending' => '⏳ ' . __('filament.feedback.pending'),
+                                'real' => '✅ '.__('filament.feedback.real'),
+                                'fake' => '❌ '.__('filament.feedback.fake'),
+                                'uncertain' => '❓ '.__('filament.feedback.uncertain'),
+                                'pending' => '⏳ '.__('filament.feedback.pending'),
                             ])
                             ->placeholder(__('filament.feedback.placeholders.verification'))
                             ->columnSpan(1),

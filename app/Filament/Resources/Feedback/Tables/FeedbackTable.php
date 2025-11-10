@@ -72,10 +72,10 @@ class FeedbackTable
                         default => 'heroicon-m-minus-circle',
                     })
                     ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'real' => '✅ ' . __('filament.feedback.real'),
-                        'fake' => '❌ ' . __('filament.feedback.fake'),
-                        'uncertain' => '❓ ' . __('filament.feedback.uncertain'),
-                        'pending' => '⏳ ' . __('filament.feedback.pending'),
+                        'real' => '✅ '.__('filament.feedback.real'),
+                        'fake' => '❌ '.__('filament.feedback.fake'),
+                        'uncertain' => '❓ '.__('filament.feedback.uncertain'),
+                        'pending' => '⏳ '.__('filament.feedback.pending'),
                         default => ucfirst($state),
                     }),
 
@@ -110,21 +110,21 @@ class FeedbackTable
                 SelectFilter::make('rating')
                     ->label(__('filament.feedback.rating'))
                     ->options([
-                        1 => '⭐ 1 ' . __('filament.feedback.ratings.star'),
-                        2 => '⭐⭐ 2 ' . __('filament.feedback.ratings.stars'),
-                        3 => '⭐⭐⭐ 3 ' . __('filament.feedback.ratings.stars'),
-                        4 => '⭐⭐⭐⭐ 4 ' . __('filament.feedback.ratings.stars'),
-                        5 => '⭐⭐⭐⭐⭐ 5 ' . __('filament.feedback.ratings.stars'),
+                        1 => '⭐ 1 '.__('filament.feedback.ratings.star'),
+                        2 => '⭐⭐ 2 '.__('filament.feedback.ratings.stars'),
+                        3 => '⭐⭐⭐ 3 '.__('filament.feedback.ratings.stars'),
+                        4 => '⭐⭐⭐⭐ 4 '.__('filament.feedback.ratings.stars'),
+                        5 => '⭐⭐⭐⭐⭐ 5 '.__('filament.feedback.ratings.stars'),
                     ])
                     ->multiple(),
 
                 SelectFilter::make('verification_result')
                     ->label(__('filament.feedback.verification_status'))
                     ->options([
-                        'real' => '✅ ' . __('filament.feedback.real'),
-                        'fake' => '❌ ' . __('filament.feedback.fake'),
-                        'uncertain' => '❓ ' . __('filament.feedback.uncertain'),
-                        'pending' => '⏳ ' . __('filament.feedback.pending'),
+                        'real' => '✅ '.__('filament.feedback.real'),
+                        'fake' => '❌ '.__('filament.feedback.fake'),
+                        'uncertain' => '❓ '.__('filament.feedback.uncertain'),
+                        'pending' => '⏳ '.__('filament.feedback.pending'),
                     ])
                     ->multiple(),
 

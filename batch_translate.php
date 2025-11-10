@@ -3,7 +3,6 @@
 /**
  * Batch update all Filament resource files with proper translation keys
  */
-
 $updates = [
     // ContactRequests - ContactRequestInfolist
     'app/Filament/Resources/ContactRequests/Schemas/ContactRequestInfolist.php' => [
@@ -34,11 +33,11 @@ $updates = [
 foreach ($updates as $file => $replacements) {
     if (file_exists($file)) {
         $content = file_get_contents($file);
-        
+
         foreach ($replacements as $search => $replace) {
             $content = str_replace("__($search)", "__($replace)", $content);
         }
-        
+
         file_put_contents($file, $content);
         echo "Updated: $file\n";
     } else {

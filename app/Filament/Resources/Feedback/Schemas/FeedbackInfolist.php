@@ -78,10 +78,10 @@ class FeedbackInfolist
                                 default => 'heroicon-m-minus-circle',
                             })
                             ->formatStateUsing(fn (string $state): string => match ($state) {
-                                'real' => '✅ ' . __('filament.feedback.real'),
-                                'fake' => '❌ ' . __('filament.feedback.fake'),
-                                'uncertain' => '❓ ' . __('filament.feedback.uncertain'),
-                                'pending' => '⏳ ' . __('filament.feedback.pending'),
+                                'real' => '✅ '.__('filament.feedback.real'),
+                                'fake' => '❌ '.__('filament.feedback.fake'),
+                                'uncertain' => '❓ '.__('filament.feedback.uncertain'),
+                                'pending' => '⏳ '.__('filament.feedback.pending'),
                                 default => ucfirst($state),
                             })
                             ->placeholder(__('filament.feedback.not_verified'))
