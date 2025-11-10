@@ -17,6 +17,10 @@ class User extends Authenticatable implements FilamentUser
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, SoftDeletes, TwoFactorAuthenticatable;
 
+    const ROLE_ADMIN = 'admin';
+
+    const ROLE_USER = 'user';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -118,6 +122,6 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return true;
+        return $this->role === self::ROLE_ADMIN;
     }
 }

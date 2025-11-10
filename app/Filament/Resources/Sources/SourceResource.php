@@ -22,9 +22,13 @@ class SourceResource extends Resource
 {
     protected static ?string $model = Source::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::Link;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::GlobeAlt;
 
-    protected static ?string $recordTitleAttribute = 'Sources';
+    protected static ?string $recordTitleAttribute = 'name';
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Data Management';
+
+    protected static ?int $navigationSort = 2;
 
     public static function form(Schema $schema): Schema
     {

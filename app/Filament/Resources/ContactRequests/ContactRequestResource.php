@@ -21,7 +21,7 @@ class ContactRequestResource extends Resource
 {
     protected static ?string $model = ContactRequest::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedInbox;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::InboxArrowDown;
 
     protected static ?string $recordTitleAttribute = 'email';
 
@@ -30,6 +30,10 @@ class ContactRequestResource extends Resource
     protected static ?string $modelLabel = null;
 
     protected static ?string $pluralModelLabel = null;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Communication';
+
+    protected static ?int $navigationSort = 3;
 
     public static function getNavigationLabel(): string
     {

@@ -23,6 +23,7 @@ Route::middleware('api.key')->group(function () {
 
     // Python AI Service Routes (for Python to call Laravel)
     Route::prefix('datasets')->group(function () {
+        // Fake News Dataset Routes
         Route::post('/fake-news', [DatasetFakeNewsController::class, 'store'])
             ->name('api.datasets.fake-news.store');
 
@@ -43,6 +44,16 @@ Route::middleware('api.key')->group(function () {
 
         Route::post('/fake-news/search', [DatasetFakeNewsController::class, 'search'])
             ->name('api.datasets.fake-news.search');
+
+        // Legitimate News Dataset Routes (for balanced training data)
+        Route::post('/legitimate-news', [DatasetFakeNewsController::class, 'storeLegitimate'])
+            ->name('api.datasets.legitimate-news.store');
+
+        Route::post('/legitimate-news/bulk', [DatasetFakeNewsController::class, 'bulkStoreLegitimate'])
+            ->name('api.datasets.legitimate-news.bulk-store');
+
+        Route::get('/legitimate-news', [DatasetFakeNewsController::class, 'indexLegitimate'])
+            ->name('api.datasets.legitimate-news.index');
     });
 
     // Feedback routes

@@ -22,7 +22,7 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::User;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::UserGroup;
 
     protected static ?string $recordTitleAttribute = 'name';
 
@@ -31,6 +31,10 @@ class UserResource extends Resource
     protected static ?string $modelLabel = null;
 
     protected static ?string $pluralModelLabel = null;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'User Management';
+
+    protected static ?int $navigationSort = 1;
 
     public static function getNavigationLabel(): string
     {

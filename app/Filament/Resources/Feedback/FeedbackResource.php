@@ -20,7 +20,7 @@ class FeedbackResource extends Resource
 {
     protected static ?string $model = Feedback::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::ChatBubbleLeftRight;
 
     protected static ?string $recordTitleAttribute = 'rating';
 
@@ -29,6 +29,10 @@ class FeedbackResource extends Resource
     protected static ?string $modelLabel = null;
 
     protected static ?string $pluralModelLabel = null;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Customer Feedback';
+
+    protected static ?int $navigationSort = 2;
 
     public static function getNavigationLabel(): string
     {

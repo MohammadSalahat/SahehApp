@@ -84,6 +84,22 @@ return [
         'verified' => 'Verified',
         'active' => 'Active',
         'created_at' => 'Registration Date',
+        'email_verified_at' => 'Email Verified At',
+        'deleted_at' => 'Deleted At',
+        'user_information' => 'User Information',
+        'basic_info' => 'Basic User Information',
+        'date_information' => 'Dates',
+
+        'placeholders' => [
+            'name' => 'Enter full name',
+            'email' => 'Enter email address',
+            'password' => 'Enter secure password',
+        ],
+
+        'helpers' => [
+            'select_role' => 'Select the appropriate role for this user',
+            'password_length' => 'Password must be at least 8 characters long',
+        ],
     ],
 
     // Sources Resource

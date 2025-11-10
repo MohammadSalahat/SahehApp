@@ -22,7 +22,7 @@ class DatasetsFakeNewResource extends Resource
 {
     protected static ?string $model = DatasetsFakeNew::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::ExclamationTriangle;
 
     protected static ?string $recordTitleAttribute = 'title';
 
@@ -31,6 +31,10 @@ class DatasetsFakeNewResource extends Resource
     protected static ?string $modelLabel = null;
 
     protected static ?string $pluralModelLabel = null;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Data Management';
+
+    protected static ?int $navigationSort = 1;
 
     public static function getNavigationLabel(): string
     {

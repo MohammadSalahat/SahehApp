@@ -282,4 +282,213 @@ class DatasetFakeNewsController extends Controller
             ], 500);
         }
     }
+
+    // ===== Legitimate News Methods (For Balanced Dataset) =====
+
+    /**
+     * Store a new legitimate news entry from Python service.
+     */
+    public function storeLegitimate(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:500',
+            'content' => 'required|string',
+            'source' => 'required|string|max:100',
+            'category' => 'nullable|string|max:50',
+            'url' => 'nullable|string|max:1000',
+            'publish_date' => 'nullable|date',
+            'credibility_score' => 'nullable|numeric|min:0|max:1',
+            'language' => 'nullable|string|max:10',
+            'metadata' => 'nullable|array',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        try {
+            // Generate content hash for duplicate detection
+            $contentHash = \App\Models\LegitimateNews::generateContentHash(
+                $request->input('title'),
+                $request->input('content')
+            );
+
+            $legitimateNews = \App\Models\LegitimateNews::create([
+                'title' => $request->input('title'),
+                'content' => $request->input('content'),
+                'source' => $request->input('source'),
+                'category' => $request->input('category', 'legal'),
+                'url' => $request->input('url'),
+                'publish_date' => $request->input('publish_date', now()),
+                'credibility_score' => $request->input('credibility_score', 0.95),
+                'language' => $request->input('language', 'ar'),
+                'content_hash' => $contentHash,
+                'metadata' => $request->input('metadata'),
+                'verified' => true,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Legitimate news entry created successfully',
+                'data' => $legitimateNews,
+            ], 201);
+
+        } catch (\Exception $e) {
+            // Check if it's a duplicate entry error
+            if (str_contains($e->getMessage(), 'Duplicate entry') ||
+                str_contains($e->getMessage(), 'content_hash')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Duplicate content detected',
+                    'error' => 'This news content already exists in the database',
+                ], 409);
+            }
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to create legitimate news entry',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Store multiple legitimate news entries in bulk.
+     */
+    public function bulkStoreLegitimate(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'entries' => 'required|array|min:1|max:100',
+            'entries.*.title' => 'required|string|max:500',
+            'entries.*.content' => 'required|string',
+            'entries.*.source' => 'required|string|max:100',
+            'entries.*.category' => 'nullable|string|max:50',
+            'entries.*.url' => 'nullable|string|max:1000',
+            'entries.*.publish_date' => 'nullable|date',
+            'entries.*.credibility_score' => 'nullable|numeric|min:0|max:1',
+            'entries.*.language' => 'nullable|string|max:10',
+            'entries.*.metadata' => 'nullable|array',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $entries = $request->input('entries');
+        $created = 0;
+        $duplicates = 0;
+        $errors = 0;
+
+        DB::beginTransaction();
+
+        try {
+            foreach ($entries as $entry) {
+                try {
+                    $contentHash = \App\Models\LegitimateNews::generateContentHash(
+                        $entry['title'],
+                        $entry['content']
+                    );
+
+                    \App\Models\LegitimateNews::create([
+                        'title' => $entry['title'],
+                        'content' => $entry['content'],
+                        'source' => $entry['source'],
+                        'category' => $entry['category'] ?? 'legal',
+                        'url' => $entry['url'] ?? null,
+                        'publish_date' => $entry['publish_date'] ?? now(),
+                        'credibility_score' => $entry['credibility_score'] ?? 0.95,
+                        'language' => $entry['language'] ?? 'ar',
+                        'content_hash' => $contentHash,
+                        'metadata' => $entry['metadata'] ?? null,
+                        'verified' => true,
+                    ]);
+
+                    $created++;
+
+                } catch (\Exception $e) {
+                    if (str_contains($e->getMessage(), 'Duplicate entry') ||
+                        str_contains($e->getMessage(), 'content_hash')) {
+                        $duplicates++;
+                    } else {
+                        $errors++;
+                    }
+                }
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Bulk legitimate news creation completed',
+                'data' => [
+                    'total_entries' => count($entries),
+                    'created' => $created,
+                    'duplicates' => $duplicates,
+                    'errors' => $errors,
+                ],
+            ], 201);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to create legitimate news entries',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Get legitimate news entries with filtering.
+     */
+    public function indexLegitimate(Request $request): JsonResponse
+    {
+        try {
+            $query = \App\Models\LegitimateNews::query();
+
+            // Apply filters
+            if ($request->has('source')) {
+                $query->bySource($request->input('source'));
+            }
+
+            if ($request->has('category')) {
+                $query->byCategory($request->input('category'));
+            }
+
+            if ($request->has('recent_days')) {
+                $query->recent($request->input('recent_days'));
+            }
+
+            if ($request->has('min_credibility')) {
+                $query->highCredibility($request->input('min_credibility'));
+            }
+
+            // Pagination
+            $perPage = min($request->input('per_page', 20), 100);
+            $legitimateNews = $query->orderBy('publish_date', 'desc')
+                ->paginate($perPage);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Legitimate news retrieved successfully',
+                'data' => $legitimateNews,
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve legitimate news',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
 }

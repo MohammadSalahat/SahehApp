@@ -9,7 +9,12 @@
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';
 @source '../**/*.js';
-
+@source '../../../../app/Filament/**/*.php';
+@source '../../../../resources/views/filament/**/*.blade.php';
+@source '../../../../resources/views/custom/**/*.blade.php';
+@source '../../../../vendor/filament/**/*.php';
+@source '../../../../vendor/filament/**/*.blade.php';
+@source '../../../../vendor/gboquizosanchez/filament-log-viewer/resources/views*.blade.php';
 
 /* @custom-variant dark (&:where(.dark, .dark *)); */
 
