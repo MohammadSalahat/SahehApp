@@ -32,48 +32,53 @@ class FetchFakeNewsFromDatasets extends Command
         $pythonProjectPath = base_path('../SahehAIPython');
 
         // Check if Python project exists
-        if (!is_dir($pythonProjectPath)) {
+        if (! is_dir($pythonProjectPath)) {
             $this->error("❌ Python project not found at: {$pythonProjectPath}");
+
             return Command::FAILURE;
         }
 
         $this->info("📂 Python project path: {$pythonProjectPath}");
 
         // Path to the Python script
-        $scriptPath = $pythonProjectPath . '/scripts/fetch_datasets.py';
-        $venvPath = $pythonProjectPath . '/.venv/bin/python';
+        $scriptPath = $pythonProjectPath.'/scripts/fetch_datasets.py';
+        $venvPath = $pythonProjectPath.'/venv/bin/python';
 
         // Check if script exists
-        if (!file_exists($scriptPath)) {
+        if (! file_exists($scriptPath)) {
             $this->warn("⚠️  Python script not found at: {$scriptPath}");
-            $this->info("📝 The script will be created in the next step.");
+            $this->info('📝 The script will be created in the next step.');
         }
 
         // Execute Python script
-        $this->info("🐍 Executing Python script to fetch datasets...");
+        $this->info('🐍 Executing Python script to fetch datasets...');
         $this->newLine();
 
-        $command = "cd {$pythonProjectPath} && {$venvPath} {$scriptPath} --limit={$limit}";
+        // Properly escape paths with spaces
+        $escapedVenvPath = escapeshellarg($venvPath);
+        $escapedScriptPath = escapeshellarg($scriptPath);
+        $command = 'cd '.escapeshellarg($pythonProjectPath)." && {$escapedVenvPath} {$escapedScriptPath} --limit={$limit}";
 
         try {
             $result = Process::path($pythonProjectPath)
                 ->timeout(600) // 10 minutes timeout
-                ->run("{$venvPath} {$scriptPath} --limit={$limit}");
+                ->run("{$escapedVenvPath} {$escapedScriptPath} --limit={$limit}");
 
             if ($result->successful()) {
-                $this->info("✅ Python script executed successfully!");
+                $this->info('✅ Python script executed successfully!');
                 $this->newLine();
                 $this->line($result->output());
 
                 return Command::SUCCESS;
             } else {
-                $this->error("❌ Python script failed!");
+                $this->error('❌ Python script failed!');
                 $this->error($result->errorOutput());
 
                 return Command::FAILURE;
             }
         } catch (\Exception $e) {
-            $this->error("❌ Error executing Python script: " . $e->getMessage());
+            $this->error('❌ Error executing Python script: '.$e->getMessage());
+
             return Command::FAILURE;
         }
     }

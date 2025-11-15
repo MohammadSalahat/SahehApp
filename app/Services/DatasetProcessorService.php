@@ -317,27 +317,343 @@ class DatasetProcessorService
     }
 
     /**
+     * Process Fake-Real News Dataset (Kaggle format)
+     */
+    public function processFakeRealNewsDataset(
+        string $filePath,
+        bool $arabicOnly = true,
+        bool $ksaLegalOnly = true
+    ): array {
+        $stats = [
+            'success' => true,
+            'processed' => 0,
+            'imported' => 0,
+            'filtered_arabic' => 0,
+            'filtered_ksa' => 0,
+            'too_short' => 0,
+            'duplicates' => 0,
+            'error' => null,
+        ];
+
+        try {
+            $handle = fopen($filePath, 'r');
+            if (! $handle) {
+                throw new \Exception("Could not open file: {$filePath}");
+            }
+
+            // Read header
+            $header = fgetcsv($handle);
+
+            // Expected columns: id, title, text, label
+            if (! $header || ! in_array('title', $header) || ! in_array('text', $header) || ! in_array('label', $header)) {
+                throw new \Exception('Invalid CSV format. Expected columns: id, title, text, label');
+            }
+
+            while (($row = fgetcsv($handle)) !== false) {
+                if (count($row) !== count($header)) {
+                    continue; // Skip malformed rows
+                }
+
+                $data = array_combine($header, $row);
+                $stats['processed']++;
+
+                // Extract data
+                $title = trim($data['title'] ?? '');
+                $content = trim($data['text'] ?? '');
+                $label = strtolower(trim($data['label'] ?? ''));
+
+                // Combine title and content
+                $fullText = $title.' '.$content;
+
+                // Skip if too short
+                if (strlen($fullText) < 50) {
+                    $stats['too_short']++;
+
+                    continue;
+                }
+
+                // Apply Arabic filter
+                if ($arabicOnly && ! $this->isArabicText($fullText)) {
+                    $stats['filtered_arabic']++;
+
+                    continue;
+                }
+
+                // Apply KSA legal filter
+                if ($ksaLegalOnly && ! $this->isKSALegalRelated($fullText)) {
+                    $stats['filtered_ksa']++;
+
+                    continue;
+                }
+
+                // Check for duplicates
+                if (DatasetFakeNews::where('title', $title)->exists()) {
+                    $stats['duplicates']++;
+
+                    continue;
+                }
+
+                // Determine if fake news (label: FAKE = 1, REAL = 0)
+                $isFake = ($label === 'fake') ? 1 : 0;
+                $confidence = $isFake ? 1.0 : 0.0; // Binary confidence
+
+                // Store in database
+                DatasetFakeNews::create([
+                    'title' => $title,
+                    'content' => $content,
+                    'is_fake' => $isFake,
+                    'confidence_score' => $confidence,
+                    'source' => 'fake_real_news_kaggle',
+                    'category' => 'general',
+                    'metadata' => json_encode([
+                        'id' => $data['id'] ?? null,
+                        'original_label' => $label,
+                        'dataset' => 'fake_real_news_kaggle',
+                    ]),
+                ]);
+
+                $stats['imported']++;
+            }
+
+            fclose($handle);
+
+        } catch (\Exception $e) {
+            $stats['success'] = false;
+            $stats['error'] = $e->getMessage();
+        }
+
+        return $stats;
+    }
+
+    /**
+     * Process KSA-specific dataset
+     */
+    public function processKSADataset(
+        string $filePath,
+        bool $arabicOnly = true,
+        bool $ksaLegalOnly = true
+    ): array {
+        $stats = [
+            'success' => true,
+            'processed' => 0,
+            'imported' => 0,
+            'filtered_arabic' => 0,
+            'filtered_ksa' => 0,
+            'too_short' => 0,
+            'duplicates' => 0,
+            'error' => null,
+        ];
+
+        try {
+            $handle = fopen($filePath, 'r');
+            if (! $handle) {
+                throw new \Exception("Could not open file: {$filePath}");
+            }
+
+            // Read header
+            $header = fgetcsv($handle);
+
+            if (! $header) {
+                throw new \Exception('Invalid CSV format - no header found');
+            }
+
+            while (($row = fgetcsv($handle)) !== false) {
+                if (count($row) !== count($header)) {
+                    continue; // Skip malformed rows
+                }
+
+                $data = array_combine($header, $row);
+                $stats['processed']++;
+
+                // Extract data
+                $title = trim($data['title'] ?? '');
+                $content = trim($data['content'] ?? '');
+                $label = strtolower(trim($data['label'] ?? ''));
+                $category = trim($data['category'] ?? 'general');
+                $region = trim($data['region'] ?? 'unknown');
+
+                // Combine title and content
+                $fullText = $title.' '.$content;
+
+                // Skip if too short
+                if (strlen($fullText) < 20) {
+                    $stats['too_short']++;
+
+                    continue;
+                }
+
+                // Apply Arabic filter (more lenient for KSA data)
+                if ($arabicOnly && ! $this->isArabicText($fullText) && ! $this->hasArabicContent($fullText)) {
+                    $stats['filtered_arabic']++;
+
+                    continue;
+                }
+
+                // KSA filter is always applied for KSA datasets
+                if (! $this->isKSALegalRelated($fullText) && ! $this->hasKSAContent($fullText)) {
+                    $stats['filtered_ksa']++;
+
+                    continue;
+                }
+
+                // Check for duplicates using content hash (more accurate)
+                $contentHash = hash('sha256', $content);
+                if (DatasetFakeNews::where('content_hash', $contentHash)->exists()) {
+                    $stats['duplicates']++;
+
+                    continue;
+                }
+
+                // Determine if fake news
+                $isFake = in_array($label, ['fake', 'false', '1']) ? 1 : 0;
+                $confidence = $isFake ? 0.95 : 0.05; // High confidence for KSA-curated data
+
+                // Store in database using correct columns for datasets_fake_news table
+                DatasetFakeNews::create([
+                    'title' => $title,
+                    'content' => $content,
+                    'language' => $this->detectLanguage($fullText),
+                    'detected_at' => now(),
+                    'confidence_score' => $confidence,
+                    'origin_dataset_name' => 'KSA_COMPREHENSIVE',
+                    'added_by_ai' => false, // This is from a curated dataset
+                    'content_hash' => $contentHash,
+                ]);
+
+                $stats['imported']++;
+            }
+
+            fclose($handle);
+
+        } catch (\Exception $e) {
+            $stats['success'] = false;
+            $stats['error'] = $e->getMessage();
+        }
+
+        return $stats;
+    }
+
+    /**
+     * Check if text has Arabic content (more flexible)
+     */
+    private function hasArabicContent(string $text): bool
+    {
+        // Check for at least some Arabic characters or KSA-related English terms
+        return preg_match('/[\x{0600}-\x{06FF}]/u', $text) ||
+               $this->containsKSAEnglishTerms($text);
+    }
+
+    /**
+     * Check if text has KSA-specific content
+     */
+    private function hasKSAContent(string $text): bool
+    {
+        $textLower = mb_strtolower($text, 'UTF-8');
+
+        $ksaTerms = [
+            'saudi', 'arabia', 'riyadh', 'jeddah', 'mecca', 'medina',
+            'السعودية', 'السعودي', 'المملكة', 'الرياض', 'جدة', 'مكة',
+            'vision 2030', 'رؤية 2030', 'neom', 'نيوم', 'ministry of justice',
+            'وزارة العدل', 'aramco', 'أرامكو',
+        ];
+
+        foreach ($ksaTerms as $term) {
+            if (mb_strpos($textLower, mb_strtolower($term, 'UTF-8')) !== false) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check for KSA-related English terms
+     */
+    private function containsKSAEnglishTerms(string $text): bool
+    {
+        $textLower = strtolower($text);
+        $englishTerms = [
+            'saudi arabia', 'kingdom of saudi', 'riyadh', 'jeddah', 'mecca', 'medina',
+            'vision 2030', 'neom', 'ministry of justice', 'public prosecution',
+            'aramco', 'royal court', 'council of ministers',
+        ];
+
+        foreach ($englishTerms as $term) {
+            if (strpos($textLower, $term) !== false) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Process all configured datasets
      */
     public function processAllDatasets(): array
     {
         $results = [];
 
-        $liarPath = storage_path('app/datasets/liar/politifact_fake.csv');
-        $credBankPath = storage_path('app/datasets/credbank/credbank_sample.csv');
+        // Try new LIAR dataset first, fall back to old one
+        $liarPaths = [
+            storage_path('app/datasets/liar/train.csv'),
+            storage_path('app/datasets/liar/politifact_fake.csv'),
+        ];
 
-        if (file_exists($liarPath)) {
+        $liarPath = null;
+        foreach ($liarPaths as $path) {
+            if (file_exists($path)) {
+                $liarPath = $path;
+                break;
+            }
+        }
+
+        if ($liarPath) {
             $results['liar'] = $this->processLiarDataset($liarPath);
         } else {
             $results['liar'] = ['success' => false, 'error' => 'File not found', 'processed' => 0];
         }
 
+        $credBankPath = storage_path('app/datasets/credbank/credbank_sample.csv');
         if (file_exists($credBankPath)) {
             $results['credbank'] = $this->processCredBankDataset($credBankPath);
         } else {
             $results['credbank'] = ['success' => false, 'error' => 'File not found', 'processed' => 0];
         }
 
+        // Add the new comprehensive fake news dataset
+        $fakeRealNewsPath = storage_path('app/datasets/fake_real_news_kaggle.csv');
+        if (file_exists($fakeRealNewsPath)) {
+            $results['fake_real_news'] = $this->processFakeRealNewsDataset($fakeRealNewsPath, true, true);
+        } else {
+            $results['fake_real_news'] = ['success' => false, 'error' => 'File not found', 'processed' => 0];
+        }
+
+        // Add KSA-specific comprehensive dataset
+        $ksaPath = storage_path('app/datasets/ksa_comprehensive.csv');
+        if (file_exists($ksaPath)) {
+            $results['ksa_comprehensive'] = $this->processKSADataset($ksaPath, true, true);
+        } else {
+            $results['ksa_comprehensive'] = ['success' => false, 'error' => 'File not found', 'processed' => 0];
+        }
+
         return $results;
+    }
+
+    /**
+     * Detect language of text
+     */
+    private function detectLanguage(string $text): string
+    {
+        $hasArabic = preg_match('/[\x{0600}-\x{06FF}]/u', $text);
+        $hasEnglish = preg_match('/[a-zA-Z]/', $text);
+
+        if ($hasArabic && $hasEnglish) {
+            return 'ar'; // Default to Arabic for mixed content since it's KSA-focused
+        } elseif ($hasArabic) {
+            return 'ar';
+        } else {
+            return 'en';
+        }
     }
 }

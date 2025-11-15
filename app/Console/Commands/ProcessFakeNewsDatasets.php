@@ -13,16 +13,17 @@ class ProcessFakeNewsDatasets extends Command
      * @var string
      */
     protected $signature = 'fakenews:process
-                            {--dataset= : Specific dataset to process (liar, credbank, or all)}
+                            {--dataset= : Specific dataset to process (liar, credbank, fake_real_news, ksa_comprehensive, or all)}
                             {--no-arabic-filter : Disable Arabic text filtering}
-                            {--no-ksa-filter : Disable KSA legal content filtering}';
+                            {--no-ksa-filter : Disable KSA legal content filtering}
+                            {--include-english : Include English content even with Arabic filter enabled}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Process fake news datasets (LIAR, CredBank) with Arabic and KSA legal filtering';
+    protected $description = 'Process fake news datasets from multiple sources with Arabic and KSA legal filtering';
 
     /**
      * Dataset processor service
@@ -58,6 +59,8 @@ class ProcessFakeNewsDatasets extends Command
         $results = [];
 
         // Process specific dataset or all
+        $validDatasets = ['liar', 'credbank', 'fake_real_news', 'ksa_comprehensive', 'all'];
+
         if ($dataset === 'liar' || $dataset === 'all') {
             $this->processLiar($arabicFilter, $ksaFilter);
         }
@@ -66,8 +69,16 @@ class ProcessFakeNewsDatasets extends Command
             $this->processCredBank($arabicFilter, $ksaFilter);
         }
 
-        if (! in_array($dataset, ['liar', 'credbank', 'all'])) {
-            $this->error('Invalid dataset option. Use: liar, credbank, or all');
+        if ($dataset === 'fake_real_news' || $dataset === 'all') {
+            $this->processFakeRealNews($arabicFilter, $ksaFilter);
+        }
+
+        if ($dataset === 'ksa_comprehensive' || $dataset === 'all') {
+            $this->processKSAComprehensive($arabicFilter, $ksaFilter);
+        }
+
+        if (! in_array($dataset, $validDatasets)) {
+            $this->error('Invalid dataset option. Use: liar, credbank, fake_real_news, ksa_comprehensive, or all');
 
             return self::FAILURE;
         }
@@ -172,6 +183,97 @@ class ProcessFakeNewsDatasets extends Command
             $this->warn('⚠️  No records were imported!');
             $this->line('   This is expected because LIAR and CredBank are primarily English datasets.');
             $this->line('   Consider creating a custom Arabic KSA legal fake news dataset.');
+        }
+    }
+
+    /**
+     * Process Fake Real News dataset
+     */
+    private function processFakeRealNews(bool $arabicFilter, bool $ksaFilter): void
+    {
+        $this->info('📊 Processing Fake Real News Dataset...');
+
+        $fakeRealNewsPath = storage_path('app/datasets/fake_real_news_kaggle.csv');
+
+        if (! file_exists($fakeRealNewsPath)) {
+            $this->warn("⚠️  Fake Real News dataset file not found at: {$fakeRealNewsPath}");
+            $this->line('   Please run: php artisan datasets:fetch-latest to download it');
+
+            return;
+        }
+
+        $this->line('   📁 Processing: '.basename($fakeRealNewsPath));
+        $this->line('   📊 Records: ~166K fake/real news articles');
+
+        $bar = $this->output->createProgressBar();
+        $bar->start();
+
+        $result = $this->processor->processFakeRealNewsDataset(
+            $fakeRealNewsPath,
+            $arabicFilter,
+            $ksaFilter
+        );
+
+        $bar->finish();
+        $this->newLine(2);
+
+        if ($result['success']) {
+            $this->displayResults('Fake Real News', $result);
+        } else {
+            $this->error("❌ Processing failed: {$result['error']}");
+        }
+    }
+
+    /**
+     * Process KSA Comprehensive dataset
+     */
+    private function processKSAComprehensive(bool $arabicFilter, bool $ksaFilter): void
+    {
+        $this->info('🇸🇦 Processing KSA Comprehensive Dataset...');
+
+        $ksaPath = storage_path('app/datasets/ksa_comprehensive.csv');
+
+        if (! file_exists($ksaPath)) {
+            $this->warn("⚠️  KSA comprehensive dataset file not found at: {$ksaPath}");
+            $this->line('   Please run: php artisan datasets:fetch-ksa to download it');
+            $this->newLine();
+
+            // Try to create it by running the fetch command
+            $this->info('🔄 Attempting to fetch KSA datasets...');
+            $this->call('datasets:fetch-ksa', ['--limit' => 5]);
+
+            if (! file_exists($ksaPath)) {
+                $this->error('❌ Could not create KSA dataset');
+
+                return;
+            }
+        }
+
+        $this->line('   📁 Processing: '.basename($ksaPath));
+        $this->line('   🇸🇦 KSA-specific fake news detection dataset');
+
+        $bar = $this->output->createProgressBar();
+        $bar->start();
+
+        $result = $this->processor->processKSADataset(
+            $ksaPath,
+            $arabicFilter,
+            $ksaFilter
+        );
+
+        $bar->finish();
+        $this->newLine(2);
+
+        if ($result['success']) {
+            $this->displayResults('KSA Comprehensive', $result);
+
+            if ($result['imported'] > 0) {
+                $this->info('🎉 KSA dataset successfully processed!');
+                $this->line('   ✅ This dataset is specifically curated for Saudi Arabian fake news detection');
+                $this->line('   🔍 Content includes legal, governmental, and social media misinformation');
+            }
+        } else {
+            $this->error("❌ Processing failed: {$result['error']}");
         }
     }
 
