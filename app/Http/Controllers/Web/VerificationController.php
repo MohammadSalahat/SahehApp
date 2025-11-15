@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Web;
 
 use App\Helpers\LanguageDetector;
 use App\Http\Controllers\Controller;
+use App\Models\ChatGPTVerification;
+use App\Services\ChatGPTService;
 use App\Services\PythonAIService;
 use Exception;
 use Illuminate\Http\Request;
@@ -18,11 +20,17 @@ class VerificationController extends Controller
     protected PythonAIService $pythonAI;
 
     /**
-     * Initialize controller with Python AI service
+     * ChatGPT Service instance
      */
-    public function __construct(PythonAIService $pythonAI)
+    protected ChatGPTService $chatGPT;
+
+    /**
+     * Initialize controller with AI services
+     */
+    public function __construct(PythonAIService $pythonAI, ChatGPTService $chatGPT)
     {
         $this->pythonAI = $pythonAI;
+        $this->chatGPT = $chatGPT;
     }
 
     /**
@@ -89,19 +97,106 @@ class VerificationController extends Controller
                 'highest_similarity' => $aiResult['highest_similarity'],
             ]);
 
+            // FALLBACK TO CHATGPT if no similarity found
+            $chatGPTResult = null;
+            $usedFallback = false;
+            $fallbackThreshold = config('chatgpt_prompts.fallback_threshold', 0.70);
+
+            if ($aiResult['similar_news_found'] === 0 || $aiResult['highest_similarity'] < $fallbackThreshold) {
+                Log::info('No similarity found in database, using ChatGPT fallback', [
+                    'similar_news_found' => $aiResult['similar_news_found'],
+                    'highest_similarity' => $aiResult['highest_similarity'],
+                ]);
+
+                try {
+                    if ($this->chatGPT->isAvailable()) {
+                        $startTime = microtime(true);
+                        
+                        $chatGPTResult = $this->chatGPT->verifyNews($content);
+                        $processingTime = (microtime(true) - $startTime) * 1000; // Convert to ms
+
+                        // Log to database
+                        ChatGPTVerification::create([
+                            'original_text' => $content,
+                            'language' => $detectedLanguage,
+                            'category' => $chatGPTResult['category'] ?? null,
+                            'model_used' => $chatGPTResult['model_used'] ?? 'gpt-4',
+                            'is_potentially_fake' => $chatGPTResult['is_potentially_fake'],
+                            'confidence_score' => $chatGPTResult['confidence_score'],
+                            'credibility_level' => $chatGPTResult['credibility_level'],
+                            'analysis' => $chatGPTResult['analysis'],
+                            'warning_signs' => $chatGPTResult['warning_signs'],
+                            'recommendation' => $chatGPTResult['recommendation'],
+                            'verification_tips' => $chatGPTResult['verification_tips'],
+                            'related_topics' => $chatGPTResult['related_topics'],
+                            'fact_check_sources' => $chatGPTResult['fact_check_sources'],
+                            'sources_checked' => $chatGPTResult['sources_checked'] ?? [],
+                            'source_verification_status' => $chatGPTResult['source_verification_status'] ?? [],
+                            'trusted_sources_used' => $chatGPTResult['trusted_sources_used'] ?? [],
+                            'tokens_used' => $chatGPTResult['tokens_used'],
+                            'processing_time_ms' => $processingTime,
+                            'user_ip' => $request->ip(),
+                            'user_id' => auth()->id(),
+                            'status' => 'completed',
+                        ]);
+
+                        $usedFallback = true;
+
+                        Log::info('ChatGPT fallback verification completed with strict rule', [
+                            'is_potentially_fake' => $chatGPTResult['is_potentially_fake'],
+                            'confidence' => $chatGPTResult['confidence_score'],
+                            'tokens_used' => $chatGPTResult['tokens_used'],
+                            'found_in_sources' => $chatGPTResult['source_verification_status']['found_in_sources'] ?? false,
+                            'sources_searched' => $chatGPTResult['source_verification_status']['sources_searched'] ?? 0,
+                            'strict_rule_applied' => true,
+                        ]);
+                    } else {
+                        Log::warning('ChatGPT fallback not available');
+                    }
+                } catch (Exception $e) {
+                    Log::error('ChatGPT fallback failed', [
+                        'error' => $e->getMessage(),
+                    ]);
+                    
+                    // Log failed attempt
+                    ChatGPTVerification::create([
+                        'original_text' => $content,
+                        'language' => $detectedLanguage,
+                        'user_ip' => $request->ip(),
+                        'user_id' => auth()->id(),
+                        'status' => 'failed',
+                        'error_message' => $e->getMessage(),
+                    ]);
+                }
+            }
+
             // Prepare data for view
+            // IMPORTANT: When ChatGPT strict verification is used, prioritize its results
+            $isFake = $aiResult['is_potentially_fake'];
+            $recommendation = $aiResult['recommendation'];
+            $processingMethod = $aiResult['processing_method'] ?? ($isArabic ? 'arabic_ai_semantic' : 'unknown');
+
+            // Override with ChatGPT strict verification results if fallback was used
+            if ($usedFallback && $chatGPTResult) {
+                $isFake = $chatGPTResult['is_potentially_fake'];
+                $recommendation = $chatGPTResult['recommendation'][$detectedLanguage] ?? $chatGPTResult['recommendation']['ar'] ?? 'يُرجى التحقق من المصادر الرسمية';
+                $processingMethod = 'chatgpt_strict_verification';
+            }
+
             $viewData = [
                 'search_content' => $content,
                 'ai_result' => $aiResult,
                 'found' => $aiResult['similar_news_found'] > 0,
-                'is_potentially_fake' => $aiResult['is_potentially_fake'],
+                'is_potentially_fake' => $isFake,
                 'similar_news' => $aiResult['similar_news'] ?? [],
                 'highest_similarity' => $aiResult['highest_similarity'],
-                'recommendation' => $aiResult['recommendation'],
+                'recommendation' => $recommendation,
                 'query_quality' => $aiResult['query_quality'] ?? [],
                 'preprocessed_text' => $aiResult['query_text_preprocessed'] ?? '',
                 'detected_language' => $detectedLanguage,
-                'processing_method' => $aiResult['processing_method'] ?? ($isArabic ? 'arabic_ai_semantic' : 'unknown'),
+                'processing_method' => $processingMethod,
+                'chatgpt_result' => $chatGPTResult,
+                'used_chatgpt_fallback' => $usedFallback,
             ];
 
             // If similar news found, add best match details

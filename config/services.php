@@ -46,6 +46,22 @@ return [
         'timeout' => env('PYTHON_AI_SERVICE_TIMEOUT', 30),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | ChatGPT/OpenAI Configuration (Fallback AI)
+    |--------------------------------------------------------------------------
+    */
+    'chatgpt' => [
+        'api_key' => env('CHATGPT_API_KEY'),
+        'organization_id' => env('CHATGPT_ORGANIZATION_ID'),
+        'model' => env('CHATGPT_MODEL', 'gpt-4'),
+        'max_tokens' => env('CHATGPT_MAX_TOKENS', 1000),
+        'temperature' => env('CHATGPT_TEMPERATURE', 0.7),
+        'timeout' => env('CHATGPT_TIMEOUT', 60),
+        'base_url' => env('CHATGPT_BASE_URL', 'https://api.openai.com/v1'),
+        'enabled' => env('CHATGPT_ENABLED', true),
+    ],
+
     // API Key for securing Laravel API endpoints (used by Python service)
     'api_key' => env('LARAVEL_API_KEY', 'your-secure-api-key-change-in-production'),
 
