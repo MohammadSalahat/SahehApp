@@ -9,6 +9,7 @@ return [
         'sources' => 'المصادر',
         'fake_news' => 'الأخبار المزيفة',
         'datasets_fake_news' => 'قواعد بيانات الأخبار المزيفة',
+        'latest_news' => 'آخر الأخبار',
     ],
 
     // Resource Names (Singular)
@@ -18,6 +19,7 @@ return [
         'user' => 'مستخدم',
         'source' => 'مصدر',
         'fake_news_item' => 'خبر مزيف',
+        'latest_news' => 'خبر',
     ],
 
     // Navigation Groups
@@ -57,6 +59,8 @@ return [
         'email_verified_at' => 'تاريخ تأكيد البريد الإلكتروني',
         'password' => 'كلمة المرور',
         'remember_token' => 'رمز التذكر',
+        'author' => 'المؤلف',
+        'image' => 'الصورة',
     ],
 
     // Dashboard

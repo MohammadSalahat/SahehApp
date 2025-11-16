@@ -9,6 +9,7 @@ return [
         'sources' => 'Sources',
         'fake_news' => 'Fake News',
         'datasets_fake_news' => 'Fake News Datasets',
+        'latest_news' => 'Latest News',
     ],
 
     // Resource Names (Singular)
@@ -18,6 +19,7 @@ return [
         'user' => 'User',
         'source' => 'Source',
         'fake_news_item' => 'Fake News Item',
+        'latest_news' => 'News',
     ],
 
     // Navigation Groups
@@ -44,6 +46,8 @@ return [
         'url' => 'URL',
         'type' => 'Type',
         'category' => 'Category',
+        'author' => 'Author',
+        'image' => 'Image',
     ],
 
     // Feedback Resource
