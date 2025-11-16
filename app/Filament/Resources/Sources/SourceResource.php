@@ -77,7 +77,7 @@ class SourceResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return __('filament.resource.sources');
+        return __('filament.resource.source');
     }
 
     public static function getPluralModelLabel(): string
