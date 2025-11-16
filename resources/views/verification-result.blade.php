@@ -1032,4 +1032,52 @@
         </div>
 
     </div>
+
+    @if(isset($safe_navigation) && $safe_navigation)
+    <!-- Safe Navigation Script: Prevent form resubmission issues -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Replace browser history to prevent back button form resubmission
+            if (window.history.replaceState) {
+                window.history.replaceState(
+                    { page: 'verification-result', preventResubmission: true },
+                    document.title,
+                    window.location.href
+                );
+            }
+            
+            // Handle back button navigation
+            window.addEventListener('popstate', function(event) {
+                if (event.state && event.state.preventResubmission) {
+                    // Redirect to home instead of going back to form
+                    window.location.href = '{{ $home_url ?? route("home") }}';
+                }
+            });
+            
+            // Add safe navigation to all internal links
+            document.querySelectorAll('a[href]').forEach(function(link) {
+                if (link.href.includes(window.location.hostname)) {
+                    link.addEventListener('click', function() {
+                        // Clear any remaining session data
+                        if (window.history.pushState) {
+                            window.history.pushState(
+                                { page: 'navigating', safe: true },
+                                document.title,
+                                link.href
+                            );
+                        }
+                    });
+                }
+            });
+            
+            // Show user-friendly message if they try to refresh
+            window.addEventListener('beforeunload', function(event) {
+                if (performance.navigation && performance.navigation.type === 1) {
+                    event.preventDefault();
+                    event.returnValue = '{{ __("verification.refresh_warning") ?? "Results will be lost if you refresh. Navigate using the buttons instead." }}';
+                }
+            });
+        });
+    </script>
+    @endif
 </x-layouts.main>

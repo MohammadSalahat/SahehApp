@@ -112,7 +112,11 @@ class OptimizedVerificationController extends Controller
                 Log::info('Cached verification result', ['cache_key' => $cacheKey]);
             }
 
-            return view('verification-result', $viewData);
+            // PRG Pattern: Store result in session and redirect to avoid form resubmission
+            $resultId = 'verification_' . time() . '_' . rand(1000, 9999);
+            session(['verification_results.' . $resultId => $viewData]);
+            
+            return redirect()->route('verification.result', ['id' => $resultId]);
 
         } catch (Exception $e) {
             Log::error('Optimized verification failed', [
@@ -120,14 +124,46 @@ class OptimizedVerificationController extends Controller
                 'processing_time_ms' => (microtime(true) - $startTime) * 1000,
             ]);
 
-            return view('verification-result', [
+            // PRG Pattern: Store error result in session and redirect
+            $errorData = [
                 'search_content' => $content,
                 'found' => false,
                 'error' => true,
                 'error_message' => 'عذراً، حدث خطأ في نظام التحقق الذكي. | Sorry, an error occurred in the verification system.',
                 'processing_time_ms' => (microtime(true) - $startTime) * 1000,
-            ]);
+            ];
+            
+            $resultId = 'verification_error_' . time() . '_' . rand(1000, 9999);
+            session(['verification_results.' . $resultId => $errorData]);
+            
+            return redirect()->route('verification.result', ['id' => $resultId]);
         }
+    }
+
+    /**
+     * Display verification result from session (PRG pattern)
+     * Prevents form resubmission issues when user navigates back
+     */
+    public function showResult(Request $request, string $id)
+    {
+        // Get result from session
+        $viewData = session('verification_results.' . $id);
+        
+        if (!$viewData) {
+            // Result expired or invalid, redirect to home with message
+            return redirect()->route('home')
+                ->with('info', __('verification.session_expired'));
+        }
+        
+        // Clean up session after displaying result
+        session()->forget('verification_results.' . $id);
+        
+        // Add navigation helpers to prevent back button issues
+        $viewData['result_id'] = $id;
+        $viewData['safe_navigation'] = true;
+        $viewData['home_url'] = route('home');
+        
+        return view('verification-result', $viewData);
     }
 
     /**

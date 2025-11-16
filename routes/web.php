@@ -24,8 +24,9 @@ Route::middleware([LanguageMiddleware::class])->group(function () {
     // Verification routes
     Route::post('/verify', [VerificationController::class, 'verify'])->name('verify');
     
-    // Ultra-optimized verification route (new)
+    // Ultra-optimized verification routes (PRG pattern)
     Route::post('/verify-fast', [App\Http\Controllers\Web\OptimizedVerificationController::class, 'verify'])->name('verify.fast');
+    Route::get('/verification-result/{id}', [App\Http\Controllers\Web\OptimizedVerificationController::class, 'showResult'])->name('verification.result');
     
     // Performance monitoring routes
     Route::get('/performance-stats', [App\Http\Controllers\Web\OptimizedVerificationController::class, 'getPerformanceStats'])->name('performance.stats')->middleware('auth');

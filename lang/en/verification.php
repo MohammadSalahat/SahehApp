@@ -74,4 +74,8 @@ return [
     // Action Buttons
     'verify_another' => 'Verify Another News',
     'analysis_footer' => 'Analysis performed using AI and Natural Language Processing (NLP) for Arabic',
+    
+    // Navigation Messages
+    'refresh_warning' => 'Results will be lost if you refresh. Navigate using the buttons instead.',
+    'session_expired' => 'Verification result not available. Please try again.',
 ];
