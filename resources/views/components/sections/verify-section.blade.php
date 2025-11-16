@@ -13,7 +13,7 @@
         <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl p-10 relative overflow-hidden">
             <div class="absolute top-0 left-0 w-full h-2 bg-primary"></div>
 
-            <form id="verification-form" action="{{ route('verify') }}" method="POST"
+            <form id="verification-form" action="{{ route('verify.fast') }}" method="POST"
                 onsubmit="handleFormSubmit(event)">
                 @csrf
                 <div class="mb-6 flex items-center gap-3 text-primary">

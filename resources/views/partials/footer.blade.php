@@ -37,16 +37,16 @@
             <div>
                 <h3 class="text-2xl font-bold mb-6">{{ __('home.legal_sources_section') }}</h3>
                 <ul class="space-y-3">
-                    <li><a href="#"
+                    <li><a href="https://www.moj.gov.sa/" target="_blank" rel="noopener"
                             class="text-white/80 hover:text-white transition-all duration-300 hover:translate-x-2 inline-block text-lg">{{ __('home.source_1_title') }}</a>
                     </li>
-                    <li><a href="#"
+                    <li><a href="https://my.gov.sa/ar/" target="_blank" rel="noopener"
                             class="text-white/80 hover:text-white transition-all duration-300 hover:translate-x-2 inline-block text-lg">{{ __('home.source_2_title') }}</a>
                     </li>
-                    <li><a href="#"
+                    <li><a href="https://www.spa.gov.sa/" target="_blank" rel="noopener"
                             class="text-white/80 hover:text-white transition-all duration-300 hover:translate-x-2 inline-block text-lg">{{ __('home.source_3_title') }}</a>
                     </li>
-                    <li><a href="#"
+                    <li><a href="https://www.bog.gov.sa/Pages/default.aspx" target="_blank" rel="noopener"
                             class="text-white/80 hover:text-white transition-all duration-300 hover:translate-x-2 inline-block text-lg">{{ __('home.source_5_title') }}</a>
                     </li>
                 </ul>

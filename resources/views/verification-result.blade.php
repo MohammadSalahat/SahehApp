@@ -62,7 +62,7 @@
                                     </svg>
                                     {{ __('verification.ai_recommendation_title') }}
                                 </div>
-                                <p class="text-lg leading-relaxed text-zinc-700 dark:text-zinc-300">{{ $recommendation }}</p>
+                                <p class="text-lg leading-relaxed text-zinc-700 dark:text-zinc-300">{{ $recommendation ?? __('verification.safe_default_message') }}</p>
                             </div>
                         </div>
 
@@ -294,7 +294,7 @@
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                         d="M13 10V3L4 14h7v7l9-11h-7z" />
                                                 </svg>
-                                                {{ __('verification.similarity_level') }}: {{ $best_match['similarity_level_arabic'] }}
+                                                {{ __('verification.similarity_level') }}: {{ $best_match['similarity_level_arabic'] ?? 'غير محدد' }}
                                             </span>
                                         </div>
                                     </div>
@@ -395,9 +395,9 @@
                                                 </h4>
                                             </div>
                                         </div>
-                                        <p class="mb-3 text-xl font-bold text-zinc-900 dark:text-zinc-50">{{ $best_match['title'] }}</p>
+                                        <p class="mb-3 text-xl font-bold text-zinc-900 dark:text-zinc-50">{{ $best_match['title'] ?? 'عنوان غير متوفر' }}</p>
                                         <p class="mb-4 leading-relaxed text-zinc-700 dark:text-zinc-300">
-                                            {{ Str::limit($best_match['content'], 300) }}
+                                            {{ Str::limit($best_match['content'] ?? 'المحتوى غير متوفر', 300) }}
                                         </p>
                                         <div class="flex flex-wrap items-center gap-3">
                                             <span
@@ -406,7 +406,7 @@
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                         d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
                                                 </svg>
-                                                {{ __('verification.source_label') }}: {{ $best_match['origin_dataset'] }}
+                                                {{ __('verification.source_label') }}: {{ $best_match['origin_dataset'] ?? 'مصدر غير محدد' }}
                                             </span>
                                             <span
                                                 class="inline-flex items-center gap-2 px-3 py-1 text-sm font-medium rounded-full bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300">
@@ -424,7 +424,7 @@
                         @endif
 
                         <!-- Additional Matches -->
-                        @if(count($similar_news) > 1)
+                        @if(isset($similar_news) && is_array($similar_news) && count($similar_news) > 1)
                             <div class="p-8 bg-zinc-50 dark:bg-zinc-800/30">
                                 <div class="max-w-4xl mx-auto">
                                     <h3 class="flex items-center gap-2 mb-6 text-xl font-bold text-zinc-900 dark:text-zinc-50">
@@ -435,11 +435,11 @@
                                         {{ __('verification.additional_matches_title') }}
                                         <span
                                             class="px-3 py-1 text-sm font-semibold text-orange-800 bg-orange-200 rounded-full dark:bg-orange-900 dark:text-orange-200">
-                                            {{ count($similar_news) - 1 }}
+                                            {{ (isset($similar_news) && is_array($similar_news) ? count($similar_news) : 1) - 1 }}
                                         </span>
                                     </h3>
                                     <div class="space-y-4">
-                                        @foreach(array_slice($similar_news, 1) as $news)
+                                        @foreach(array_slice($similar_news ?? [], 1) as $news)
                                             <div
                                                 class="p-5 transition-all border-s-4 rounded-xl bg-white dark:bg-zinc-900 border-orange-400 hover:shadow-lg">
                                                 <div class="flex items-start justify-between gap-4 mb-2">
@@ -474,7 +474,7 @@
                                     d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                             <h2 class="mb-3 text-4xl font-bold">{{ __('verification.caution_title') }}</h2>
-                            <p class="text-xl opacity-95">{{ $recommendation }}</p>
+                            <p class="text-xl opacity-95">{{ $recommendation ?? __('verification.safe_default_message') }}</p>
                         </div>
 
                         <!-- ChatGPT Source Verification Results -->
@@ -675,11 +675,11 @@
                                         {{ __('verification.similar_news_found') }}
                                         <span
                                             class="px-3 py-1 text-sm font-semibold text-orange-800 bg-orange-200 rounded-full dark:bg-orange-900 dark:text-orange-200">
-                                            {{ count($similar_news) }}
+                                            {{ isset($similar_news) && is_array($similar_news) ? count($similar_news) : 0 }}
                                         </span>
                                     </h3>
                                     <div class="space-y-4">
-                                        @foreach($similar_news as $news)
+                                        @foreach($similar_news ?? [] as $news)
                                             <div
                                                 class="p-5 transition-all border-s-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/50 border-orange-400 hover:shadow-lg">
                                                 <div class="flex items-start justify-between gap-4 mb-2">

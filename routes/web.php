@@ -21,8 +21,15 @@ Route::middleware([LanguageMiddleware::class])->group(function () {
 
     Route::get('/', HomePage::class)->name('home');
 
-    // Verification route
+    // Verification routes
     Route::post('/verify', [VerificationController::class, 'verify'])->name('verify');
+    
+    // Ultra-optimized verification route (new)
+    Route::post('/verify-fast', [App\Http\Controllers\Web\OptimizedVerificationController::class, 'verify'])->name('verify.fast');
+    
+    // Performance monitoring routes
+    Route::get('/performance-stats', [App\Http\Controllers\Web\OptimizedVerificationController::class, 'getPerformanceStats'])->name('performance.stats')->middleware('auth');
+    Route::get('/benchmark', [App\Http\Controllers\Web\OptimizedVerificationController::class, 'benchmark'])->name('benchmark')->middleware('auth');
 
     // Review route (requires auth)
     Route::get('/review', ReviewPage::class)->middleware('auth')->name('review');

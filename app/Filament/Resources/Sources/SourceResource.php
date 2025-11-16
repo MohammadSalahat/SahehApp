@@ -69,4 +69,19 @@ class SourceResource extends Resource
                 SoftDeletingScope::class,
             ]);
     }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('filament.resources.sources');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('filament.resource.sources');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('filament.resources.sources');
+    }
 }

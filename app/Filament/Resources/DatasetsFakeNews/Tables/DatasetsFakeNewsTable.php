@@ -33,6 +33,13 @@ class DatasetsFakeNewsTable
                     ->copyable()
                     ->copyMessage(__('filament.datasets_fake_news.title_copied')),
 
+                TextColumn::make('content')
+                    ->label(__('filament.datasets_fake_news.article_content'))
+                    ->searchable()
+                    ->sortable()
+                    ->limit(50)
+                    ->copyMessage(__('filament.datasets_fake_news.content_copied')),
+
                 TextColumn::make('detected_at')
                     ->label(__('filament.datasets_fake_news.detected_at'))
                     ->dateTime()
