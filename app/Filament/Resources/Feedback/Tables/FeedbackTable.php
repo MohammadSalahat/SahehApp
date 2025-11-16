@@ -40,11 +40,10 @@ class FeedbackTable
                     ->numeric()
                     ->sortable()
                     ->badge()
-                    ->icon('heroicon-m-star')
                     ->color(fn (string $state): string => match ((int) $state) {
                         1 => 'danger',
-                        2 => 'orange',
-                        3 => 'yellow',
+                        2 => 'warning',
+                        3 => 'gray',
                         4 => 'info',
                         5 => 'success',
                         default => 'gray',
