@@ -694,7 +694,7 @@
                                                         {{ number_format($news['similarity_score'] * 100, 1) }}%
                                                     </span>
                                                 </div>
-                                                <p class="text-sm text-zinc-600 dark:text-zinc-400">{{ Str::limit($news['content'], 150) }}
+                                                <p class="text-sm text-zinc-600 dark:text-zinc-400">{{ $news['content'] }}
                                                 </p>
                                             </div>
                                         @endforeach
@@ -962,7 +962,7 @@
                         </h3>
                     </div>
                     <div class="p-8">
-                        <p class="mb-6 text-lg leading-relaxed whitespace-pre-wrap text-zinc-800 dark:text-zinc-200">
+                        <p class="mb-6 text-lg leading-relaxed text-zinc-800 dark:text-zinc-200">
                             {{ $search_content }}
                         </p>
 
