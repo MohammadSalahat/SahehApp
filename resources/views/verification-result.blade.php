@@ -178,24 +178,17 @@
                             $highestSimilarity = $sourceStatus['highest_similarity'] ?? 0;
                         @endphp
 
-                        <div class="p-8 border-b bg-gradient-to-br from-zinc-50 to-blue-50/30 dark:from-zinc-900 dark:to-blue-950/20 border-zinc-100 dark:border-zinc-800">
-                            <div class="flex items-center gap-3 mb-6">
-                                <div class="p-3 bg-blue-100 dark:bg-blue-900/50 rounded-xl">
-                                    <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                                    </svg>
-                                </div>
-                                <h4 class="text-xl font-bold text-zinc-900 dark:text-zinc-50">
-                                    @if($detected_language === 'ar')
-                                        التحقق من المصادر الموثوقة
-                                    @else
-                                        Trusted Sources Verification
-                                    @endif
-                                </h4>
-                            </div>
 
-                            @if($foundInSources)
+                        @if($foundInSources)
+                            <div class="p-8 border-b bg-gradient-to-br from-zinc-50 to-blue-50/30 dark:from-zinc-900 dark:to-blue-950/20 border-zinc-100 dark:border-zinc-800">
+                                <div class="flex items-center gap-3 mb-6">
+                                    <div class="p-3 bg-blue-100 dark:bg-blue-900/50 rounded-xl">
+                                        <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                        </svg>
+                                    </div>
+                                </div>
                                 <div class="p-6 rounded-2xl bg-gradient-to-br from-emerald-50 to-green-50 dark:from-emerald-950/30 dark:to-green-950/30 border-2 border-emerald-400 dark:border-emerald-600">
                                     <div class="flex items-center gap-3 mb-4">
                                         <svg class="w-8 h-8 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -241,37 +234,8 @@
                                         </div>
                                     </div>
                                 </div>
-                            @else
-                                <div class="p-6 rounded-2xl bg-gradient-to-br from-orange-50 to-amber-50 dark:from-orange-950/30 dark:to-amber-950/30 border-2 border-orange-400 dark:border-orange-600">
-                                    <div class="flex items-center gap-3 mb-4">
-                                        <svg class="w-8 h-8 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                        </svg>
-                                        <p class="text-lg font-bold text-orange-800 dark:text-orange-300">
-                                            @if($detected_language === 'ar')
-                                                لم يتم العثور على هذا الخبر في {{ $sourcesSearched }} مصدر موثوق
-                                            @else
-                                                News not found in {{ $sourcesSearched }} trusted sources
-                                            @endif
-                                        </p>
-                                    </div>
-
-                                    @if(isset($chatgpt_result['sources_checked']) && count($chatgpt_result['sources_checked']) > 0)
-                                        <div class="flex flex-wrap gap-2">
-                                            @foreach($chatgpt_result['sources_checked'] as $source)
-                                                <span class="inline-flex items-center gap-2 px-3 py-1 text-sm font-medium text-orange-800 bg-orange-200 rounded-full dark:bg-orange-900 dark:text-orange-200">
-                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                                    </svg>
-                                                    {{ $source }}
-                                                </span>
-                                            @endforeach
-                                        </div>
-                                    @endif
-                                </div>
-                            @endif
-                        </div>
+                            </div>
+                        @endif
 
                         <!-- Recommendation -->
                         @php

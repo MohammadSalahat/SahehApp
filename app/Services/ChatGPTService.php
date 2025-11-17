@@ -86,11 +86,10 @@ class ChatGPTService
             $category = $this->detectCategory($text, $language);
         }
 
-        // Skip slow web scraping - just pass source info to ChatGPT
-        // ChatGPT will do conceptual verification based on its knowledge
-        Log::info('Preparing trusted sources list for ChatGPT', ['sources_to_include' => 'trusted_sources']);
+        // Don't scrape - ChatGPT API can't browse web anyway
+        // Instead, provide source URLs for reference and let ChatGPT use its training data
+        Log::info('Preparing trusted sources reference list for ChatGPT');
 
-        // Build a lightweight source verification result without scraping
         $trustedSources = $this->getTrustedSources();
         $sourceVerificationResults = [
             'sources_searched' => count($trustedSources),
@@ -321,17 +320,23 @@ class ChatGPTService
      */
     protected function buildSourceVerificationContext(array $sourceResults, string $language): string
     {
-        if (!$sourceResults['found_in_sources']) {
-            return $language === 'ar'
-                ? "تم البحث في {$sourceResults['sources_searched']} مصادر موثوقة ولم يتم العثور على هذا الخبر في أي منها."
-                : "Searched {$sourceResults['sources_searched']} trusted sources and this news was not found in any of them.";
-        }
+        $sourcesCount = $sourceResults['sources_searched'];
 
+        return "**Reference Sources ({$sourcesCount} trusted Saudi news sources):**\n" .
+               $this->formatSourcesForAnalysis($sourceResults, $language) . "\n\n" .
+               "Use your training data knowledge to verify this news.";
+    }
+
+    /**
+     * Build source verification context when sources were found (legacy)
+     */
+    protected function buildSourceVerificationContextOld(array $sourceResults, string $language): string
+    {
         $context = $language === 'ar'
             ? "تم العثور على هذا الخبر في المصادر الموثوقة التالية:\n\n"
             : "This news was found in the following trusted sources:\n\n";
 
-        foreach ($sourceResults['matching_sources'] as $match) {
+        foreach ($sourceResults['matching_sources'] ?? [] as $match) {
             $similarity = round($match['similarity'] * 100);
             if ($language === 'ar') {
                 $context .= "• {$match['source_name']}: تطابق {$similarity}%\n";
@@ -414,72 +419,17 @@ class ChatGPTService
             throw new Exception('Invalid JSON response from ChatGPT');
         }
 
-        // Use ChatGPT's intelligent analysis as the primary decision maker
-        // ChatGPT already received source content and did semantic comparison
+        // Temporary logging to debug response structure
+        Log::info('ChatGPT parsed response', [
+            'analysis_keys' => array_keys($analysis ?? []),
+            'full_response' => json_encode($analysis, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT)
+        ]);
+
+        // Use ChatGPT's intelligent analysis as is
+        // Trust ChatGPT's judgment based on its training data knowledge
         $isFake = $analysis['is_potentially_fake'] ?? false;
         $confidence = $analysis['confidence_score'] ?? 0.5;
         $credibility = $analysis['credibility_level'] ?? 'medium';
-
-        // Light adjustment based on source verification results
-        // But TRUST ChatGPT's semantic analysis over keyword similarity
-
-        if ($sourceResults['found_in_sources'] && $sourceResults['highest_similarity'] >= 0.60) {
-            // Sources found - ChatGPT already analyzed the content
-            // Only boost confidence if ChatGPT also said it's NOT fake
-            if (!$isFake && $confidence < 0.80) {
-                $confidence = max($confidence, 0.80); // Boost confidence
-                $credibility = 'high';
-            }
-
-            // Enhance analysis with source confirmation
-            $sourcesFound = implode(', ', array_column($sourceResults['matching_sources'] ?? [], 'source_name'));
-            $similarityPercent = round($sourceResults['highest_similarity'] * 100);
-
-            $sourceNote = $language === 'ar'
-                ? "\n\n[تأكيد] تم العثور على محتوى مشابه في: {$sourcesFound} (تطابق كلمات: {$similarityPercent}%)"
-                : "\n\n[CONFIRMED] Similar content found in: {$sourcesFound} (keyword match: {$similarityPercent}%)";
-
-            $analysis['analysis']['ar'] = ($analysis['analysis']['ar'] ?? 'تحليل غير متوفر') . $sourceNote;
-            $analysis['analysis']['en'] = ($analysis['analysis']['en'] ?? 'Analysis not available') . $sourceNote;
-        }
-        // STRICT RULE: If NOT found in ANY trusted source → LIKELY FAKE
-        // But still respect ChatGPT's analysis if it found good reasons
-        else if ($sourceResults['sources_searched'] > 0 && !$sourceResults['found_in_sources']) {
-            // Not found in sources - apply strict rule ONLY if ChatGPT also suspects it's fake
-            if ($isFake || $confidence < 0.40) {
-                // ChatGPT agrees or is uncertain → Apply strict rule
-                $isFake = true;
-                $confidence = max($confidence, 0.85); // High confidence it's fake
-                $credibility = 'very_low';
-
-                $sourcesSearched = $sourceResults['sources_searched'];
-                $sourcesListAr = $this->formatSourcesForAnalysis($sourceResults, 'ar');
-
-                $strictNote = $language === 'ar'
-                    ? "\n\n[تحذير] تم البحث في {$sourcesSearched} مصادر موثوقة ولم يتم العثور على هذا الخبر.\n\nوفقاً لسياسة التحقق: أي خبر لا يوجد في المصادر الموثوقة يُعتبر مشكوكاً فيه.\n\nالمصادر المفحوصة:\n{$sourcesListAr}"
-                    : "\n\n[WARNING] Searched {$sourcesSearched} trusted sources - news not found.\n\nAccording to verification policy: News not found in trusted sources is considered suspicious.";
-
-                $analysis['analysis']['ar'] = ($analysis['analysis']['ar'] ?? 'تحليل غير متوفر') . $strictNote;
-                $analysis['analysis']['en'] = ($analysis['analysis']['en'] ?? 'Analysis not available') . $strictNote;
-
-                $analysis['recommendation']['ar'] = "هذا الخبر مشكوك فيه. لم يتم العثور عليه في المصادر الموثوقة.";
-                $analysis['recommendation']['en'] = "This news is suspicious. Not found in trusted sources.";
-
-                if (!isset($analysis['warning_signs'])) {
-                    $analysis['warning_signs'] = [];
-                }
-                $analysis['warning_signs'][] = ['ar' => 'لم يتم نشر في مصادر موثوقة', 'en' => 'Not published in trusted sources'];
-            } else {
-                // ChatGPT says it's authentic despite not being in sources
-                // Trust ChatGPT but add a note
-                $notFoundNote = $language === 'ar'
-                    ? "\n\n[ملاحظة] لم يتم العثور على هذا الخبر في المصادر الموثوقة المفحوصة، لكن التحليل الدلالي يشير إلى أنه قد يكون صحيحاً."
-                    : "\n\n[NOTE] This news was not found in checked trusted sources, but semantic analysis suggests it may be authentic.";
-
-                $analysis['analysis']['ar'] = ($analysis['analysis']['ar'] ?? 'تحليل غير متوفر') . $notFoundNote;
-                $analysis['analysis']['en'] = ($analysis['analysis']['en'] ?? 'Analysis not available') . $notFoundNote;
-            }
-        }
 
         // Structure the response to match our verification format
         return [
@@ -620,8 +570,8 @@ class ChatGPTService
             'verification_tips' => $analysis['verification_tips'] ?? [],
             'related_topics' => $analysis['related_topics'] ?? [],
             'fact_check_sources' => $analysis['fact_check_sources'] ?? [],
-            'sources_checked' => $analysis['sources_checked'] ?? [],
-            'source_verification_status' => $analysis['source_verification_status'] ?? [
+            'sources_checked' => [], // No longer using ChatGPT's response for this
+            'source_verification_status' => [
                 'checked_trusted_sources' => false,
                 'found_in_sources' => false,
                 'matching_sources' => [],

@@ -118,7 +118,7 @@ class WebScrapingService
         ];
         
         $urlsChecked = 0;
-        $maxUrlsToCheck = 15; // Limit to avoid long delays
+        $maxUrlsToCheck = 5; // Reduced to 5 for faster response
 
         foreach ($urlsToTry as $url) {
             if ($urlsChecked >= $maxUrlsToCheck) {
@@ -130,7 +130,7 @@ class WebScrapingService
                 Log::info("Checking MOJ URL: $url");
                 $urlsChecked++;
 
-                $response = Http::timeout(10) // Reduced timeout
+                $response = Http::timeout(5) // Reduced to 5 seconds
                     ->withHeaders([
                         'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
                         'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
@@ -180,11 +180,11 @@ class WebScrapingService
                         }
                     }
 
-                    // If we found good results (>=80% match), stop searching
+                    // If we found good results (>=70% match), stop searching early
                     if (!empty($results)) {
                         $highestSimilarity = max(array_column($results, 'similarity'));
-                        if ($highestSimilarity >= 0.80) {
-                            Log::info("Found high similarity match ({$highestSimilarity}), stopping search");
+                        if ($highestSimilarity >= 0.70) {
+                            Log::info("Found good similarity match ({$highestSimilarity}), stopping search early");
                             break;
                         }
                     }
@@ -389,7 +389,7 @@ class WebScrapingService
         $results = [];
         
         try {
-            $response = Http::timeout(10)
+            $response = Http::timeout(5) // Reduced timeout for faster response
                 ->withHeaders([
                     'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
                 ])
@@ -517,11 +517,12 @@ class WebScrapingService
         });
         
         $bestMatch = $searchResults[0];
-        
+
         return [
             'found' => $bestMatch['similarity'] >= 0.60, // Require 60%+ similarity to avoid false positives
             'similarity' => $bestMatch['similarity'],
             'matched_content' => $bestMatch['content'] ?? $bestMatch['title'],
+            'full_text' => $bestMatch['full_text'] ?? ($bestMatch['content'] ?? $bestMatch['title']), // Include full text for ChatGPT
             'url' => $bestMatch['url'],
             'title' => $bestMatch['title'] ?? null,
             'date' => $bestMatch['date'] ?? null
