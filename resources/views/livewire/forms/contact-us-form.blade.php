@@ -1,4 +1,4 @@
-<div>
+<div class="">
     @if ($this->submitted)
         <div class="flex items-start justify-center gap-4 flex-col">
             <div class="w-full bg-primary/10 border-2 border-primary/40 text-primary px-4 py-3 rounded-lg relative"
@@ -53,8 +53,7 @@
 
                 {{-- Submit --}}
                 <button aria-label="submit" wire:loading.attr="disabled" wire:target="submit" type="submit"
-                    class="w-fit self-end px-6 py-4 hover:bg-white bg-primary  text-white rounded-md cursor-pointer flex items-center space-x-2">
-                    <span class="text-lg font-bold">{{ __('contact.submit_button') }}</span>
+                    class="w-fit self-end px-6 py-4 hover:bg-primary-300 bg-primary text-white rounded-md cursor-pointer flex items-center space-x-2">
                     <div wire:loading wire:target="submit" class="inline-block">
                         <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 24 24">
@@ -65,6 +64,7 @@
                             </path>
                         </svg>
                     </div>
+                    <span class="text-lg font-bold">{{ __('contact.submit_button') }}</span>
                 </button>
             </div>
         </form>

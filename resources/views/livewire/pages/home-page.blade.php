@@ -12,7 +12,7 @@
     <x-sections.verify-section />
 
     <!-- Latest News Section -->
-    <x-sections.latest-news-section />
+    {{-- <x-sections.latest-news-section /> --}}
 
     <!-- Contact Section -->
     <x-sections.contact-section />
