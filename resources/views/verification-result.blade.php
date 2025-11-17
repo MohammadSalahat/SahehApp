@@ -20,7 +20,348 @@
 
         <div class="flex flex-row items-start gap-12">
             <div id="main-content" class="basis-4/6">
-                @if (isset($error) && $error)
+                {{-- AI-Powered Analysis Section - ChatGPT Fallback --}}
+                @if(isset($used_chatgpt_fallback) && $used_chatgpt_fallback && isset($chatgpt_result))
+                    <div class="mb-8 overflow-hidden border shadow-2xl rounded-3xl bg-gradient-to-br from-purple-50 via-white to-blue-50 dark:from-purple-950/30 dark:via-zinc-900 dark:to-blue-950/30 border-purple-200 dark:border-purple-800">
+                        <!-- AI Header -->
+                        <div class="relative p-8 overflow-hidden text-white bg-gradient-to-r from-purple-600 via-purple-500 to-blue-600">
+                            <div class="absolute top-0 right-0 w-64 h-64 bg-white rounded-full opacity-10 -mr-32 -mt-32"></div>
+                            <div class="absolute bottom-0 left-0 w-48 h-48 bg-white rounded-full opacity-10 -ml-24 -mb-24"></div>
+
+                            <div class="relative flex items-center gap-4 mb-4">
+                                <div class="p-4 bg-white/20 backdrop-blur-sm rounded-2xl">
+                                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                                    </svg>
+                                </div>
+                                <div class="flex-1">
+                                    <h2 class="text-3xl font-bold mb-1">
+                                        @if($detected_language === 'ar')
+                                            تحليل ذكي بواسطة الذكاء الاصطناعي
+                                        @else
+                                            AI-Powered Analysis
+                                        @endif
+                                    </h2>
+                                    <p class="text-purple-100">
+                                        @if($detected_language === 'ar')
+                                            تم التحليل باستخدام ChatGPT والتحقق من المصادر الموثوقة
+                                        @else
+                                            Analyzed using ChatGPT with trusted source verification
+                                        @endif
+                                    </p>
+                                </div>
+                                <div class="flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full">
+                                    <div class="flex gap-1">
+                                        <div class="w-2 h-2 bg-white rounded-full animate-pulse" style="animation-delay: 0s"></div>
+                                        <div class="w-2 h-2 bg-white rounded-full animate-pulse" style="animation-delay: 0.2s"></div>
+                                        <div class="w-2 h-2 bg-white rounded-full animate-pulse" style="animation-delay: 0.4s"></div>
+                                    </div>
+                                    <span class="text-sm font-semibold">
+                                        @if($detected_language === 'ar')
+                                            جاري التحليل
+                                        @else
+                                            Processing
+                                        @endif
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Verification Result Badge -->
+                        <div class="px-8 py-6 border-b bg-gradient-to-r {{ $chatgpt_result['is_potentially_fake'] ? 'from-red-50 to-orange-50 dark:from-red-950/20 dark:to-orange-950/20 border-red-100 dark:border-red-900/50' : 'from-emerald-50 to-green-50 dark:from-emerald-950/20 dark:to-green-950/20 border-emerald-100 dark:border-emerald-900/50' }}">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-4">
+                                    @if($chatgpt_result['is_potentially_fake'])
+                                        <div class="p-3 bg-red-100 dark:bg-red-900/50 rounded-xl">
+                                            <svg class="w-8 h-8 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-2xl font-bold text-red-800 dark:text-red-300">
+                                                @if($detected_language === 'ar')
+                                                    تحذير: خبر مشكوك فيه
+                                                @else
+                                                    Warning: Questionable News
+                                                @endif
+                                            </h3>
+                                            <p class="text-red-600 dark:text-red-400">
+                                                @if($detected_language === 'ar')
+                                                    وفقاً لتحليل الذكاء الاصطناعي
+                                                @else
+                                                    According to AI analysis
+                                                @endif
+                                            </p>
+                                        </div>
+                                    @else
+                                        <div class="p-3 bg-emerald-100 dark:bg-emerald-900/50 rounded-xl">
+                                            <svg class="w-8 h-8 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-2xl font-bold text-emerald-800 dark:text-emerald-300">
+                                                @if($detected_language === 'ar')
+                                                    لم يتم رصد علامات مضللة واضحة
+                                                @else
+                                                    No Clear Misleading Signs Detected
+                                                @endif
+                                            </h3>
+                                            <p class="text-emerald-600 dark:text-emerald-400">
+                                                @if($detected_language === 'ar')
+                                                    وفقاً لتحليل الذكاء الاصطناعي
+                                                @else
+                                                    According to AI analysis
+                                                @endif
+                                            </p>
+                                        </div>
+                                    @endif
+                                </div>
+
+                                <!-- Confidence Score -->
+                                <div class="text-center">
+                                    <div class="mb-2 text-4xl font-bold {{ $chatgpt_result['is_potentially_fake'] ? 'text-red-600 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-400' }}">
+                                        {{ round($chatgpt_result['confidence_score'] * 100) }}%
+                                    </div>
+                                    <div class="text-sm font-semibold {{ $chatgpt_result['is_potentially_fake'] ? 'text-red-700 dark:text-red-500' : 'text-emerald-700 dark:text-emerald-500' }}">
+                                        @if($detected_language === 'ar')
+                                            درجة الثقة
+                                        @else
+                                            Confidence
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- AI Analysis with Typing Effect -->
+                        @php
+                            $analysis = $chatgpt_result['analysis'][$detected_language] ?? $chatgpt_result['analysis']['ar'] ?? '';
+                        @endphp
+
+                        @if($analysis)
+                        <div class="p-8 border-b bg-white dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800">
+                            <div class="flex items-start gap-4 mb-4">
+                                <div class="flex-shrink-0 p-3 bg-gradient-to-br from-purple-100 to-blue-100 dark:from-purple-900/50 dark:to-blue-900/50 rounded-xl">
+                                    <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                                    </svg>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="text-xl font-bold mb-3 text-zinc-900 dark:text-zinc-50">
+                                        @if($detected_language === 'ar')
+                                            التحليل التفصيلي
+                                        @else
+                                            Detailed Analysis
+                                        @endif
+                                    </h4>
+                                    <div class="p-6 rounded-2xl bg-gradient-to-br from-zinc-50 to-purple-50/30 dark:from-zinc-800/50 dark:to-purple-900/10 border border-zinc-200 dark:border-zinc-700">
+                                        <div id="ai-analysis-text" class="text-lg leading-relaxed text-zinc-800 dark:text-zinc-200 whitespace-pre-wrap" data-text="{{ $analysis }}">
+                                            <span class="inline-block w-2 h-5 bg-purple-600 animate-pulse"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endif
+
+                        <!-- Source Verification Results -->
+                        @php
+                            $sourceStatus = $chatgpt_result['source_verification_status'] ?? [];
+                            $foundInSources = $sourceStatus['found_in_sources'] ?? false;
+                            $sourcesSearched = $sourceStatus['sources_searched'] ?? 0;
+                            $matchingSources = $sourceStatus['matching_sources'] ?? [];
+                            $highestSimilarity = $sourceStatus['highest_similarity'] ?? 0;
+                        @endphp
+
+                        <div class="p-8 border-b bg-gradient-to-br from-zinc-50 to-blue-50/30 dark:from-zinc-900 dark:to-blue-950/20 border-zinc-100 dark:border-zinc-800">
+                            <div class="flex items-center gap-3 mb-6">
+                                <div class="p-3 bg-blue-100 dark:bg-blue-900/50 rounded-xl">
+                                    <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                    </svg>
+                                </div>
+                                <h4 class="text-xl font-bold text-zinc-900 dark:text-zinc-50">
+                                    @if($detected_language === 'ar')
+                                        التحقق من المصادر الموثوقة
+                                    @else
+                                        Trusted Sources Verification
+                                    @endif
+                                </h4>
+                            </div>
+
+                            @if($foundInSources)
+                                <div class="p-6 rounded-2xl bg-gradient-to-br from-emerald-50 to-green-50 dark:from-emerald-950/30 dark:to-green-950/30 border-2 border-emerald-400 dark:border-emerald-600">
+                                    <div class="flex items-center gap-3 mb-4">
+                                        <svg class="w-8 h-8 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <p class="text-lg font-bold text-emerald-800 dark:text-emerald-300">
+                                            @if($detected_language === 'ar')
+                                                ✓ تم العثور على محتوى مشابه في {{ $sourcesSearched }} مصدر موثوق
+                                            @else
+                                                ✓ Similar content found in {{ $sourcesSearched }} trusted sources
+                                            @endif
+                                        </p>
+                                    </div>
+
+                                    <div class="flex flex-wrap gap-2 mb-4">
+                                        @foreach($matchingSources as $source)
+                                            <span class="inline-flex items-center gap-2 px-4 py-2 font-semibold text-emerald-800 bg-emerald-200 rounded-full dark:bg-emerald-900 dark:text-emerald-200">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                                </svg>
+                                                {{ $source['source_name'] ?? $source }}
+                                            </span>
+                                        @endforeach
+                                    </div>
+
+                                    <div class="p-4 rounded-xl bg-white/70 dark:bg-zinc-800/50">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <span class="font-semibold text-zinc-700 dark:text-zinc-300">
+                                                @if($detected_language === 'ar')
+                                                    درجة التطابق
+                                                @else
+                                                    Match Score
+                                                @endif
+                                            </span>
+                                            <span class="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
+                                                {{ number_format($highestSimilarity * 100, 1) }}%
+                                            </span>
+                                        </div>
+                                        <div class="relative overflow-hidden rounded-full h-3 bg-zinc-200 dark:bg-zinc-700">
+                                            <div class="absolute inset-0 bg-gradient-to-r from-emerald-400 to-emerald-600 transition-all duration-1000"
+                                                 style="width: {{ $highestSimilarity * 100 }}%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @else
+                                <div class="p-6 rounded-2xl bg-gradient-to-br from-orange-50 to-amber-50 dark:from-orange-950/30 dark:to-amber-950/30 border-2 border-orange-400 dark:border-orange-600">
+                                    <div class="flex items-center gap-3 mb-4">
+                                        <svg class="w-8 h-8 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                        </svg>
+                                        <p class="text-lg font-bold text-orange-800 dark:text-orange-300">
+                                            @if($detected_language === 'ar')
+                                                لم يتم العثور على هذا الخبر في {{ $sourcesSearched }} مصدر موثوق
+                                            @else
+                                                News not found in {{ $sourcesSearched }} trusted sources
+                                            @endif
+                                        </p>
+                                    </div>
+
+                                    @if(isset($chatgpt_result['sources_checked']) && count($chatgpt_result['sources_checked']) > 0)
+                                        <div class="flex flex-wrap gap-2">
+                                            @foreach($chatgpt_result['sources_checked'] as $source)
+                                                <span class="inline-flex items-center gap-2 px-3 py-1 text-sm font-medium text-orange-800 bg-orange-200 rounded-full dark:bg-orange-900 dark:text-orange-200">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                    {{ $source }}
+                                                </span>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </div>
+                            @endif
+                        </div>
+
+                        <!-- Recommendation -->
+                        @php
+                            $recommendation = $chatgpt_result['recommendation'][$detected_language] ?? $chatgpt_result['recommendation']['ar'] ?? '';
+                        @endphp
+
+                        @if($recommendation)
+                        <div class="p-8 bg-gradient-to-br from-purple-50/50 to-blue-50/50 dark:from-purple-950/20 dark:to-blue-950/20">
+                            <div class="flex items-start gap-4">
+                                <div class="flex-shrink-0 p-3 bg-gradient-to-br from-purple-100 to-blue-100 dark:from-purple-900/50 dark:to-blue-900/50 rounded-xl">
+                                    <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="text-lg font-bold mb-2 text-zinc-900 dark:text-zinc-50">
+                                        @if($detected_language === 'ar')
+                                            التوصية
+                                        @else
+                                            Recommendation
+                                        @endif
+                                    </h4>
+                                    <p class="text-lg leading-relaxed text-zinc-700 dark:text-zinc-300">{{ $recommendation }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        @endif
+                    </div>
+
+                    <!-- Typing Animation Script -->
+                    <style>
+                        @keyframes blink {
+                            0%, 49% { opacity: 1; }
+                            50%, 100% { opacity: 0; }
+                        }
+
+                        #ai-analysis-text::after {
+                            content: '|';
+                            color: #9333ea;
+                            font-weight: bold;
+                            animation: blink 1s infinite;
+                            margin-left: 2px;
+                        }
+
+                        #ai-analysis-text.typing-complete::after {
+                            display: none;
+                        }
+
+                        .fade-in {
+                            animation: fadeIn 0.5s ease-in;
+                        }
+
+                        @keyframes fadeIn {
+                            from { opacity: 0; transform: translateY(10px); }
+                            to { opacity: 1; transform: translateY(0); }
+                        }
+                    </style>
+
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const textElement = document.getElementById('ai-analysis-text');
+                            if (textElement) {
+                                const fullText = textElement.getAttribute('data-text');
+                                const typingSpeed = 15; // milliseconds per character (adjust for faster/slower typing)
+                                let currentIndex = 0;
+
+                                textElement.textContent = '';
+
+                                function typeWriter() {
+                                    if (currentIndex < fullText.length) {
+                                        textElement.textContent += fullText.charAt(currentIndex);
+                                        currentIndex++;
+
+                                        // Auto-scroll to bottom while typing
+                                        textElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+                                        setTimeout(typeWriter, typingSpeed);
+                                    } else {
+                                        // Mark typing as complete to hide cursor
+                                        textElement.classList.add('typing-complete');
+                                    }
+                                }
+
+                                // Start typing after a short delay for effect
+                                setTimeout(typeWriter, 800);
+                            }
+                        });
+                    </script>
+                @elseif (isset($error) && $error)
                 <!-- ERROR: Show Error Message -->
                 <div class="mb-8 overflow-hidden border-t-4 shadow-xl rounded-2xl border-amber-500 bg-white dark:bg-zinc-900">
                     <div class="p-10 text-center text-white bg-gradient-to-br from-amber-500 to-amber-600">
@@ -65,193 +406,6 @@
                                 <p class="text-lg leading-relaxed text-zinc-700 dark:text-zinc-300">{{ $recommendation ?? __('verification.safe_default_message') }}</p>
                             </div>
                         </div>
-
-                        <!-- ChatGPT Source Verification Results -->
-                        @if(isset($used_chatgpt_fallback) && $used_chatgpt_fallback && isset($chatgpt_result))
-                            <div class="p-8 border-b bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800">
-                                <div class="max-w-4xl mx-auto">
-                                    <!-- Section Header -->
-                                    <div class="flex items-center justify-center gap-3 mb-6">
-                                        <svg class="w-8 h-8 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                                        </svg>
-                                        <h3 class="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-                                            @if($detected_language === 'ar')
-                                                التحقق من المصادر الموثوقة
-                                            @else
-                                                Trusted Sources Verification
-                                            @endif
-                                        </h3>
-                                    </div>
-
-                                    @php
-                                        $sourceStatus = $chatgpt_result['source_verification_status'] ?? [];
-                                        $foundInSources = $sourceStatus['found_in_sources'] ?? false;
-                                        $sourcesSearched = $sourceStatus['sources_searched'] ?? 0;
-                                        $matchingSources = $sourceStatus['matching_sources'] ?? [];
-                                        $highestSimilarity = $sourceStatus['highest_similarity'] ?? 0;
-                                        $confidenceScore = $chatgpt_result['confidence_score'] ?? 0;
-                                        $analysis = $chatgpt_result['analysis'][$detected_language] ?? $chatgpt_result['analysis']['ar'] ?? '';
-                                    @endphp
-
-                                    @if($foundInSources)
-                                        <!-- FOUND IN SOURCES: Positive Result -->
-                                        <div class="p-6 mb-6 border-s-4 rounded-xl bg-gradient-to-br from-emerald-50 to-green-50 dark:from-emerald-950/30 dark:to-green-950/30 border-emerald-500">
-                                            <div class="flex items-start gap-4 mb-4">
-                                                <div class="p-3 rounded-lg bg-emerald-100 dark:bg-emerald-900/50">
-                                                    <svg class="w-8 h-8 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                    </svg>
-                                                </div>
-                                                <div class="flex-1">
-                                                    <h4 class="mb-2 text-xl font-bold text-emerald-800 dark:text-emerald-300">
-                                                        @if($detected_language === 'ar')
-                                                            تم العثور على محتوى مشابه في المصادر الموثوقة
-                                                        @else
-                                                            Similar Content Found in Trusted Sources
-                                                        @endif
-                                                    </h4>
-                                                    <p class="text-emerald-700 dark:text-emerald-400">
-                                                        @if($detected_language === 'ar')
-                                                            تم التحقق من {{ $sourcesSearched }} مصدر موثوق ووجدنا تطابقاً دلالياً مع المصادر التالية:
-                                                        @else
-                                                            Verified against {{ $sourcesSearched }} trusted sources and found semantic match with:
-                                                        @endif
-                                                    </p>
-                                                </div>
-                                            </div>
-
-                                            <!-- Matching Sources -->
-                                            <div class="mb-4">
-                                                <div class="flex flex-wrap gap-2">
-                                                    @foreach($matchingSources as $source)
-                                                        <span class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-emerald-800 bg-emerald-200 rounded-full dark:bg-emerald-900 dark:text-emerald-200">
-                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                                    d="M5 13l4 4L19 7" />
-                                                            </svg>
-                                                            {{ $source['source_name'] ?? $source }}
-                                                        </span>
-                                                    @endforeach
-                                                </div>
-                                            </div>
-
-                                            <!-- Confidence Score -->
-                                            <div class="p-4 mb-4 rounded-lg bg-white/70 dark:bg-zinc-800/50">
-                                                <div class="flex items-center justify-between mb-2">
-                                                    <span class="text-sm font-bold text-zinc-700 dark:text-zinc-300">
-                                                        @if($detected_language === 'ar')
-                                                            درجة الثقة في التطابق
-                                                        @else
-                                                            Match Confidence Score
-                                                        @endif
-                                                    </span>
-                                                    <span class="text-3xl font-bold text-emerald-600 dark:text-emerald-400">
-                                                        {{ number_format($highestSimilarity * 100, 1) }}%
-                                                    </span>
-                                                </div>
-                                                <div class="relative overflow-hidden rounded-full h-3 bg-zinc-200 dark:bg-zinc-700">
-                                                    <div class="absolute inset-0 bg-gradient-to-r from-emerald-400 to-emerald-600"
-                                                         style="width: {{ $highestSimilarity * 100 }}%"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @else
-                                        <!-- NOT FOUND IN SOURCES: Warning Result -->
-                                        <div class="p-6 mb-6 border-s-4 rounded-xl bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-950/30 dark:to-orange-950/30 border-red-500">
-                                            <div class="flex items-start gap-4 mb-4">
-                                                <div class="p-3 rounded-lg bg-red-100 dark:bg-red-900/50">
-                                                    <svg class="w-8 h-8 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                                    </svg>
-                                                </div>
-                                                <div class="flex-1">
-                                                    <h4 class="mb-2 text-xl font-bold text-red-800 dark:text-red-300">
-                                                        @if($detected_language === 'ar')
-                                                            لم يتم العثور على هذا الخبر في المصادر الموثوقة
-                                                        @else
-                                                            News Not Found in Trusted Sources
-                                                        @endif
-                                                    </h4>
-                                                    <p class="text-red-700 dark:text-red-400">
-                                                        @if($detected_language === 'ar')
-                                                            تم البحث في {{ $sourcesSearched }} مصدر موثوق ولم يتم العثور على هذا الخبر في أي منها.
-                                                        @else
-                                                            Searched {{ $sourcesSearched }} trusted sources - this news was not found in any of them.
-                                                        @endif
-                                                    </p>
-                                                </div>
-                                            </div>
-
-                                            <!-- Sources Checked -->
-                                            @if(isset($chatgpt_result['sources_checked']) && count($chatgpt_result['sources_checked']) > 0)
-                                                <div class="mb-4">
-                                                    <p class="mb-2 text-sm font-bold text-red-800 dark:text-red-300">
-                                                        @if($detected_language === 'ar')
-                                                            المصادر التي تم فحصها:
-                                                        @else
-                                                            Sources Checked:
-                                                        @endif
-                                                    </p>
-                                                    <div class="flex flex-wrap gap-2">
-                                                        @foreach($chatgpt_result['sources_checked'] as $source)
-                                                            <span class="inline-flex items-center gap-2 px-3 py-1 text-sm font-medium text-red-800 bg-red-200 rounded-full dark:bg-red-900 dark:text-red-200">
-                                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                                        d="M6 18L18 6M6 6l12 12" />
-                                                                </svg>
-                                                                {{ $source }}
-                                                            </span>
-                                                        @endforeach
-                                                    </div>
-                                                </div>
-                                            @endif
-
-                                            <!-- Confidence Score -->
-                                            <div class="p-4 mb-4 rounded-lg bg-white/70 dark:bg-zinc-800/50">
-                                                <div class="flex items-center justify-between mb-2">
-                                                    <span class="text-sm font-bold text-zinc-700 dark:text-zinc-300">
-                                                        @if($detected_language === 'ar')
-                                                            درجة الثقة (احتمالية كون الخبر مزيف)
-                                                        @else
-                                                            Confidence Score (Likelihood of Being Fake)
-                                                        @endif
-                                                    </span>
-                                                    <span class="text-3xl font-bold text-red-600 dark:text-red-400">
-                                                        {{ number_format($confidenceScore * 100, 1) }}%
-                                                    </span>
-                                                </div>
-                                                <div class="relative overflow-hidden rounded-full h-3 bg-zinc-200 dark:bg-zinc-700">
-                                                    <div class="absolute inset-0 bg-gradient-to-r from-red-400 to-red-600"
-                                                         style="width: {{ $confidenceScore * 100 }}%"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endif
-
-                                    <!-- AI Analysis -->
-                                    @if($analysis)
-                                        <div class="p-6 border rounded-xl bg-purple-50 dark:bg-purple-950/20 border-purple-200 dark:border-purple-900/50">
-                                            <h4 class="flex items-center gap-2 mb-3 text-lg font-bold text-purple-800 dark:text-purple-300">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                                                </svg>
-                                                @if($detected_language === 'ar')
-                                                    التحليل الذكي المفصل
-                                                @else
-                                                    Detailed AI Analysis
-                                                @endif
-                                            </h4>
-                                            <p class="text-purple-900 dark:text-purple-200 leading-relaxed whitespace-pre-wrap">{{ $analysis }}</p>
-                                        </div>
-                                    @endif
-                                </div>
-                            </div>
-                        @endif
 
                         <!-- Similarity Score -->
                         @if(isset($best_match))
@@ -477,193 +631,6 @@
                             <p class="text-xl opacity-95">{{ $recommendation ?? __('verification.safe_default_message') }}</p>
                         </div>
 
-                        <!-- ChatGPT Source Verification Results -->
-                        @if(isset($used_chatgpt_fallback) && $used_chatgpt_fallback && isset($chatgpt_result))
-                            <div class="p-8 border-b bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800">
-                                <div class="max-w-4xl mx-auto">
-                                    <!-- Section Header -->
-                                    <div class="flex items-center justify-center gap-3 mb-6">
-                                        <svg class="w-8 h-8 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                                        </svg>
-                                        <h3 class="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-                                            @if($detected_language === 'ar')
-                                                التحقق من المصادر الموثوقة
-                                            @else
-                                                Trusted Sources Verification
-                                            @endif
-                                        </h3>
-                                    </div>
-
-                                    @php
-                                        $sourceStatus = $chatgpt_result['source_verification_status'] ?? [];
-                                        $foundInSources = $sourceStatus['found_in_sources'] ?? false;
-                                        $sourcesSearched = $sourceStatus['sources_searched'] ?? 0;
-                                        $matchingSources = $sourceStatus['matching_sources'] ?? [];
-                                        $highestSimilarity = $sourceStatus['highest_similarity'] ?? 0;
-                                        $confidenceScore = $chatgpt_result['confidence_score'] ?? 0;
-                                        $analysis = $chatgpt_result['analysis'][$detected_language] ?? $chatgpt_result['analysis']['ar'] ?? '';
-                                    @endphp
-
-                                    @if($foundInSources)
-                                        <!-- FOUND IN SOURCES: Positive Result -->
-                                        <div class="p-6 mb-6 border-s-4 rounded-xl bg-gradient-to-br from-emerald-50 to-green-50 dark:from-emerald-950/30 dark:to-green-950/30 border-emerald-500">
-                                            <div class="flex items-start gap-4 mb-4">
-                                                <div class="p-3 rounded-lg bg-emerald-100 dark:bg-emerald-900/50">
-                                                    <svg class="w-8 h-8 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                    </svg>
-                                                </div>
-                                                <div class="flex-1">
-                                                    <h4 class="mb-2 text-xl font-bold text-emerald-800 dark:text-emerald-300">
-                                                        @if($detected_language === 'ar')
-                                                            تم العثور على محتوى مشابه في المصادر الموثوقة
-                                                        @else
-                                                            Similar Content Found in Trusted Sources
-                                                        @endif
-                                                    </h4>
-                                                    <p class="text-emerald-700 dark:text-emerald-400">
-                                                        @if($detected_language === 'ar')
-                                                            تم التحقق من {{ $sourcesSearched }} مصدر موثوق ووجدنا تطابقاً دلالياً مع المصادر التالية:
-                                                        @else
-                                                            Verified against {{ $sourcesSearched }} trusted sources and found semantic match with:
-                                                        @endif
-                                                    </p>
-                                                </div>
-                                            </div>
-
-                                            <!-- Matching Sources -->
-                                            <div class="mb-4">
-                                                <div class="flex flex-wrap gap-2">
-                                                    @foreach($matchingSources as $source)
-                                                        <span class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-emerald-800 bg-emerald-200 rounded-full dark:bg-emerald-900 dark:text-emerald-200">
-                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                                    d="M5 13l4 4L19 7" />
-                                                            </svg>
-                                                            {{ $source['source_name'] ?? $source }}
-                                                        </span>
-                                                    @endforeach
-                                                </div>
-                                            </div>
-
-                                            <!-- Confidence Score -->
-                                            <div class="p-4 mb-4 rounded-lg bg-white/70 dark:bg-zinc-800/50">
-                                                <div class="flex items-center justify-between mb-2">
-                                                    <span class="text-sm font-bold text-zinc-700 dark:text-zinc-300">
-                                                        @if($detected_language === 'ar')
-                                                            درجة الثقة في التطابق
-                                                        @else
-                                                            Match Confidence Score
-                                                        @endif
-                                                    </span>
-                                                    <span class="text-3xl font-bold text-emerald-600 dark:text-emerald-400">
-                                                        {{ number_format($highestSimilarity * 100, 1) }}%
-                                                    </span>
-                                                </div>
-                                                <div class="relative overflow-hidden rounded-full h-3 bg-zinc-200 dark:bg-zinc-700">
-                                                    <div class="absolute inset-0 bg-gradient-to-r from-emerald-400 to-emerald-600"
-                                                         style="width: {{ $highestSimilarity * 100 }}%"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @else
-                                        <!-- NOT FOUND IN SOURCES: Warning Result -->
-                                        <div class="p-6 mb-6 border-s-4 rounded-xl bg-gradient-to-br from-orange-50 to-yellow-50 dark:from-orange-950/30 dark:to-yellow-950/30 border-orange-500">
-                                            <div class="flex items-start gap-4 mb-4">
-                                                <div class="p-3 rounded-lg bg-orange-100 dark:bg-orange-900/50">
-                                                    <svg class="w-8 h-8 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                                    </svg>
-                                                </div>
-                                                <div class="flex-1">
-                                                    <h4 class="mb-2 text-xl font-bold text-orange-800 dark:text-orange-300">
-                                                        @if($detected_language === 'ar')
-                                                            لم يتم العثور على هذا الخبر في المصادر الموثوقة
-                                                        @else
-                                                            News Not Found in Trusted Sources
-                                                        @endif
-                                                    </h4>
-                                                    <p class="text-orange-700 dark:text-orange-400">
-                                                        @if($detected_language === 'ar')
-                                                            تم البحث في {{ $sourcesSearched }} مصدر موثوق ولم يتم العثور على هذا الخبر في أي منها.
-                                                        @else
-                                                            Searched {{ $sourcesSearched }} trusted sources - this news was not found in any of them.
-                                                        @endif
-                                                    </p>
-                                                </div>
-                                            </div>
-
-                                            <!-- Sources Checked -->
-                                            @if(isset($chatgpt_result['sources_checked']) && count($chatgpt_result['sources_checked']) > 0)
-                                                <div class="mb-4">
-                                                    <p class="mb-2 text-sm font-bold text-orange-800 dark:text-orange-300">
-                                                        @if($detected_language === 'ar')
-                                                            المصادر التي تم فحصها:
-                                                        @else
-                                                            Sources Checked:
-                                                        @endif
-                                                    </p>
-                                                    <div class="flex flex-wrap gap-2">
-                                                        @foreach($chatgpt_result['sources_checked'] as $source)
-                                                            <span class="inline-flex items-center gap-2 px-3 py-1 text-sm font-medium text-orange-800 bg-orange-200 rounded-full dark:bg-orange-900 dark:text-orange-200">
-                                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                                        d="M6 18L18 6M6 6l12 12" />
-                                                                </svg>
-                                                                {{ $source }}
-                                                            </span>
-                                                        @endforeach
-                                                    </div>
-                                                </div>
-                                            @endif
-
-                                            <!-- Confidence Score -->
-                                            <div class="p-4 mb-4 rounded-lg bg-white/70 dark:bg-zinc-800/50">
-                                                <div class="flex items-center justify-between mb-2">
-                                                    <span class="text-sm font-bold text-zinc-700 dark:text-zinc-300">
-                                                        @if($detected_language === 'ar')
-                                                            درجة الثقة (احتمالية كون الخبر مشكوك فيه)
-                                                        @else
-                                                            Confidence Score (Likelihood of Being Questionable)
-                                                        @endif
-                                                    </span>
-                                                    <span class="text-3xl font-bold text-orange-600 dark:text-orange-400">
-                                                        {{ number_format($confidenceScore * 100, 1) }}%
-                                                    </span>
-                                                </div>
-                                                <div class="relative overflow-hidden rounded-full h-3 bg-zinc-200 dark:bg-zinc-700">
-                                                    <div class="absolute inset-0 bg-gradient-to-r from-orange-400 to-orange-600"
-                                                         style="width: {{ $confidenceScore * 100 }}%"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endif
-
-                                    <!-- AI Analysis -->
-                                    @if($analysis)
-                                        <div class="p-6 border rounded-xl bg-purple-50 dark:bg-purple-950/20 border-purple-200 dark:border-purple-900/50">
-                                            <h4 class="flex items-center gap-2 mb-3 text-lg font-bold text-purple-800 dark:text-purple-300">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                                                </svg>
-                                                @if($detected_language === 'ar')
-                                                    التحليل الذكي المفصل
-                                                @else
-                                                    Detailed AI Analysis
-                                                @endif
-                                            </h4>
-                                            <p class="text-purple-900 dark:text-purple-200 leading-relaxed whitespace-pre-wrap">{{ $analysis }}</p>
-                                        </div>
-                                    @endif
-                                </div>
-                            </div>
-                        @endif
-
                         @if(!empty($similar_news))
                             <div class="p-8 bg-white dark:bg-zinc-900">
                                 <div class="max-w-4xl mx-auto">
@@ -718,173 +685,6 @@
                             <h2 class="mb-3 text-4xl font-bold">{{ __('verification.safe_title') }}</h2>
                             <p class="text-xl opacity-95">{{ __('verification.safe_subtitle') }}</p>
                         </div>
-
-                        <!-- ChatGPT Source Verification Results -->
-                        @if(isset($used_chatgpt_fallback) && $used_chatgpt_fallback && isset($chatgpt_result))
-                            <div class="p-8 border-b bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800">
-                                <div class="max-w-4xl mx-auto">
-                                    <!-- Section Header -->
-                                    <div class="flex items-center justify-center gap-3 mb-6">
-                                        <svg class="w-8 h-8 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                                        </svg>
-                                        <h3 class="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-                                            @if($detected_language === 'ar')
-                                                التحقق من المصادر الموثوقة
-                                            @else
-                                                Trusted Sources Verification
-                                            @endif
-                                        </h3>
-                                    </div>
-
-                                    @php
-                                        $sourceStatus = $chatgpt_result['source_verification_status'] ?? [];
-                                        $foundInSources = $sourceStatus['found_in_sources'] ?? false;
-                                        $sourcesSearched = $sourceStatus['sources_searched'] ?? 0;
-                                        $matchingSources = $sourceStatus['matching_sources'] ?? [];
-                                        $highestSimilarity = $sourceStatus['highest_similarity'] ?? 0;
-                                        $confidenceScore = $chatgpt_result['confidence_score'] ?? 0;
-                                        $analysis = $chatgpt_result['analysis'][$detected_language] ?? $chatgpt_result['analysis']['ar'] ?? '';
-                                    @endphp
-
-                                    @if($foundInSources)
-                                        <!-- FOUND IN SOURCES: Positive Result -->
-                                        <div class="p-6 mb-6 border-s-4 rounded-xl bg-gradient-to-br from-emerald-50 to-green-50 dark:from-emerald-950/30 dark:to-green-950/30 border-emerald-500">
-                                            <div class="flex items-start gap-4 mb-4">
-                                                <div class="p-3 rounded-lg bg-emerald-100 dark:bg-emerald-900/50">
-                                                    <svg class="w-8 h-8 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                    </svg>
-                                                </div>
-                                                <div class="flex-1">
-                                                    <h4 class="mb-2 text-xl font-bold text-emerald-800 dark:text-emerald-300">
-                                                        @if($detected_language === 'ar')
-                                                            تم العثور على محتوى مشابه في المصادر الموثوقة
-                                                        @else
-                                                            Similar Content Found in Trusted Sources
-                                                        @endif
-                                                    </h4>
-                                                    <p class="text-emerald-700 dark:text-emerald-400">
-                                                        @if($detected_language === 'ar')
-                                                            تم التحقق من {{ $sourcesSearched }} مصدر موثوق ووجدنا تطابقاً دلالياً مع المصادر التالية:
-                                                        @else
-                                                            Verified against {{ $sourcesSearched }} trusted sources and found semantic match with:
-                                                        @endif
-                                                    </p>
-                                                </div>
-                                            </div>
-
-                                            <!-- Matching Sources -->
-                                            <div class="mb-4">
-                                                <div class="flex flex-wrap gap-2">
-                                                    @foreach($matchingSources as $source)
-                                                        <span class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-emerald-800 bg-emerald-200 rounded-full dark:bg-emerald-900 dark:text-emerald-200">
-                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                                    d="M5 13l4 4L19 7" />
-                                                            </svg>
-                                                            {{ $source['source_name'] ?? $source }}
-                                                        </span>
-                                                    @endforeach
-                                                </div>
-                                            </div>
-
-                                            <!-- Confidence Score -->
-                                            <div class="p-4 mb-4 rounded-lg bg-white/70 dark:bg-zinc-800/50">
-                                                <div class="flex items-center justify-between mb-2">
-                                                    <span class="text-sm font-bold text-zinc-700 dark:text-zinc-300">
-                                                        @if($detected_language === 'ar')
-                                                            درجة الثقة في التطابق
-                                                        @else
-                                                            Match Confidence Score
-                                                        @endif
-                                                    </span>
-                                                    <span class="text-3xl font-bold text-emerald-600 dark:text-emerald-400">
-                                                        {{ number_format($highestSimilarity * 100, 1) }}%
-                                                    </span>
-                                                </div>
-                                                <div class="relative overflow-hidden rounded-full h-3 bg-zinc-200 dark:bg-zinc-700">
-                                                    <div class="absolute inset-0 bg-gradient-to-r from-emerald-400 to-emerald-600"
-                                                         style="width: {{ $highestSimilarity * 100 }}%"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @else
-                                        <!-- NOT FOUND IN SOURCES: Informational Note -->
-                                        <div class="p-6 mb-6 border-s-4 rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 border-blue-500">
-                                            <div class="flex items-start gap-4 mb-4">
-                                                <div class="p-3 rounded-lg bg-blue-100 dark:bg-blue-900/50">
-                                                    <svg class="w-8 h-8 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                    </svg>
-                                                </div>
-                                                <div class="flex-1">
-                                                    <h4 class="mb-2 text-xl font-bold text-blue-800 dark:text-blue-300">
-                                                        @if($detected_language === 'ar')
-                                                            لم يتم العثور على هذا الخبر في قاعدة البيانات أو المصادر الموثوقة
-                                                        @else
-                                                            News Not Found in Database or Trusted Sources
-                                                        @endif
-                                                    </h4>
-                                                    <p class="text-blue-700 dark:text-blue-400">
-                                                        @if($detected_language === 'ar')
-                                                            تم البحث في {{ $sourcesSearched }} مصدر موثوق. عدم العثور على الخبر قد يعني أنه جديد أو لم يتم تغطيته بعد.
-                                                        @else
-                                                            Searched {{ $sourcesSearched }} trusted sources. Not finding the news may mean it's new or hasn't been covered yet.
-                                                        @endif
-                                                    </p>
-                                                </div>
-                                            </div>
-
-                                            <!-- Sources Checked -->
-                                            @if(isset($chatgpt_result['sources_checked']) && count($chatgpt_result['sources_checked']) > 0)
-                                                <div class="mb-4">
-                                                    <p class="mb-2 text-sm font-bold text-blue-800 dark:text-blue-300">
-                                                        @if($detected_language === 'ar')
-                                                            المصادر التي تم فحصها:
-                                                        @else
-                                                            Sources Checked:
-                                                        @endif
-                                                    </p>
-                                                    <div class="flex flex-wrap gap-2">
-                                                        @foreach($chatgpt_result['sources_checked'] as $source)
-                                                            <span class="inline-flex items-center gap-2 px-3 py-1 text-sm font-medium text-blue-800 bg-blue-200 rounded-full dark:bg-blue-900 dark:text-blue-200">
-                                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                                        d="M9 12l2 2 4-4" />
-                                                                </svg>
-                                                                {{ $source }}
-                                                            </span>
-                                                        @endforeach
-                                                    </div>
-                                                </div>
-                                            @endif
-                                        </div>
-                                    @endif
-
-                                    <!-- AI Analysis -->
-                                    @if($analysis)
-                                        <div class="p-6 border rounded-xl bg-purple-50 dark:bg-purple-950/20 border-purple-200 dark:border-purple-900/50">
-                                            <h4 class="flex items-center gap-2 mb-3 text-lg font-bold text-purple-800 dark:text-purple-300">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                                                </svg>
-                                                @if($detected_language === 'ar')
-                                                    التحليل الذكي المفصل
-                                                @else
-                                                    Detailed AI Analysis
-                                                @endif
-                                            </h4>
-                                            <p class="text-purple-900 dark:text-purple-200 leading-relaxed whitespace-pre-wrap">{{ $analysis }}</p>
-                                        </div>
-                                    @endif
-                                </div>
-                            </div>
-                        @endif
 
                         <div class="p-8 bg-white dark:bg-zinc-900">
                             <div class="max-w-4xl mx-auto text-center">

@@ -102,10 +102,20 @@ class OptimizedVerificationController extends Controller
             }
 
             $processingTime = (microtime(true) - $startTime) * 1000;
-            
+
+            // Check if we need to use ChatGPT fallback
+            $chatGPTResult = null;
+            $usedChatGPTFallback = false;
+
+            if (isset($result['use_chatgpt_fallback']) && $result['use_chatgpt_fallback'] === true) {
+                Log::info('No database match found - using ChatGPT fallback');
+                $chatGPTResult = $this->callChatGPTFallback($content, $detectedLanguage);
+                $usedChatGPTFallback = $chatGPTResult !== null;
+            }
+
             // Prepare optimized view data
-            $viewData = $this->prepareOptimizedViewData($result, $content, $detectedLanguage, $processingTime);
-            
+            $viewData = $this->prepareOptimizedViewData($result, $content, $detectedLanguage, $processingTime, $chatGPTResult, $usedChatGPTFallback);
+
             // Cache successful results for 5 minutes
             if ($result && !isset($result['error'])) {
                 Cache::put($cacheKey, $viewData, $this->cacheTTL);
@@ -502,16 +512,110 @@ class OptimizedVerificationController extends Controller
             'similar_news' => [],
             'processing_method' => $reason,
             'processing_time_ms' => $processingTime,
+            'use_chatgpt_fallback' => true, // Signal to use ChatGPT fallback
         ];
+    }
+
+    /**
+     * Call ChatGPT for verification when no database matches found
+     */
+    private function callChatGPTFallback(string $content, string $language): ?array
+    {
+        try {
+            if (!$this->chatGPT->isAvailable()) {
+                Log::warning('ChatGPT service not available for fallback');
+                return null;
+            }
+
+            Log::info('Using ChatGPT fallback - no database matches found');
+            $startTime = microtime(true);
+
+            $chatGPTResult = $this->chatGPT->verifyNews($content);
+            $processingTime = (microtime(true) - $startTime) * 1000;
+
+            // Log to database
+            ChatGPTVerification::create([
+                'original_text' => $content,
+                'language' => $language,
+                'category' => $chatGPTResult['category'] ?? null,
+                'model_used' => $chatGPTResult['model_used'] ?? 'gpt-4',
+                'is_potentially_fake' => $chatGPTResult['is_potentially_fake'],
+                'confidence_score' => $chatGPTResult['confidence_score'],
+                'credibility_level' => $chatGPTResult['credibility_level'],
+                'analysis' => $chatGPTResult['analysis'],
+                'warning_signs' => $chatGPTResult['warning_signs'],
+                'recommendation' => $chatGPTResult['recommendation'],
+                'verification_tips' => $chatGPTResult['verification_tips'],
+                'related_topics' => $chatGPTResult['related_topics'],
+                'fact_check_sources' => $chatGPTResult['fact_check_sources'],
+                'sources_checked' => $chatGPTResult['sources_checked'] ?? [],
+                'source_verification_status' => $chatGPTResult['source_verification_status'] ?? [],
+                'trusted_sources_used' => $chatGPTResult['trusted_sources_used'] ?? [],
+                'tokens_used' => $chatGPTResult['tokens_used'],
+                'processing_time_ms' => $processingTime,
+                'user_ip' => request()->ip(),
+                'user_id' => auth()->id(),
+                'status' => 'completed',
+            ]);
+
+            Log::info('ChatGPT verification completed', [
+                'is_potentially_fake' => $chatGPTResult['is_potentially_fake'],
+                'confidence' => $chatGPTResult['confidence_score'],
+                'tokens_used' => $chatGPTResult['tokens_used'],
+                'processing_time_ms' => $processingTime,
+            ]);
+
+            return $chatGPTResult;
+
+        } catch (Exception $e) {
+            Log::error('ChatGPT fallback failed', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            // Log failed attempt
+            ChatGPTVerification::create([
+                'original_text' => $content,
+                'language' => $language,
+                'user_ip' => request()->ip(),
+                'user_id' => auth()->id(),
+                'status' => 'failed',
+                'error_message' => $e->getMessage(),
+            ]);
+
+            return null;
+        }
     }
 
     /**
      * Prepare optimized view data
      */
-    private function prepareOptimizedViewData(array $result, string $content, string $language, float $processingTime): array
+    private function prepareOptimizedViewData(array $result, string $content, string $language, float $processingTime, ?array $chatGPTResult = null, bool $usedChatGPTFallback = false): array
     {
         $found = $result['similar_news_found'] > 0;
-        
+
+        // If ChatGPT fallback was used and successful, prioritize its results
+        if ($usedChatGPTFallback && $chatGPTResult) {
+            $viewData = [
+                'search_content' => $content,
+                'found' => false, // No database match
+                'is_potentially_fake' => $chatGPTResult['is_potentially_fake'],
+                'confidence_level' => $chatGPTResult['credibility_level'],
+                'confidence_percentage' => round($chatGPTResult['confidence_score'] * 100),
+                'highest_similarity' => 0.0,
+                'total_matches' => 0,
+                'processing_time_ms' => $processingTime,
+                'processing_method' => 'chatgpt_with_source_verification',
+                'detected_language' => $language,
+                'cached' => false,
+                'similar_news' => [],
+                'used_chatgpt_fallback' => true,
+                'chatgpt_result' => $chatGPTResult,
+            ];
+
+            return $viewData;
+        }
+
         $viewData = [
             'search_content' => $content,
             'found' => $found,
@@ -525,13 +629,15 @@ class OptimizedVerificationController extends Controller
             'detected_language' => $language,
             'cached' => false,
             'similar_news' => $result['similar_news'] ?? [], // Add similar_news array
+            'used_chatgpt_fallback' => false,
+            'chatgpt_result' => null,
         ];
 
         // Add best match if found
         if ($found && !empty($result['similar_news'])) {
             $bestMatch = $result['similar_news'][0];
             $similarityLevel = $this->getSimilarityLevel($bestMatch['similarity_score']);
-            
+
             $viewData['best_match'] = [
                 'id' => $bestMatch['id'],
                 'title' => $bestMatch['title'],
