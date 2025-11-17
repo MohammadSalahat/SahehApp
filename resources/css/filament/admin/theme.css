@@ -1,0 +1,266 @@
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+
+@source '../../../../app/Filament/**/*.php';
+@source '../../../../resources/views/filament/**/*.blade.php';
+@source '../../../../resources/views/custom/**/*.blade.php';
+@source '../../../../vendor/filament/**/*.php';
+@source '../../../../vendor/filament/**/*.blade.php';
+@source '../../../../vendor/gboquizosanchez/filament-log-viewer/resources/views*.blade.php';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --color-primary: #4A6B5A;
+    --color-primary-50: #bcd1c6;
+    --color-primary-100: #b0c9bc;
+    --color-primary-150: #99b9a8;
+    --color-primary-250: #8eb19f;
+    --color-primary-200: #76a18b;
+    --color-primary-300: #6b9981;
+    --color-primary-350: #628e77;
+    --color-primary-400: #527764;
+    --color-primary-450: #4a6b5a;
+    --color-primary-500: #4a6b5a;
+    --color-primary-550: #4a6b5a;
+    --color-primary-600: #425f50;
+    --color-primary-650: #425f50;
+    --color-primary-700: #3a5446;
+    --color-primary-750: #2a3d33;
+    --color-primary-800: #223129;
+    --color-primary-850: #1a251f;
+    --color-primary-900: #527764;
+    --color-primary-950: #ffffff;
+
+    /* make the gray more darkness */
+    --color-gray-50: #fafafa;
+    --color-gray-100: #f3f4f6;
+    --color-gray-200: #e5e7eb;
+    --color-gray-300: #d1d5db;
+    --color-gray-400: #9ca3af;
+    --color-gray-500: #6b7280;
+    --color-gray-600: #4b5563;
+    --color-gray-700: #374151;
+    --color-gray-800: #1f2937;
+    --color-gray-900: #111827;
+
+
+}
+
+.fi-tabs-item {
+    &.fi-active {
+
+        & .fi-tabs-item-label,
+        & .fi-icon {
+            @apply text-primary-50;
+        }
+    }
+}
+
+.fi-main-ctn {
+    position: relative;
+    opacity: 100;
+}
+
+.fi-sidebar-nav {
+    @apply ps-3;
+}
+
+.fi-sidebar-nav {
+    @apply border-e border-e-primary-200 dark:border-e-primary-200/20 shadow-2xl;
+}
+
+.fi-sidebar-item-btn {
+    @apply border-s-4 border-transparent bg-transparent rounded-s-none rounded-e-xs;
+}
+
+.fi-sidebar-item-btn:hover {
+    @apply bg-primary-50 dark:bg-primary-750;
+}
+
+.fi-sidebar-item.fi-active .fi-sidebar-item-btn {
+    @apply border-primary-400 dark:border-primary bg-primary-50 dark:bg-primary-750;
+}
+
+.fi-sidebar-item-btn .fi-icon,
+.fi-sidebar-item-btn .fi-sidebar-item-label {
+    @apply text-primary-700 dark:text-white;
+}
+
+.fi-text-color-900 {
+    @apply text-primary-900;
+}
+
+/* 
+.fi-sidebar-item-btn {
+    @apply rounded-md bg-transparent;
+}
+
+.fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn:hover {
+    @apply rounded-md border-primary dark:border-primary-400 bg-primary/5 dark:bg-primary/40;
+}
+
+.fi-sidebar-item-btn .fi-icon,
+.fi-sidebar-item-btn .fi-sidebar-item-label {
+    @apply text-primary-700 dark:text-primary-400;
+} */
+
+
+.fi-simple-layout {
+    @apply bg-gradient-to-b from-primary-400 via-primary-700 to-primary-900;
+}
+
+.fi-simple-main {
+    background-image: radial-gradient(circle at center, var(--color-primary-200), var(--color-white) 50%);
+
+    &.dark,
+    .dark & {
+        background-image: radial-gradient(circle at center, var(--color-primary-700), var(--color-primary-900) 50%);
+    }
+}
+
+.sticky-top .fi-tabs {
+    @apply sticky top-16 z-10 bg-white shadow rounded-t-xl;
+}
+
+.fi-tabs-item {
+    @apply bg-gray-100;
+}
+
+.fi-tabs-item .fi-tabs-item-label {
+    @apply text-black;
+}
+
+.fi-tabs-item.fi-active {
+    @apply bg-primary-700 text-white;
+}
+
+.fi-tabs-item.fi-active .fi-tabs-item-label {
+    @apply text-white;
+}
+
+/* Dashboard Enhancements */
+.fi-dashboard-page {
+    @apply bg-gradient-to-br from-gray-50 via-white to-gray-100;
+
+    &.dark,
+    .dark & {
+        @apply bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900;
+    }
+}
+
+/* Widget Styling */
+.fi-wi {
+    @apply shadow-lg border border-gray-200/50 dark:border-gray-700/50;
+    @apply rounded-xl overflow-hidden;
+    @apply transition-all duration-300 ease-in-out;
+}
+
+.fi-wi:hover {
+    @apply shadow-xl scale-[1.02];
+}
+
+/* Stats Overview Styling */
+.fi-stat {
+    @apply bg-gradient-to-br;
+    @apply border border-white/20 dark:border-gray-700/20;
+    @apply backdrop-blur-sm;
+}
+
+.fi-stat:nth-child(1) {
+    @apply from-green-50 to-emerald-100 dark:from-green-950/50 dark:to-emerald-900/50;
+    @apply border-green-200 dark:border-green-800;
+}
+
+.fi-stat:nth-child(2) {
+    @apply from-blue-50 to-sky-100 dark:from-blue-950/50 dark:to-sky-900/50;
+    @apply border-blue-200 dark:border-blue-800;
+}
+
+.fi-stat:nth-child(3) {
+    @apply from-yellow-50 to-amber-100 dark:from-yellow-950/50 dark:to-amber-900/50;
+    @apply border-yellow-200 dark:border-yellow-800;
+}
+
+.fi-stat:nth-child(4) {
+    @apply from-purple-50 to-violet-100 dark:from-purple-950/50 dark:to-violet-900/50;
+    @apply border-purple-200 dark:border-purple-800;
+}
+
+/* Chart Widgets */
+.fi-wi-chart {
+    @apply bg-white/80 dark:bg-gray-800/80;
+    @apply backdrop-blur-sm;
+    @apply border border-gray-200/50 dark:border-gray-700/50;
+}
+
+/* Table Widget Enhancements */
+.fi-wi-table {
+    @apply bg-white/90 dark:bg-gray-800/90;
+    @apply backdrop-blur-sm;
+}
+
+.fi-ta-content {
+    @apply rounded-lg overflow-hidden;
+}
+
+/* Prayer Times Widget */
+.prayer-time-card {
+    @apply transform transition-all duration-200 hover:scale-105;
+    @apply bg-gradient-to-br from-white/90 to-gray-50/90;
+    @apply dark:from-gray-800/90 dark:to-gray-900/90;
+    @apply backdrop-blur-sm;
+    @apply border border-white/50 dark:border-gray-700/50;
+}
+
+/* Quick Actions Widget */
+.quick-action-card {
+    @apply transform transition-all duration-300;
+    @apply hover:scale-105 hover:shadow-xl;
+    @apply bg-gradient-to-br backdrop-blur-sm;
+    @apply border border-white/50 dark:border-gray-700/50;
+}
+
+/* Custom Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fi-wi {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.fi-wi:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.fi-wi:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.fi-wi:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.fi-wi:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+/* Responsive Enhancements */
+@media (max-width: 768px) {
+    .fi-wi {
+        @apply scale-100;
+    }
+
+    .fi-wi:hover {
+        @apply scale-100;
+    }
+}
