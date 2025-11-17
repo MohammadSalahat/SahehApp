@@ -61,11 +61,11 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->plugins([
-                FilamentLanguageSwitcherPlugin::make()
-                    ->locales([
-                        ['code' => 'en', 'name' => 'English', 'flag' => 'gb'],
-                        ['code' => 'ar', 'name' => 'العربية', 'flag' => 'sa'],
-                    ]),
+                // FilamentLanguageSwitcherPlugin::make()
+                //     ->locales([
+                //         ['code' => 'en', 'name' => 'English', 'flag' => 'gb'],
+                //         ['code' => 'ar', 'name' => 'العربية', 'flag' => 'sa'],
+                //     ]),
             ]);
     }
 }

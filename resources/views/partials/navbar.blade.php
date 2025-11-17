@@ -33,7 +33,7 @@
             <!-- Desktop Actions -->
             <div class="hidden md:flex items-center space-x-4">
                 <!-- Locale Switcher -->
-                @livewire('locale-switcher')
+                {{-- @livewire('locale-switcher') --}}
 
                 @auth
                     <!-- Authenticated User -->
@@ -100,9 +100,9 @@
         <!-- Mobile Actions -->
         <div class="pt-4 pb-3 border-t border-gray-200">
             <!-- Locale Switcher Mobile -->
-            <div class="px-3 mb-4">
+            {{-- <div class="px-3 mb-4">
                 @livewire('locale-switcher')
-            </div>
+            </div> --}}
 
             @auth
                 <div class="px-3 space-y-3">
