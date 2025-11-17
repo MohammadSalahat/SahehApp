@@ -3,7 +3,7 @@
         <div class="grid md:grid-cols-4 gap-8 mb-12">
             <div>
                 <div class="flex items-center gap-2 mb-6">
-                    <img src="{{ asset('images/logo.png') }}" class="w-20 h-20 object-contain">
+                    <img src="{{ asset('images/logo-white.png') }}" class="w-20 h-20 object-contain">
                     <div class="text-2xl font-bold">
                         <span class="text-white">{{ __('navigation.name') }}</span>
                     </div>

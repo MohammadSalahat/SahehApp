@@ -2,7 +2,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
             <!-- Logo -->
-            <a class="flex items-center cursor-pointer " href="{{ route('home') }}" wire:navigate>
+            <a class="flex items-center cursor-pointer gap-2" href="{{ route('home') }}" wire:navigate>
                 <x-app-logo-icon class="h-10 object-contain" />
                 <span class="ml-2 text-xl font-semibold text-primary">{{ __('navigation.name') }}</span>
             </a>
