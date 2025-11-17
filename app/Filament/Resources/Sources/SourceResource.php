@@ -26,7 +26,7 @@ class SourceResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    protected static string|\UnitEnum|null $navigationGroup = 'Data Management';
+    protected static string|\UnitEnum|null $navigationGroup = 'إدارة بيانات الذكاء الاصطناعي';
 
     protected static ?int $navigationSort = 2;
 
@@ -83,5 +83,9 @@ class SourceResource extends Resource
     public static function getPluralModelLabel(): string
     {
         return __('filament.resources.sources');
+    }
+        public static function getNavigationBadge(): ?string
+    {
+        return (string) static::getModel()::query()->count();
     }
 }

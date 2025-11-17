@@ -31,7 +31,7 @@ class ContactRequestResource extends Resource
 
     protected static ?string $pluralModelLabel = null;
 
-    protected static string|\UnitEnum|null $navigationGroup = 'Communication';
+    protected static string|\UnitEnum|null $navigationGroup = 'تعليقات العملاء والاتصالات';
 
     protected static ?int $navigationSort = 3;
 

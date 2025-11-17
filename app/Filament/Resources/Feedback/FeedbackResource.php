@@ -30,7 +30,7 @@ class FeedbackResource extends Resource
 
     protected static ?string $pluralModelLabel = null;
 
-    protected static string|\UnitEnum|null $navigationGroup = 'Customer Feedback';
+    protected static string|\UnitEnum|null $navigationGroup = 'تعليقات العملاء والاتصالات';
 
     protected static ?int $navigationSort = 2;
 
@@ -79,5 +79,10 @@ class FeedbackResource extends Resource
             'view' => ViewFeedback::route('/{record}'),
             'edit' => EditFeedback::route('/{record}/edit'),
         ];
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) static::getModel()::query()->count();
     }
 }

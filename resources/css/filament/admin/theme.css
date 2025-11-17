@@ -47,6 +47,10 @@
 
 }
 
+.fi-main-ctn {
+    @apply bg-primary/15
+}
+
 .fi-tabs-item {
     &.fi-active {
 

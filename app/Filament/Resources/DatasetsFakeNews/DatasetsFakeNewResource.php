@@ -32,7 +32,7 @@ class DatasetsFakeNewResource extends Resource
 
     protected static ?string $pluralModelLabel = null;
 
-    protected static string|\UnitEnum|null $navigationGroup = 'Data Management';
+    protected static string|\UnitEnum|null $navigationGroup = 'إدارة بيانات الذكاء الاصطناعي';
 
     protected static ?int $navigationSort = 1;
 
@@ -89,5 +89,9 @@ class DatasetsFakeNewResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+        public static function getNavigationBadge(): ?string
+    {
+        return (string) static::getModel()::query()->count();
     }
 }
