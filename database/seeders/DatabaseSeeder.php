@@ -12,17 +12,27 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // First, run the SQL file seeder to import all data from mysql.sql
+        $this->call([
+            SqlFileSeeder::class,
+        ]);
 
+        // Then run other seeders
         $this->call([
             SourceSeeder::class,
         ]);
 
-        // create admin user directly here
-        \App\Models\User::create([
-            'name' => 'Mohammad Salahat',
-            'email' => 'mohammadsalahat691@gmail.com',
-            'password' => bcrypt('123456789'),
-            'role' => 'admin',
-        ]);
+        // Create admin user if it doesn't exist
+        if (!\App\Models\User::where('email', 'mohammadsalahat691@gmail.com')->exists()) {
+            \App\Models\User::create([
+                'name' => 'Mohammad Salahat',
+                'email' => 'mohammadsalahat691@gmail.com',
+                'password' => bcrypt('123456789'),
+                'role' => 'admin',
+            ]);
+            $this->command->info('✅ Admin user created');
+        } else {
+            $this->command->info('ℹ️  Admin user already exists');
+        }
     }
 }

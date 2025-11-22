@@ -520,6 +520,9 @@ class ChatGPTService
 
         $response = Http::timeout($this->timeout)
             ->withHeaders($headers)
+            ->withOptions([
+                'verify' => false, // Disable SSL verification for Windows/MSYS2 compatibility
+            ])
             ->post("{$this->baseUrl}/chat/completions", $payload);
 
         if (! $response->successful()) {
