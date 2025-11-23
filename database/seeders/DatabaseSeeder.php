@@ -23,10 +23,10 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Create admin user if it doesn't exist
-        if (!\App\Models\User::where('email', 'mohammadsalahat691@gmail.com')->exists()) {
+        if (!\App\Models\User::where('email', 'walajmi50@gmail.com')->exists()) {
             \App\Models\User::create([
-                'name' => 'Mohammad Salahat',
-                'email' => 'mohammadsalahat691@gmail.com',
+                'name' => 'Wadha Al-Ajmi',
+                'email' => 'walajmi50@gmail.com',
                 'password' => bcrypt('123456789'),
                 'role' => 'admin',
             ]);
