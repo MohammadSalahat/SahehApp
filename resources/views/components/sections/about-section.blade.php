@@ -7,10 +7,6 @@
                 {{ __('home.about_p1') }}
             </p>
 
-            <p class="text-xl text-gray-700 leading-relaxed mb-8">
-                {{ __('home.about_p2') }}
-            </p>
-
             <p class="text-xl text-gray-700 leading-relaxed">
                 {{ __('home.about_p3') }}
             </p>
